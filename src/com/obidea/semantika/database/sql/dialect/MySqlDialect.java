@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2013-2014 Josef Hardi <josef.hardi@gmail.com>
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.obidea.semantika.database.sql.dialect;
+
+import java.util.List;
+
+public class MySqlDialect extends Sql99Dialect
+{
+   public MySqlDialect()
+   {
+      super();
+   }
+
+   @Override
+   public String concat(List<String> parameters)
+   {
+      StringBuilder sb = new StringBuilder();
+      sb.append("CONCAT"); //$NON-NLS-1$
+      sb.append("("); //$NON-NLS-1$
+      boolean needConcat = false;
+      for (String parameter : parameters) {
+         if (needConcat) {
+            sb.append(","); //$NON-NLS-1$
+         }
+         sb.append(parameter);
+         needConcat = true;
+      }
+      sb.append(")"); //$NON-NLS-1$
+      return sb.toString();
+   }
+
+   @Override
+   public String regex(String textExpr, String pattern, String flag)
+   {
+      return textExpr + " REGEXP " + pattern; //$NON-NLS-1$
+   }
+
+   @Override
+   public String lang(String textExpr)
+   {
+      return String.format("SUBSTRING(%s, LENGTH(%s) - LOCATE('@', REVERSE(%s)) + 2)", textExpr, textExpr, textExpr); //$NON-NLS-1$
+   }
+}

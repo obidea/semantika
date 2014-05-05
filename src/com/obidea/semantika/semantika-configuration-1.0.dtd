@@ -1,0 +1,40 @@
+#-------------------------------------------------------------------------------
+# Copyright (c) 2013-2014 Josef Hardi <josef.hardi@gmail.com>
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#-------------------------------------------------------------------------------
+<!-- Semantika file-based configuration document.
+
+<!DOCTYPE semantika-configuration PUBLIC
+        "-//Semantika/Semantika Configuration DTD 1.0//EN"
+        "http://www.obidea.com/semantika/dtd/semantika-configuration-1.0.dtd">
+
+An instance of this document contains property settings and references to
+ontology and mapping files for a number of ApplicationFactory instances.
+
+-->
+
+<!ELEMENT semantika-configuration (application-factory)>
+<!ELEMENT application-factory (data-source,ontology-source?,mapping-source+)>
+<!ATTLIST application-factory name CDATA #REQUIRED>
+
+<!ELEMENT data-source (property*)>
+<!ELEMENT property (#PCDATA)>
+<!ATTLIST property name CDATA #REQUIRED>
+
+<!ELEMENT ontology-source EMPTY>
+<!ATTLIST ontology-source resource CDATA #IMPLIED>
+
+<!ELEMENT mapping-source EMPTY>
+<!ATTLIST mapping-source resource CDATA #REQUIRED>
+<!ATTLIST mapping-source strict-parsing CDATA "true">
