@@ -145,6 +145,18 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
             getLineNumber(), getColumnNumber());
    }
 
+   protected UnsupportedTermTypeException unsupportedTermTypeException(String value)
+   {
+      return new UnsupportedTermTypeException("Unsupported term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+            getLineNumber(), getColumnNumber());
+   }
+
+   protected UnknownTermTypeException unknownTermTypeException(String value)
+   {
+      return new UnknownTermTypeException("Unknown term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+            getLineNumber(), getColumnNumber());
+   }
+
    protected DataTypeOverrideException datatypeOverrideException(String sourceType, String targetType)
    {
       return new DataTypeOverrideException("Unable to convert type \"" + sourceType + "\" to type \"" + targetType + "\"", //$NON-NLS-1$ //$NON-NLS-2$  //$NON-NLS-3$
