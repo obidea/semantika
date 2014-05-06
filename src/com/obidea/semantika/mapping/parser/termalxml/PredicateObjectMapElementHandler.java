@@ -18,6 +18,7 @@ package com.obidea.semantika.mapping.parser.termalxml;
 import java.net.URI;
 
 import com.obidea.semantika.datatype.AbstractXmlType;
+import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.TypeConversion;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
@@ -78,6 +79,9 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
       else if (name.equals(R2RmlVocabulary.OBJECT.getQName())) {
          mObjectMapValue = getUriReference(value);
       }
+      else if (name.equals(R2RmlVocabulary.TERM_TYPE.getQName())) {
+         overrideTermType(value);
+      }
       else {
          throw unknownXmlAttributeException(name);
       }
@@ -103,6 +107,29 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
             return;
          }
          throw propertyNotFoundException(uri);
+      }
+   }
+
+   private void overrideTermType(String value) throws UnsupportedTermTypeException, UnknownTermTypeException
+   {
+      if (mObjectMapValue instanceof SqlColumn) {
+         SqlColumn columnMap = (SqlColumn) mObjectMapValue;
+         if (value.equals(R2RmlVocabulary.IRI.getQName())) {
+            columnMap.setUserDatatype(DataType.ANY_URI);
+         }
+         else if (value.equals(R2RmlVocabulary.LITERAL.getQName())) {
+            columnMap.setUserDatatype(DataType.PLAIN_LITERAL);
+         }
+         else if (value.equals(R2RmlVocabulary.BLANK_NODE.getQName())) {
+            throw unsupportedTermTypeException(value);
+         }
+         else {
+            throw unknownTermTypeException(value);
+         }
+      }
+      else {
+         LOG.warn("rr:termType is only applicable to column-based term map"); //$NON-NLS-1$
+         return;
       }
    }
 

@@ -28,7 +28,9 @@ public enum R2RmlVocabulary
    GRAPH("graph"), //$NON-NLS-1$
    GRAPH_MAP("graphMap"), //$NON-NLS-1$
    TERM_TYPE("termType"), //$NON-NLS-1$
-   LITERAL("literal"), //$NON-NLS-1$
+   IRI("IRI"), //$NON-NLS-1$
+   BLANK_NODE("BlankNode"), //$NON-NLS-1$
+   LITERAL("Literal"), //$NON-NLS-1$
    CLASS("class"), //$NON-NLS-1$
    PREDICATE_OBJECT_MAP("predicateObjectMap"), //$NON-NLS-1$
    SUBJECT("subject"), //$NON-NLS-1$
@@ -43,6 +45,7 @@ public enum R2RmlVocabulary
    JOIN_CONDITION("joinCondition"), //$NON-NLS-1$
    CHILD("child"), //$NON-NLS-1$
    PARENT("parent"); //$NON-NLS-1$
+
 
    private String mName;
 
