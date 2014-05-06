@@ -240,7 +240,7 @@ public final class TermUtils
       return (IFunction) term;
    }
 
-   public static String getClass(Term term)
+   public static String getClass(ITerm term)
    {
       if (isVariable(term)) {
          return "variable"; //$NON-NLS-1$

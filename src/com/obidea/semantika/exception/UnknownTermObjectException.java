@@ -15,19 +15,19 @@
  */
 package com.obidea.semantika.exception;
 
-import com.obidea.semantika.expression.base.Term;
+import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.TermUtils;
 
 public class UnknownTermObjectException extends SemantikaRuntimeException
 {
    private static final long serialVersionUID = 629451L;
 
-   private Term mUnknownTerm;
+   private ITerm mUnknownTerm;
 
    /**
     * Create a new UnknownTermObjectException given the unknown term object.
     */
-   public UnknownTermObjectException(Term term)
+   public UnknownTermObjectException(ITerm term)
    {
       super();
       mUnknownTerm = term;
