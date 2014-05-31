@@ -161,6 +161,11 @@ public final class TermUtils
       return Function.createBuiltInFunction(BuiltInFunction.Lang, t);
    }
 
+   public static IFunction makeStr(ITerm t)
+   {
+      return Function.createBuiltInFunction(BuiltInFunction.Str, t);
+   }
+
    /*
     * Public utility methods
     */

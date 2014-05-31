@@ -380,6 +380,21 @@ public enum BuiltInFunction
       {
          return DataType.STRING;
       }
+   }),
+
+   Str(ExpressionConstant.CAST_STRING, 1, new IFunctionOperation() {
+      private static final long serialVersionUID = 629451L;
+      @Override
+      public ILiteral execute(List<? extends IConstant> args)
+      {
+         String text = args.get(0).getLexicalValue();
+         return sExpressionFactory.getLiteral(text);
+      }
+      @Override
+      public String getReturnType()
+      {
+         return DataType.STRING;
+      }
    });
 
    private static ExpressionObjectFactory sExpressionFactory = ExpressionObjectFactory.getInstance();

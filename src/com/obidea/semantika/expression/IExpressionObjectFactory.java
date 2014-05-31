@@ -347,7 +347,7 @@ public interface IExpressionObjectFactory
     */
    IFunction formGte(ITerm t1, ITerm t2);
 
-/**
+   /**
     * Creates a boolean comparison using less than <code>'<'</code> operator.
     * 
     * @param t1
@@ -442,4 +442,13 @@ public interface IExpressionObjectFactory
     * @return a function object representing string concatenation operation
     */
    IFunction formStringConcat(ITerm t1, ITerm t2);
+
+   /**
+    * Creates a string convert expression using <code>STR</code> operator.
+    * 
+    * @param t
+    *           a target term
+    * @return a function object representing string convert operation
+    */
+   IFunction formStr(ITerm t);
 }

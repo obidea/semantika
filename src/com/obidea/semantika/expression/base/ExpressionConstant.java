@@ -42,4 +42,6 @@ public final class ExpressionConstant
 
    public static final String REGEX = "&regex"; //$NON-NLS-1$
    public static final String LANG = "&lang"; //$NON-NLS-1$
+
+   public static final String CAST_STRING = "&str"; //$NON-NLS-1$
 }

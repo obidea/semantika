@@ -365,6 +365,12 @@ public class ExpressionObjectFactory implements IExpressionObjectFactory
       return (Function) TermUtils.makeLang((Term) t);
    }
 
+   @Override
+   public Function formStr(ITerm t)
+   {
+      return (Function) TermUtils.makeStr((Term) t);
+   }
+
    /*
     * Prevent external instantiation
     */
