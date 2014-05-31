@@ -708,7 +708,9 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Str arg0) throws SparqlParserException
    {
-      throw new UnsupportedSparqlExpressionException("Built-in call: STR"); //$NON-NLS-1$
+      arg0.getArg().visit(this);
+      ITerm term = getTerm();
+      mTerm = sExpressionFactory.formStr(term);
    }
 
    @Override
