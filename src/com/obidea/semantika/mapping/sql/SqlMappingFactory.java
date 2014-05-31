@@ -180,4 +180,9 @@ public class SqlMappingFactory
    {
       return new SqlLang(text);
    }
+
+   public SqlCastString createCastStringExpression(ISqlExpression parameter)
+   {
+      return new SqlCastString(parameter);
+   }
 }
