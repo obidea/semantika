@@ -15,28 +15,21 @@
  */
 package com.obidea.semantika.mapping.parser;
 
-public final class MappingParserConfiguration
+import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+
+public abstract class AbstractMappingParser implements IMappingParser
 {
-   private String mBaseIri = "http://www.obidea.com/semantika#"; // default base IRI
-   private boolean mIsStrict;
+   private IMetaModel mMetaModel;
 
-   public void setBaseIri(String iri)
+   public AbstractMappingParser(IMetaModel metaModel)
    {
-      mBaseIri = iri;
+      mMetaModel = metaModel;
    }
 
-   public String getBaseIri()
+   protected IMetaModel getMetaModel()
    {
-      return mBaseIri;
+      return mMetaModel;
    }
 
-   public void setStrictParsing(boolean isStrict)
-   {
-      mIsStrict = isStrict;
-   }
-
-   public boolean isStrictParsing()
-   {
-      return mIsStrict;
-   }
+   public abstract String getSyntax();
 }
