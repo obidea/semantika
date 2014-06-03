@@ -31,15 +31,14 @@ import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
+import com.obidea.semantika.mapping.parser.AbstractMappingParser;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 
 public class TermalXmlParser extends AbstractMappingParser
 {
-   private IMetaModel mMetaModel;
-
    public TermalXmlParser(IMetaModel metaModel)
    {
-      mMetaModel = metaModel;
+      super(metaModel);
    }
 
    @Override
@@ -57,7 +56,7 @@ public class TermalXmlParser extends AbstractMappingParser
          SAXParserFactory factory = SAXParserFactory.newInstance();
          factory.setNamespaceAware(true);
          SAXParser parser = factory.newSAXParser();
-         TermalXmlParserHandler handler = new TermalXmlParserHandler(mutableMappingSet, mMetaModel, configuration);
+         TermalXmlParserHandler handler = new TermalXmlParserHandler(mutableMappingSet, getMetaModel(), configuration);
          parser.parse(is, handler);
          prefixManager.setAll(handler.getPrefixMapper());
          return prefixManager;
@@ -75,6 +74,13 @@ public class TermalXmlParser extends AbstractMappingParser
             is.getCharacterStream().close();
          }
       }
+   }
+
+   private InputSource getInputSource(IDocumentSource inputDocument) throws IOException
+   {
+      InputSource is = new InputSource(inputDocument.getInputStream());
+      is.setSystemId(inputDocument.getDocumentUri().toString());
+      return is;
    }
 
    @Override
