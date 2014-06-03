@@ -23,7 +23,7 @@ import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.QuerySet;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
 import com.obidea.semantika.queryanswer.parser.SparqlFactory;
 import com.obidea.semantika.queryanswer.parser.SparqlParserException;

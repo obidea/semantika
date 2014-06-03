@@ -24,11 +24,11 @@ import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
-import com.obidea.semantika.mapping.sql.SqlColumn;
-import com.obidea.semantika.mapping.sql.SqlQuery;
 
 public class PredicateObjectMapElementHandler extends AbstractMappingElementHandler
 {

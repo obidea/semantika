@@ -28,9 +28,9 @@ import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.IMapping;
-import com.obidea.semantika.mapping.sql.SqlQuery;
-import com.obidea.semantika.mapping.sql.parser.SqlFactory;
-import com.obidea.semantika.mapping.sql.parser.SqlMappingParserException;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.parser.SqlFactory;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.ontology.IOntology;
 
 public abstract class BaseMappingHandler

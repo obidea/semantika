@@ -17,7 +17,7 @@ package com.obidea.semantika.database.sql.dialect;
 
 import java.util.List;
 
-import com.obidea.semantika.mapping.sql.parser.SqlException;
+import com.obidea.semantika.mapping.base.sql.parser.SqlException;
 
 public class H2Dialect extends Sql99Dialect
 {

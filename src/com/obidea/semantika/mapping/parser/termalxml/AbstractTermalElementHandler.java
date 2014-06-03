@@ -24,9 +24,9 @@ import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
-import com.obidea.semantika.mapping.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 import com.obidea.semantika.util.LogUtils;
 

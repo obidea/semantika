@@ -79,7 +79,7 @@ import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 import com.obidea.semantika.util.LogUtils;
 import com.obidea.semantika.util.MultiMap;

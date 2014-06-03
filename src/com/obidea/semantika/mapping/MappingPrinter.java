@@ -32,8 +32,8 @@ import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IMappingVisitor;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlColumn;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class MappingPrinter implements IMappingVisitor
 {

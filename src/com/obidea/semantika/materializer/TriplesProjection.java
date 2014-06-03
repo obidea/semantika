@@ -21,10 +21,10 @@ import java.util.List;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
-import com.obidea.semantika.mapping.sql.SqlColumn;
-import com.obidea.semantika.mapping.sql.SqlQuery;
-import com.obidea.semantika.mapping.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.sql.SqlUriValue;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
+import com.obidea.semantika.mapping.base.sql.SqlUriValue;
 
 public class TriplesProjection
 {

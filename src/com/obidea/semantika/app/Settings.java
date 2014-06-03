@@ -24,11 +24,11 @@ import com.obidea.semantika.knowledgebase.processor.KnowledgeBaseProcessorRegist
 import com.obidea.semantika.knowledgebase.processor.ReferentialIntegrityProcessor;
 import com.obidea.semantika.knowledgebase.processor.TMappingProcessor;
 import com.obidea.semantika.mapping.IMappingSet;
+import com.obidea.semantika.mapping.base.sql.parser.JSqlParser;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserRegistry;
 import com.obidea.semantika.mapping.parser.MappingParserFactoryRegistry;
 import com.obidea.semantika.mapping.parser.r2rml.R2RmlParserFactory;
 import com.obidea.semantika.mapping.parser.termalxml.TermalXmlParserFactory;
-import com.obidea.semantika.mapping.sql.parser.JSqlParser;
-import com.obidea.semantika.mapping.sql.parser.SqlMappingParserRegistry;
 import com.obidea.semantika.ontology.IOntology;
 
 public final class Settings

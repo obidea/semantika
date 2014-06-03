@@ -26,9 +26,9 @@ import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlAnd;
-import com.obidea.semantika.mapping.sql.SqlOr;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlAnd;
+import com.obidea.semantika.mapping.base.sql.SqlOr;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.util.Serializer;
 
 /**
