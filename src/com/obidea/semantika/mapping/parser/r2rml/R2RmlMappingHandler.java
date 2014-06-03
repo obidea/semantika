@@ -94,6 +94,7 @@ public class R2RmlMappingHandler extends BaseMappingHandler implements IMappingV
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
             setObjectMapValue(getColumnTerm(value));
+            break;
          case TermMap.CONSTANT_VALUE:
             setObjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
             break;
