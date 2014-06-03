@@ -16,6 +16,9 @@
 package com.obidea.semantika.mapping.base.sql.parser;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.database.sql.parser.ISqlParser;
+import com.obidea.semantika.database.sql.parser.SqlParserException;
+import com.obidea.semantika.database.sql.parser.SqlParserRegistry;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class SqlFactory
@@ -29,20 +32,19 @@ public class SqlFactory
       mMetadata = metadata;
    }
 
-   public SqlQuery create(String sqlString) throws SqlMappingParserException
+   public SqlQuery create(String sqlString) throws SqlParserException
    {
       return create(sqlString, DEFAULT_SQL_PARSER);
    }
 
-   public SqlQuery create(String sqlString, String parserName) throws SqlMappingParserException
+   public SqlQuery create(String sqlString, String parserName) throws SqlParserException
    {
-      SqlMappingParser parser = SqlMappingParserRegistry.getInstance().lookup(parserName);
-      return create(sqlString, (SqlMappingParser) parser);
+      ISqlParser parser = SqlParserRegistry.getInstance().lookup(parserName);
+      return create(sqlString, parser);
    }
 
-   public SqlQuery create(String sqlString, SqlMappingParser parser) throws SqlMappingParserException
+   public SqlQuery create(String sqlString, ISqlParser parser) throws SqlParserException
    {
-      parser.setMetadata(mMetadata);
-      return parser.parse(sqlString);
+      return (SqlQuery) parser.parse(sqlString, mMetadata);
    }
 }

@@ -21,10 +21,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
@@ -207,7 +207,7 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
             getLineNumber(), getColumnNumber());
    }
 
-   protected SourceQueryParsingException sourceQueryParsingException(SqlMappingParserException e)
+   protected SourceQueryParsingException sourceQueryParsingException(SqlParserException e)
    {
       return new SourceQueryParsingException(e.getMessage(), getLineNumber(), getColumnNumber());
    }

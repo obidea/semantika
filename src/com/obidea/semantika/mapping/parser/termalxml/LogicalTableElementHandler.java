@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
+import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.parser.SqlFactory;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
 import com.obidea.semantika.util.StringUtils;
@@ -47,7 +47,7 @@ public class LogicalTableElementHandler extends AbstractMappingQueryElementHandl
          getParentElement().handleChild(this);
          mSqlString = ""; //$NON-NLS-1$ // clear the SQL string
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw sourceQueryParsingException(e);
       }
    }
@@ -77,7 +77,7 @@ public class LogicalTableElementHandler extends AbstractMappingQueryElementHandl
    }
 
    @Override
-   protected SqlQuery createQuery() throws SqlMappingParserException
+   protected SqlQuery createQuery() throws SqlParserException
    {
       return mSqlFactory.create(getSqlString()); //$NON-NLS-1$
    }

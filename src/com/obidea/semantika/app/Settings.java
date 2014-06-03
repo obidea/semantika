@@ -18,6 +18,7 @@ package com.obidea.semantika.app;
 import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.database.connection.IConnectionProvider;
 import com.obidea.semantika.database.sql.dialect.IDialect;
+import com.obidea.semantika.database.sql.parser.SqlParserRegistry;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.knowledgebase.processor.DisjunctionProcessor;
 import com.obidea.semantika.knowledgebase.processor.KnowledgeBaseProcessorRegistry;
@@ -25,7 +26,6 @@ import com.obidea.semantika.knowledgebase.processor.ReferentialIntegrityProcesso
 import com.obidea.semantika.knowledgebase.processor.TMappingProcessor;
 import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.base.sql.parser.JSqlParser;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserRegistry;
 import com.obidea.semantika.mapping.parser.MappingParserFactoryRegistry;
 import com.obidea.semantika.mapping.parser.r2rml.R2RmlParserFactory;
 import com.obidea.semantika.mapping.parser.termalxml.TermalXmlParserFactory;
@@ -55,7 +55,7 @@ public final class Settings
    }
 
    static {
-      SqlMappingParserRegistry registry = SqlMappingParserRegistry.getInstance();
+      SqlParserRegistry registry = SqlParserRegistry.getInstance();
       registry.register(new JSqlParser());
    }
 

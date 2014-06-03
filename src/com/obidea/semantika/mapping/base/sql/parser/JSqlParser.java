@@ -26,28 +26,19 @@ import org.slf4j.Logger;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.exception.InternalDatabaseException;
+import com.obidea.semantika.database.sql.base.ISqlQuery;
+import com.obidea.semantika.database.sql.parser.ISqlParser;
+import com.obidea.semantika.database.sql.parser.SqlParserException;
+import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.util.LogUtils;
 
-public class JSqlParser extends SqlMappingParser
+public class JSqlParser implements ISqlParser
 {
-   private IDatabaseMetadata mMetadata;
-
    private static final Logger LOG = LogUtils.createLogger("semantika.mapping.sqlparser"); //$NON-NLS-1$
 
-   public JSqlParser()
-   {
-      super("jsqlparser"); //$NON-NLS-1$
-   }
-
    @Override
-   public void setMetadata(IDatabaseMetadata metadata)
-   {
-      mMetadata = metadata;
-   }
-
-   @Override
-   public SqlQuery parse(String sqlString) throws SqlMappingParserException
+   public ISqlQuery parse(String sqlString, IDatabaseMetadata metadata) throws SqlParserException
    {
       final StringReader reader = new StringReader(sqlString);
       CCJSqlParser parser = new CCJSqlParser(reader);
@@ -55,7 +46,7 @@ public class JSqlParser extends SqlMappingParser
          Statement stmt = parser.Statement();
          if (stmt instanceof Select) {
             Select ss = (Select) stmt;
-            SelectStatementHandler ssh = new SelectStatementHandler(mMetadata);
+            SelectStatementHandler ssh = new SelectStatementHandler(metadata);
             return ssh.parse(ss);
          }
          else {
@@ -76,5 +67,18 @@ public class JSqlParser extends SqlMappingParser
       catch (InternalDatabaseException e) {
          throw new SqlMappingParserException("Database metadata access error", e); //$NON-NLS-1$
       }
+   }
+
+   @Override
+   public SqlQuery parse(String sqlString) throws SqlMappingParserException
+   {
+      throw new SemantikaRuntimeException("SQL parser requires database metadata. " +
+            "Use method parse(String, IDatabaseMetadata) instead"); //$NON-NLS-1$
+   }
+
+   @Override
+   public String getName()
+   {
+      return "JSqlParser"; //$NON-NLS-1$
    }
 }

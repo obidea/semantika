@@ -22,6 +22,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
@@ -30,7 +31,6 @@ import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.parser.SqlFactory;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.ontology.IOntology;
 
 public abstract class BaseMappingHandler
@@ -103,7 +103,7 @@ public abstract class BaseMappingHandler
       try {
          mSqlQuery = mSqlFactory.create(sqlString);
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw new SemantikaRuntimeException(e);
       }
    }
