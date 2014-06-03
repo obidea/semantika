@@ -36,9 +36,9 @@ public class R2RmlTemplate
    {
       Matcher m = columnInCurlyBraces.matcher(templateString);
       while (m.find()) {
-         String arg = m.group(2);
+         String arg = m.group(1);
          if (!StringUtils.isEmpty(arg)) {
-            mTemplateString.replace(arg, mIndex+"");
+            mTemplateString = mTemplateString.replace("{" + arg + "}", "{" + mIndex + "}");
             mColumnNames.add(arg);
             mIndex++;
          }
