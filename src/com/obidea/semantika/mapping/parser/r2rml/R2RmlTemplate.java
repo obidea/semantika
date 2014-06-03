@@ -18,6 +18,7 @@ public class R2RmlTemplate
 
    public R2RmlTemplate(String templateString)
    {
+      mTemplateString = templateString;
       process(templateString);
    }
 
