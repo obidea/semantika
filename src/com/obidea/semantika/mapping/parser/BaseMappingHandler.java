@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
@@ -98,9 +100,11 @@ public abstract class BaseMappingHandler
 
    public void setClassUri(String uri)
    {
-      URI classUri = createUri(uri);
-      checkClassSignature(classUri);
-      mClassUri = classUri;
+      if (!StringUtils.isEmpty(uri)) {
+         URI classUri = createUri(uri);
+         checkClassSignature(classUri);
+         mClassUri = classUri;
+      }
    }
 
    public URI getClassUri()

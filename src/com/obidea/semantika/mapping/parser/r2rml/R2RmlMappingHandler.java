@@ -54,9 +54,13 @@ public class R2RmlMappingHandler extends BaseMappingHandler implements IMappingV
             setSubjectMapValue(getMappingObjectFactory().createUriTemplate(template.getTemplateString(), parameters));
             break;
       }
-      ClassMapping cm = getMappingObjectFactory().createClassMapping(getClassUri(), getSqlQuery());
-      cm.setSubjectMapValue(getSubjectMapValue()); // subject template
-      addMapping(cm);
+      
+      // Create the class mapping if a class URI specified in the mapping
+      if (getClassUri() != null) {
+         ClassMapping cm = getMappingObjectFactory().createClassMapping(getClassUri(), getSqlQuery());
+         cm.setSubjectMapValue(getSubjectMapValue()); // subject template
+         addMapping(cm);
+      }
    }
 
    @Override
