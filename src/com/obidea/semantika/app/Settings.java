@@ -25,6 +25,7 @@ import com.obidea.semantika.knowledgebase.processor.ReferentialIntegrityProcesso
 import com.obidea.semantika.knowledgebase.processor.TMappingProcessor;
 import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.parser.MappingParserFactoryRegistry;
+import com.obidea.semantika.mapping.parser.r2rml.R2RmlParserFactory;
 import com.obidea.semantika.mapping.parser.termalxml.TermalXmlParserFactory;
 import com.obidea.semantika.mapping.sql.parser.JSqlParser;
 import com.obidea.semantika.mapping.sql.parser.SqlMappingParserRegistry;
@@ -50,6 +51,7 @@ public final class Settings
    static {
       MappingParserFactoryRegistry registry = MappingParserFactoryRegistry.getInstance();
       registry.register(0, new TermalXmlParserFactory()); // top priority
+      registry.register(new R2RmlParserFactory());
    }
 
    static {
