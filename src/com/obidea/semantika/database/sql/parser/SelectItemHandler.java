@@ -80,7 +80,6 @@ import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlMappingFactory;
 import com.obidea.semantika.mapping.base.sql.SqlTable;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.Serializer;
 
 /* package */class SelectItemHandler implements SelectItemVisitor, ExpressionVisitor
@@ -126,7 +125,7 @@ import com.obidea.semantika.util.Serializer;
             mSelectItems.add(new SqlSelectItem(column));
          }
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw new SemantikaRuntimeException(e);
       }
    }
@@ -153,7 +152,7 @@ import com.obidea.semantika.util.Serializer;
          String columnName = removeQuotesIfAny(tableColumn.getColumnName());
          mExpression = mFromTables.getColumn(tableName, columnName);
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw new SemantikaRuntimeException(e);
       }
    }

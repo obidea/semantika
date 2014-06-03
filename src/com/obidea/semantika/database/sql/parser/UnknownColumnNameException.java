@@ -15,9 +15,7 @@
  */
 package com.obidea.semantika.database.sql.parser;
 
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
-
-public class UnknownColumnNameException extends SqlMappingParserException
+public class UnknownColumnNameException extends SqlParserException
 {
    private static final long serialVersionUID = 629451L;
 

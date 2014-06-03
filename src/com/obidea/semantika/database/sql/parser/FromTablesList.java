@@ -24,7 +24,6 @@ import com.obidea.semantika.database.base.IColumn;
 import com.obidea.semantika.database.base.ITable;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlTable;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.StringUtils;
 
 /**
@@ -59,7 +58,7 @@ import com.obidea.semantika.util.StringUtils;
     * @throws AmbiguousColumnNameException
     *            if there are more than one column using the same name.
     */
-   public SqlColumn getColumn(String anyTableName, String columnName) throws SqlMappingParserException
+   public SqlColumn getColumn(String anyTableName, String columnName) throws SqlParserException
    {
       IColumn c = (StringUtils.isEmpty(anyTableName)) ?
             findColumnByNameOnly(columnName) :
@@ -75,7 +74,7 @@ import com.obidea.semantika.util.StringUtils;
     *           table name; can be local name or full name
     * @return a list of columns.
     */
-   public List<SqlColumn> getColumns(String anyTableName) throws SqlMappingParserException
+   public List<SqlColumn> getColumns(String anyTableName) throws SqlParserException
    {
       List<SqlColumn> toReturn = new ArrayList<SqlColumn>();
       ITable sourceTable = findTableInSelectionList(anyTableName);
@@ -138,7 +137,7 @@ import com.obidea.semantika.util.StringUtils;
     * Private helper methods
     */
 
-   private ITable findTableInSelectionList(String tableName) throws SqlMappingParserException
+   private ITable findTableInSelectionList(String tableName) throws SqlParserException
    {
       for (ITable table : mSelectionList) {
          // Check based its local name first
@@ -154,7 +153,7 @@ import com.obidea.semantika.util.StringUtils;
       throw new UnknownTableNameException(tableName);
    }
 
-   private IColumn findColumnByTableReference(String tableName, String columnName) throws SqlMappingParserException
+   private IColumn findColumnByTableReference(String tableName, String columnName) throws SqlParserException
    {
       final ITable table = findTableInSelectionList(tableName);
       IColumn column = table.getColumn(columnName);
@@ -164,7 +163,7 @@ import com.obidea.semantika.util.StringUtils;
       throw new UnknownColumnNameException(columnName);
    }
 
-   private IColumn findColumnByNameOnly(String columnName) throws SqlMappingParserException
+   private IColumn findColumnByNameOnly(String columnName) throws SqlParserException
    {
       List<IColumn> possibleColumns = new ArrayList<IColumn>();
       for (ITable table : mSelectionList) {

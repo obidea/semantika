@@ -18,9 +18,8 @@ package com.obidea.semantika.database.sql.parser;
 import java.util.List;
 
 import com.obidea.semantika.database.base.IDatabaseObject;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 
-public class AmbiguousColumnNameException extends SqlMappingParserException
+public class AmbiguousColumnNameException extends SqlParserException
 {
    private static final long serialVersionUID = 629451L;
 

@@ -29,7 +29,6 @@ import com.obidea.semantika.database.exception.InternalDatabaseException;
 import com.obidea.semantika.database.sql.base.ISqlQuery;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.LogUtils;
 
 public class JSqlParser implements ISqlParser
@@ -58,18 +57,18 @@ public class JSqlParser implements ISqlParser
          return handler.parse(sqlString);
       }
       catch (ParseException e) {
-         throw new SqlMappingParserException("SQL syntax error", e); //$NON-NLS-1$
+         throw new SqlParserException("SQL syntax error", e); //$NON-NLS-1$
       }
       catch (SqlException e) {
-         throw new SqlMappingParserException("Invalid SQL", e); //$NON-NLS-1$
+         throw new SqlParserException("Invalid SQL", e); //$NON-NLS-1$
       }
       catch (InternalDatabaseException e) {
-         throw new SqlMappingParserException("Database metadata access error", e); //$NON-NLS-1$
+         throw new SqlParserException("Database metadata access error", e); //$NON-NLS-1$
       }
    }
 
    @Override
-   public SqlQuery parse(String sqlString) throws SqlMappingParserException
+   public SqlQuery parse(String sqlString) throws SqlParserException
    {
       throw new SemantikaRuntimeException("SQL parser requires database metadata. " +
             "Use method parse(String, IDatabaseMetadata) instead"); //$NON-NLS-1$

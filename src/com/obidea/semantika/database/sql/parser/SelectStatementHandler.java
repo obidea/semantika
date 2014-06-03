@@ -97,7 +97,6 @@ import com.obidea.semantika.mapping.base.sql.SqlMappingFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.SqlSelectQuery;
 import com.obidea.semantika.mapping.base.sql.SqlTable;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.Serializer;
 
 public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, ItemsListVisitor, ExpressionVisitor
@@ -500,7 +499,7 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
          String columnName = tableColumn.getColumnName();
          mExpression = mTableList.getColumn(tableName, columnName);
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw new SqlException(e);
       }
    }

@@ -70,7 +70,6 @@ import net.sf.jsqlparser.statement.select.SubSelect;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
-import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.Serializer;
 
 public class JoinConditionHandler implements ExpressionVisitor
@@ -97,7 +96,7 @@ public class JoinConditionHandler implements ExpressionVisitor
          String columnName = tableColumn.getColumnName();
          mJoinColumn = mFromTables.getColumn(tableName, columnName);
       }
-      catch (SqlMappingParserException e) {
+      catch (SqlParserException e) {
          throw new SqlException(e);
       }
    }
