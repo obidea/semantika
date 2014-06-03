@@ -66,6 +66,7 @@ public class R2RmlMappingHandler extends BaseMappingHandler implements IMappingV
       arg.getObjectMap().accept(this);
       
       PropertyMapping pm = getMappingObjectFactory().createPropertyMapping(getPropertyUri(), getSqlQuery());
+      pm.setSubjectMapValue(getSubjectMapValue());
       pm.setObjectMapValue(getObjectMapValue());
       addMapping(pm);
    }
