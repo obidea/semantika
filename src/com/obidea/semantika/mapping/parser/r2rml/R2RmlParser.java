@@ -1,7 +1,7 @@
 package com.obidea.semantika.mapping.parser.r2rml;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.InputStream;
 
 import org.openrdf.rio.turtle.TurtleParser;
 
@@ -28,12 +28,13 @@ public class R2RmlParser extends AbstractMappingParser
          MappingParserConfiguration configuration) throws MappingParserException, IOException
    {
       R2RmlTriplesMapHandler triplesMapHandler = new R2RmlTriplesMapHandler(mappingSet, getMetaModel(), configuration);
-      Reader reader = inputDocument.getReader();
+      InputStream is = inputDocument.getInputStream();
       try {
          DefaultPrefixManager prefixManager = new DefaultPrefixManager();
          TurtleParser parser = new TurtleParser();
          R2RmlHandler parserHandler = new R2RmlHandler();
          parser.setRDFHandler(parserHandler);
+         parser.parse(is, configuration.getBaseIri());
          triplesMapHandler.handle(parserHandler.getTriplesMaps());
          prefixManager.setAll(parserHandler.getPrefixMapper());
          return prefixManager;
@@ -42,8 +43,8 @@ public class R2RmlParser extends AbstractMappingParser
          throw new MappingParserException(e.getMessage());
       }
       finally {
-         if (reader != null) {
-            reader.close();
+         if (is != null) {
+            is.close();
          }
       }
    }
