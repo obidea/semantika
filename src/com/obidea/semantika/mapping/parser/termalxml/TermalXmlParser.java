@@ -45,18 +45,13 @@ public class TermalXmlParser extends AbstractMappingParser
    public IPrefixManager parse(final IDocumentSource inputDocument, final IMappingSet mappingSet,
          final MappingParserConfiguration configuration) throws MappingParserException, IOException
    {
-      if (!(mappingSet instanceof MutableMappingSet)) {
-         throw new MappingParserException("Mutable mapping set is required to run the parser"); //$NON-NLS-1$
-      }
-      
-      MutableMappingSet mutableMappingSet = (MutableMappingSet) mappingSet;
       InputSource is = getInputSource(inputDocument);
       try {
          DefaultPrefixManager prefixManager = new DefaultPrefixManager();
          SAXParserFactory factory = SAXParserFactory.newInstance();
          factory.setNamespaceAware(true);
          SAXParser parser = factory.newSAXParser();
-         TermalXmlParserHandler handler = new TermalXmlParserHandler(mutableMappingSet, getMetaModel(), configuration);
+         TermalXmlParserHandler handler = new TermalXmlParserHandler(mappingSet, getMetaModel(), configuration);
          parser.parse(is, handler);
          prefixManager.setAll(handler.getPrefixMapper());
          return prefixManager;

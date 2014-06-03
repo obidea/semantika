@@ -36,6 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
@@ -64,9 +65,9 @@ public class TermalXmlParserHandler extends DefaultHandler
 
    private Stack<AbstractTermalElementHandler<?>> mHandlerStack;
 
-   public TermalXmlParserHandler(MutableMappingSet mappingSet, IMetaModel metaModel, MappingParserConfiguration configuration) throws MappingParserException
+   public TermalXmlParserHandler(IMappingSet mappingSet, IMetaModel metaModel, MappingParserConfiguration configuration) throws MappingParserException
    {
-      mMappingSet = mappingSet;
+      mMappingSet = (MutableMappingSet) mappingSet;
       mConfiguration = configuration;
       mDatabaseMetadata = metaModel.getDatabaseMetadata();
       mOntology = owlOntology(metaModel.getOntology());
