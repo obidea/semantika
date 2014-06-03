@@ -35,9 +35,9 @@ import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
-import com.obidea.semantika.mapping.parser.BaseMappingHandler;
+import com.obidea.semantika.mapping.parser.AbstractMappingHandler;
 
-public class R2RmlMappingHandler extends BaseMappingHandler implements IMappingVisitor
+public class R2RmlMappingHandler extends AbstractMappingHandler implements IMappingVisitor
 {
    public R2RmlMappingHandler(IMetaModel metaModel)
    {

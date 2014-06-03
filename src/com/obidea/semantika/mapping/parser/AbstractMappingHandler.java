@@ -33,7 +33,7 @@ import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.ontology.IOntology;
 
-public abstract class BaseMappingHandler
+public abstract class AbstractMappingHandler
 {
    private String mBaseIri;
    private boolean mUseStrictParsing;
@@ -51,7 +51,7 @@ public abstract class BaseMappingHandler
 
    private List<IMapping> mMappings = new ArrayList<IMapping>();
 
-   public BaseMappingHandler(IMetaModel metaModel)
+   public AbstractMappingHandler(IMetaModel metaModel)
    {
       mOntology = metaModel.getOntology();
       mDatabaseMetadata = metaModel.getDatabaseMetadata();
