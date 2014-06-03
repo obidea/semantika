@@ -17,12 +17,18 @@ import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.UriReference;
+import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.parser.BaseMappingHandler;
 
 public class R2RmlMappingHandler extends BaseMappingHandler implements IMappingVisitor
 {
+   public R2RmlMappingHandler(IMetaModel metaModel)
+   {
+      super(metaModel);
+   }
+
    @Override
    public void visit(LogicalTable arg)
    {

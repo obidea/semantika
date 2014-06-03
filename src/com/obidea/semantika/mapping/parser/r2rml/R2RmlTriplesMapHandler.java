@@ -42,11 +42,9 @@ public class R2RmlTriplesMapHandler
 
    private R2RmlMappingHandler createMappingHandler()
    {
-      R2RmlMappingHandler handler = new R2RmlMappingHandler();
+      R2RmlMappingHandler handler = new R2RmlMappingHandler(mMetaModel);
       handler.setBaseIri(mParsingConfiguration.getBaseIri());
       handler.setStrictParsing(mParsingConfiguration.isStrictParsing());
-      handler.setOntology(mMetaModel.getOntology());
-      handler.setDatabaseMetadata(mMetaModel.getDatabaseMetadata());
       return handler;
    }
 }

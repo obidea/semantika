@@ -8,6 +8,7 @@ import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.sql.SqlQuery;
@@ -22,7 +23,7 @@ public abstract class BaseMappingHandler
    private IOntology mOntology;
    private IDatabaseMetadata mDatabaseMetadata;
 
-   private SqlFactory mSqlFactory = new SqlFactory(mDatabaseMetadata);
+   private SqlFactory mSqlFactory;
    private SqlQuery mSqlQuery;
 
    private URI mClassUri;
@@ -32,6 +33,23 @@ public abstract class BaseMappingHandler
    private ITerm mObjectMapValue;
 
    private List<IMapping> mMappings = new ArrayList<IMapping>();
+
+   public BaseMappingHandler(IMetaModel metaModel)
+   {
+      mOntology = metaModel.getOntology();
+      mDatabaseMetadata = metaModel.getDatabaseMetadata();
+      mSqlFactory = new SqlFactory(mDatabaseMetadata);
+   }
+
+   public IOntology getOntology()
+   {
+      return mOntology;
+   }
+
+   public IDatabaseMetadata getDatabaseMetadata()
+   {
+      return mDatabaseMetadata;
+   }
 
    public void addMapping(IMapping mapping)
    {
@@ -61,26 +79,6 @@ public abstract class BaseMappingHandler
    public boolean isStrictParsing()
    {
       return mUseStrictParsing;
-   }
-
-   public void setOntology(IOntology ontology)
-   {
-      mOntology = ontology;
-   }
-
-   public IOntology getOntology()
-   {
-      return mOntology;
-   }
-
-   public void setDatabaseMetadata(IDatabaseMetadata metadata)
-   {
-      mDatabaseMetadata = metadata;
-   }
-
-   public IDatabaseMetadata getDatabaseMetadata()
-   {
-      return mDatabaseMetadata;
    }
 
    public void setSqlQuery(String sqlString)
@@ -157,7 +155,7 @@ public abstract class BaseMappingHandler
    protected void checkClassSignature(URI uri)
    {
       if (isStrictParsing()) {
-         if (mOntology.containClass(uri)) {
+         if (getOntology().containClass(uri)) {
             return;
          }
          throw new SemantikaRuntimeException("Class URI not found in ontology \"" + uri + "\"");
