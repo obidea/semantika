@@ -29,7 +29,6 @@ import com.obidea.semantika.knowledgebase.DefaultPrefixManager;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.IMappingSet;
-import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.mapping.parser.AbstractMappingParser;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
