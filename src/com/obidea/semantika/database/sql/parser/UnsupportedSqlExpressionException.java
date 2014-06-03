@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
-public class UnknownTableNameException extends SqlMappingParserException
+public class UnsupportedSqlExpressionException extends SqlException
 {
    private static final long serialVersionUID = 629451L;
 
-   private String mTableName;
+   private String mOperationName;
 
-   public UnknownTableNameException(String tableName)
+   public UnsupportedSqlExpressionException(String operation)
    {
-      super();
-      mTableName = tableName;
+      mOperationName = operation;
    }
 
-   public String getTableName()
+   public String getUnsupportedOperation()
    {
-      return mTableName;
+      return mOperationName;
    }
 
    @Override
    public String getMessage()
    {
-      return "Unknown table name \"" + mTableName + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      return String.format("SQL %s expression is not supported yet", mOperationName);
    }
 }

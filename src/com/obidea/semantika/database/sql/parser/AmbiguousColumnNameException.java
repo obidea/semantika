@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
 import java.util.List;
 
 import com.obidea.semantika.database.base.IDatabaseObject;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 
 public class AmbiguousColumnNameException extends SqlMappingParserException
 {

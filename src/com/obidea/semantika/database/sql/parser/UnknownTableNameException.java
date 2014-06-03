@@ -13,28 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
-public class UnknownColumnNameException extends SqlMappingParserException
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
+
+public class UnknownTableNameException extends SqlMappingParserException
 {
    private static final long serialVersionUID = 629451L;
 
-   private String mColumnName;
+   private String mTableName;
 
-   public UnknownColumnNameException(String columnName)
+   public UnknownTableNameException(String tableName)
    {
       super();
-      mColumnName = columnName;
+      mTableName = tableName;
    }
 
-   public String getColumnName()
+   public String getTableName()
    {
-      return mColumnName;
+      return mTableName;
    }
 
    @Override
    public String getMessage()
    {
-      return "Unknown column name \"" + mColumnName + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      return "Unknown table name \"" + mTableName + "\""; //$NON-NLS-1$ //$NON-NLS-2$
    }
 }

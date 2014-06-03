@@ -34,6 +34,7 @@ import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.dialect.IDialect;
+import com.obidea.semantika.database.sql.parser.SqlException;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.mapping.base.sql.SqlAddition;
@@ -55,7 +56,6 @@ import com.obidea.semantika.mapping.base.sql.SqlRegex;
 import com.obidea.semantika.mapping.base.sql.SqlSubtract;
 import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
 import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
-import com.obidea.semantika.mapping.base.sql.parser.SqlException;
 
 public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
 {

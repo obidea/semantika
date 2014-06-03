@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -97,6 +97,7 @@ import com.obidea.semantika.mapping.base.sql.SqlMappingFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.SqlSelectQuery;
 import com.obidea.semantika.mapping.base.sql.SqlTable;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.Serializer;
 
 public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, ItemsListVisitor, ExpressionVisitor

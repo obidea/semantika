@@ -13,27 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
-public class UnsupportedSqlExpressionException extends SqlException
+import com.obidea.semantika.exception.SemantikaRuntimeException;
+
+public class SqlException extends SemantikaRuntimeException
 {
    private static final long serialVersionUID = 629451L;
 
-   private String mOperationName;
-
-   public UnsupportedSqlExpressionException(String operation)
+   public SqlException()
    {
-      mOperationName = operation;
+      super();
    }
 
-   public String getUnsupportedOperation()
+   public SqlException(String message)
    {
-      return mOperationName;
+      super(message);
    }
 
-   @Override
-   public String getMessage()
+   public SqlException(String message, Throwable cause)
    {
-      return String.format("SQL %s expression is not supported yet", mOperationName);
+      super(message, cause);
+   }
+
+   public SqlException(Throwable cause)
+   {
+      super(cause);
    }
 }

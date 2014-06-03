@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -70,6 +70,7 @@ import net.sf.jsqlparser.statement.select.SubSelect;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.Serializer;
 
 public class JoinConditionHandler implements ExpressionVisitor

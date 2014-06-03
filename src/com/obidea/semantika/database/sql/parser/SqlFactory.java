@@ -13,12 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
-import com.obidea.semantika.database.sql.parser.ISqlParser;
-import com.obidea.semantika.database.sql.parser.SqlParserException;
-import com.obidea.semantika.database.sql.parser.SqlParserRegistry;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class SqlFactory

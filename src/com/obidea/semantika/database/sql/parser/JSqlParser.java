@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.base.sql.parser;
+package com.obidea.semantika.database.sql.parser;
 
 import java.io.StringReader;
 
@@ -27,10 +27,9 @@ import org.slf4j.Logger;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.exception.InternalDatabaseException;
 import com.obidea.semantika.database.sql.base.ISqlQuery;
-import com.obidea.semantika.database.sql.parser.ISqlParser;
-import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.util.LogUtils;
 
 public class JSqlParser implements ISqlParser
