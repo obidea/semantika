@@ -7,10 +7,70 @@ Feature
 -------
 * Support most features in SPARQL 1.1 Query language.
 * Data semantic mapping based on R2RML
+* Support R2RML native syntax
 * Data provider based on JDBC system. Full support on MySQL, PostgreSQL and H2
 * Connection pool enabled
-* Domain modelling in OWL 2 QL
+* Support domain modelling in OWL2 QL
+* Built-in reasoner when domain model is supplied
 * Open source under Apache License 2.0
+
+API Overview
+------------
+
+### System Setup
+
+An instance of `com.obidea.semantika.app.ApplicationManager` is created by loading a configuration file, i.e., `application.cfg.xml` in your classpath. [Please refer to our wiki page for more details about Semantika configuration settings](https://github.com/obidea/semantika-api/wiki/1.-XML-Configuration-File).
+```java
+ApplicationManager manager = new ApplicationFactory()
+             .configure("application.cfg.xml")
+             .createApplicationManager();
+```
+
+### Query Answer
+
+The `com.obidea.semantika.app.ApplicationManager` then creates `com.obidea.semantika.queryanswer.SparqlQueryEngine` which is a thread-safe object that is initiated once to serve SPARQL query answering.
+```java
+SparqlQueryEngine queryEngine = manager.createQueryEngine(); 
+queryEngine.start();
+IQueryResult result = queryEngine.evaluate(sparql);
+// do something with the result
+// ...
+queryEngine.stop();
+```
+
+In addition, the query engine allows you to manage result fetching for efficient data retrieval. The example below shows you how to create a simple paging where each page contains 100 items.
+
+```java
+IQueryEngineExt queryEngine = manager.createQueryEngine();
+queryEngine.start();
+int offset = 0;
+int limit = 100;
+int maxPage = 10;
+int pageNum = 1;
+while (pageNum <= maxPage) {
+   IQueryResult result = queryEngine.createQuery(sparql)
+                                    .setFirstResult(offset)
+                                    .setMaxResults(limit).evaluate();
+   // do something with the result
+   // ...
+   offset += limit;
+   pageNum++;
+}
+queryEngine.stop();
+```
+
+### RDB2RDF Export
+
+The `com.obidea.semantika.app.ApplicationManager` can also create `com.obidea.semantika.materializer.RdfMaterializerEngine` which is a thread-safe object that is initiated once to serve RDB2RDF data exporting.
+
+```java
+IMaterializerEngine exporter = manager.createMaterializerEngine().useNTriples();
+exporter.start();
+exporter.materialize(fout);
+exporter.stop();
+```
+
+Starting from Semantika 1.5, the application manager can receive R2RML mapping model and does the same RDB2RDF data exporting.
 
 License
 -------
