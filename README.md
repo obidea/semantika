@@ -32,7 +32,7 @@ The `com.obidea.semantika.app.ApplicationManager` then creates `com.obidea.seman
 ```java
 SparqlQueryEngine queryEngine = manager.createQueryEngine(); 
 queryEngine.start();
-IQueryResult result = queryEngine.evaluate(sparql);
+QueryResult result = queryEngine.evaluate(sparql);
 // do something with the result
 // ...
 queryEngine.stop();
@@ -41,14 +41,14 @@ queryEngine.stop();
 In addition, the query engine allows you to manage result fetching for efficient data retrieval. The example below shows you how to create a simple paging where each page contains 100 items.
 
 ```java
-IQueryEngineExt queryEngine = manager.createQueryEngine();
+SparqlQueryEngine queryEngine = manager.createQueryEngine();
 queryEngine.start();
 int offset = 0;
 int limit = 100;
 int maxPage = 10;
 int pageNum = 1;
 while (pageNum <= maxPage) {
-   IQueryResult result = queryEngine.createQuery(sparql)
+   QueryResult result = queryEngine.createQuery(sparql)
                                     .setFirstResult(offset)
                                     .setMaxResults(limit).evaluate();
    // do something with the result
