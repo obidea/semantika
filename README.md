@@ -64,7 +64,7 @@ queryEngine.stop();
 The `com.obidea.semantika.app.ApplicationManager` can also create `com.obidea.semantika.materializer.RdfMaterializerEngine` which is a thread-safe object that is initiated once to serve RDB2RDF data exporting.
 
 ```java
-IMaterializerEngine exporter = manager.createMaterializerEngine().useNTriples();
+RdfMaterializerEngine exporter = manager.createMaterializerEngine().useNTriples();
 exporter.start();
 exporter.materialize(fout);
 exporter.stop();
