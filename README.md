@@ -26,7 +26,7 @@ ApplicationManager manager = new ApplicationFactory()
              .createApplicationManager();
 ```
 
-### Query Answer
+### SPARQL Query Answer
 
 The `com.obidea.semantika.app.ApplicationManager` then creates `com.obidea.semantika.queryanswer.SparqlQueryEngine` which is a thread-safe object that is initiated once to serve SPARQL query answering.
 ```java
