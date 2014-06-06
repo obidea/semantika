@@ -74,7 +74,7 @@ public class JdbcConnectionProvider implements IConnectionProvider
    @Override
    public Connection getConnection() throws SQLException
    {
-      LOG.debug("** Opening new JDBC connection."); //$NON-NLS-1$
+      LOG.debug("Opening new JDBC connection."); //$NON-NLS-1$
       Connection conn = DriverManager.getConnection(mUrl, mUser, mPassword);
       conn.setAutoCommit(false); // always execute query in transaction block
       return conn;
@@ -83,7 +83,7 @@ public class JdbcConnectionProvider implements IConnectionProvider
    @Override
    public void closeConnection(Connection conn) throws SQLException
    {
-      LOG.debug("** Closing JDBC connection."); //$NON-NLS-1$
+      LOG.debug("Closing JDBC connection."); //$NON-NLS-1$
       conn.close();
    }
 

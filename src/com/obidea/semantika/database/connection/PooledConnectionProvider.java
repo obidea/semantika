@@ -97,21 +97,21 @@ public class PooledConnectionProvider implements IConnectionProvider
    @Override
    public Connection getConnection() throws SQLException
    {
-      LOG.debug("** Taking connection from the pool."); //$NON-NLS-1$
+      LOG.debug("Taking connection from the pool."); //$NON-NLS-1$
       return mDataSource.getConnection();
    }
 
    @Override
    public void closeConnection(Connection conn) throws SQLException
    {
-      LOG.debug("** Returning connection to the pool."); //$NON-NLS-1$
+      LOG.debug("Returning connection to the pool."); //$NON-NLS-1$
       conn.close();
    }
 
    @Override
    public void close() throws SQLException
    {
-      LOG.debug("** Closing connection pool."); //$NON-NLS-1$
+      LOG.debug("Closing connection pool."); //$NON-NLS-1$
       DataSources.destroy(mDataSource);
    }
 
