@@ -68,6 +68,36 @@ public class ApplicationFactory
       this(new DefaultSettingFactory());
    }
 
+   public ApplicationFactory addProperty(String propertyName, Object value)
+   {
+      mProperties.setProperty(propertyName, value);
+      return this;
+   }
+
+   public ApplicationFactory setName(String name)
+   {
+      mProperties.setProperty(Environment.APPLICATION_FACTORY_NAME, name);
+      return this;
+   }
+
+   public ApplicationFactory setOntologySource(String resource)
+   {
+      mProperties.setProperty(Environment.ONTOLOGY_SOURCE, resource);
+      return this;
+   }
+
+   public ApplicationFactory addMappingSource(String resource)
+   {
+      return addMappingSource(resource, true);
+   }
+
+   public ApplicationFactory addMappingSource(String resource, boolean useStrictParsing)
+   {
+      mProperties.addProperty(Environment.MAPPING_SOURCE, resource);
+      mProperties.addProperty(Environment.STRICT_PARSING, useStrictParsing);
+      return this;
+   }
+
    public ApplicationFactory configure() throws ConfigurationException
    {
       return configure(DEFAULT_CONFIGURATION_FILENAME); //$NON-NLS-1$
