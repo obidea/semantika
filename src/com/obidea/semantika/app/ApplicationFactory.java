@@ -244,7 +244,7 @@ public class ApplicationFactory
             mProperties.setProperty(name, value);
          }
       }
-      LOG.debug("* {} = {}", Environment.URL, mProperties.getString(Environment.URL)); //$NON-NLS-1$
+      LOG.debug("* {} = {}", Environment.CONNECTION_URL, mProperties.getString(Environment.CONNECTION_URL)); //$NON-NLS-1$
    }
 
    private void addOntologyResource(Element parent)
