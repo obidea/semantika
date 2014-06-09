@@ -22,6 +22,7 @@ import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
+import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.mapping.UriTemplateBuilder;
 
 /* package */class SesameStatement implements Statement
@@ -91,7 +92,13 @@ import com.obidea.semantika.mapping.UriTemplateBuilder;
             return mValueFactory.createURI(uriString);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             String datatype = mProjection.getDatatype(3);
-            return mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
+            if (datatype.equals(DataType.STRING)) {
+               // Create a literal object without a datatype URI for string type.
+               return mValueFactory.createLiteral(mObjectValue);
+            }
+            else {
+               return mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
+            }
          case TriplesProjection.DATA_URI_VALUE_CATEGORY:
             return mValueFactory.createURI(mObjectValue);
       }
