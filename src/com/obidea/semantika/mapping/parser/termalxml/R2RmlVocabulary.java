@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.parser;
+package com.obidea.semantika.mapping.parser.termalxml;
 
 public enum R2RmlVocabulary
 {

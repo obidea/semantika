@@ -21,7 +21,6 @@ import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
-import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
 
 public class SubjectMapElementHandler extends AbstractMappingElementHandler
 {

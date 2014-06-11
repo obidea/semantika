@@ -28,7 +28,6 @@ import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
-import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
 
 public class PredicateObjectMapElementHandler extends AbstractMappingElementHandler
 {

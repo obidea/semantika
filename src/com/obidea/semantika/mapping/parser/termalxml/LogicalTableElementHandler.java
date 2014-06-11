@@ -19,7 +19,6 @@ import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
-import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
 import com.obidea.semantika.util.StringUtils;
 
 public class LogicalTableElementHandler extends AbstractMappingQueryElementHandler
