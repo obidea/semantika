@@ -30,6 +30,7 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
+import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
@@ -139,10 +140,11 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       int termMap = arg.getType();
       String value = arg.getValue();
+      String termType = arg.getTermType();
       String datatype = arg.getDatatype();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
-            setObjectMapValue(getColumnTerm(value, datatype));
+            setObjectMapValue(getColumnTerm(value, termType, datatype));
             break;
          case TermMap.CONSTANT_VALUE:
             setObjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
@@ -171,11 +173,27 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       return ((UriReference) getPredicateMapValue()).toUri();
    }
 
-   private SqlColumn getColumnTerm(String columnName, String datatype)
+   private SqlColumn getColumnTerm(String columnName, String termType, String datatype)
    {
       SqlColumn column = getColumnTerm(columnName);
-      if (!StringUtils.isEmpty(datatype)) {
-         column.setUserDatatype(datatype);
+      if (termType.equals(R2RmlVocabulary.IRI)) {
+         if (StringUtils.isEmpty(datatype)) {
+            column.setUserDatatype(DataType.ANY_URI);
+         }
+         else {
+            throw new SemantikaRuntimeException("Illegal operation: Can't use rr:datatype together with term type rr:IRI");
+         }
+      }
+      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         if (StringUtils.isEmpty(datatype)) {
+            // NO-OP: set as natural RDF literal
+         }
+         else {
+            column.setUserDatatype(datatype); // set as datatype-override RDF literal
+         }
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+         throw new SemantikaRuntimeException("Blank node is not supported yet");
       }
       return column;
    }
