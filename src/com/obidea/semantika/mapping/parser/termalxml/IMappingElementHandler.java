@@ -17,7 +17,7 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public interface IMappingElementHandler<E>
+public interface IMappingElementHandler
 {
    void startElement(String name) throws MappingParserException;
 
@@ -26,8 +26,6 @@ public interface IMappingElementHandler<E>
    void attribute(String name, String value) throws MappingParserException;
 
    void characters(char[] ch, int start, int length) throws MappingParserException;
-
-   E getMappingObject();
 
    String getText();
 }

@@ -15,10 +15,10 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import com.obidea.semantika.mapping.MutableMappingSet;
+import com.obidea.semantika.mapping.MappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class ProgramElementHandler extends AbstractTermalElementHandler<MutableMappingSet>
+public class ProgramElementHandler extends AbstractTermalElementHandler
 {
    public ProgramElementHandler(TermalXmlParserHandler handler)
    {
@@ -38,15 +38,9 @@ public class ProgramElementHandler extends AbstractTermalElementHandler<MutableM
    }
 
    @Override
-   public MutableMappingSet getMappingObject()
-   {
-      return getMappingSet();
-   }
-
-   @Override
    /* package */void handleChild(MappingElementHandler handler)
    {
-      final MutableMappingSet mappingSet = handler.getMappingObject();
+      final MappingSet mappingSet = handler.getMappingSet();
       getMappingSet().copy(mappingSet);
    }
 

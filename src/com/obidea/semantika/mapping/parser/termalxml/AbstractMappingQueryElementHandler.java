@@ -17,7 +17,7 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
-public abstract class AbstractMappingQueryElementHandler extends AbstractTermalElementHandler<SqlQuery>
+public abstract class AbstractMappingQueryElementHandler extends AbstractTermalElementHandler
 {
    private SqlQuery mQuery;
 
@@ -26,8 +26,7 @@ public abstract class AbstractMappingQueryElementHandler extends AbstractTermalE
       super(handler);
    }
 
-   @Override
-   public SqlQuery getMappingObject()
+   public SqlQuery getSourceQuery()
    {
       return mQuery;
    }

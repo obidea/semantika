@@ -27,7 +27,7 @@ import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.util.StringUtils;
 
-public abstract class AbstractMappingElementHandler extends AbstractTermalElementHandler<IMapping>
+public abstract class AbstractMappingElementHandler extends AbstractTermalElementHandler
 {
    private IMapping mMapping;
 
@@ -36,8 +36,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       super(handler);
    }
 
-   @Override
-   public IMapping getMappingObject()
+   public IMapping getMapping()
    {
       return mMapping;
    }

@@ -17,18 +17,17 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.MappingSet;
-import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class MappingElementHandler extends AbstractTermalElementHandler<MutableMappingSet>
+public class MappingElementHandler extends AbstractTermalElementHandler
 {
    private SqlQuery mSourceQuery;
 
    private ITerm mSubjectTermMap;
 
-   private MutableMappingSet mMappingSet = new MappingSet();
+   private MappingSet mMappingSet = new MappingSet();
 
    public MappingElementHandler(TermalXmlParserHandler handler)
    {
@@ -59,7 +58,7 @@ public class MappingElementHandler extends AbstractTermalElementHandler<MutableM
    }
 
    @Override
-   public MutableMappingSet getMappingObject()
+   public MappingSet getMappingSet()
    {
       return mMappingSet;
    }
@@ -98,7 +97,7 @@ public class MappingElementHandler extends AbstractTermalElementHandler<MutableM
        * and predicate-object map. Use the method
        * <code>getParentElement().getSourceQuery()</code> to get this object.
        */
-      final SqlQuery query = handler.getMappingObject();
+      final SqlQuery query = handler.getSourceQuery();
       setSourceQuery(query);
    }
 
@@ -110,7 +109,7 @@ public class MappingElementHandler extends AbstractTermalElementHandler<MutableM
        * many-to-many relationship. If so, the handler will produce no class
        * mapping and no new mapping is added to the mapping set.
        */
-      final IMapping classMapping = handler.getMappingObject();
+      final IMapping classMapping = handler.getMapping();
       if (classMapping != null) {
          mMappingSet.add(classMapping);
       }
@@ -131,7 +130,7 @@ public class MappingElementHandler extends AbstractTermalElementHandler<MutableM
        * The handler will always produce a property mapping if users make the
        * definition properly in the mapping file.
        */
-      final IMapping propertyMapping = handler.getMappingObject();
+      final IMapping propertyMapping = handler.getMapping();
       mMappingSet.add(propertyMapping);
    }
 }

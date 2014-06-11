@@ -30,11 +30,11 @@ import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 import com.obidea.semantika.util.LogUtils;
 
-public abstract class AbstractTermalElementHandler<E> implements IMappingElementHandler<E>
+public abstract class AbstractTermalElementHandler implements IMappingElementHandler
 {
    private TermalXmlParserHandler mHandler;
 
-   private AbstractTermalElementHandler<?> mParentElement;
+   private AbstractTermalElementHandler mParentElement;
 
    private StringBuilder mStringBuilder;
 
@@ -115,12 +115,12 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
       return mElementName;
    }
 
-   public void setParentElement(AbstractTermalElementHandler<?> handler)
+   public void setParentElement(AbstractTermalElementHandler handler)
    {
       mParentElement = handler;
    }
 
-   protected AbstractTermalElementHandler<?> getParentElement()
+   protected AbstractTermalElementHandler getParentElement()
    {
       return mParentElement;
    }
