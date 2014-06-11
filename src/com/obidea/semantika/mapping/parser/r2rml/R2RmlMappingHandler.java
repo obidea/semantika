@@ -35,6 +35,7 @@ import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
@@ -62,6 +63,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       
       int termMap = arg.getType();
       String value = arg.getValue();
+      String termType = arg.getTermType();
+      String datatype = arg.getDatatype();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
             throw new IllegalR2RmlMappingException("Subject map cannot use column-valued term map"); //$NON-NLS-1$
@@ -69,9 +72,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             setSubjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
             break;
          case TermMap.TEMPLATE_VALUE:
-            R2RmlTemplate template = new R2RmlTemplate(value);
-            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-            setSubjectMapValue(getMappingObjectFactory().createUriTemplate(template.getTemplateString(), parameters));
+            setSubjectMapValue(getTemplateTerm(value, termType, datatype));
             break;
       }
       // Create the class mapping if a class URI specified in the mapping
@@ -151,10 +152,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             setObjectMapValue(getLiteralTerm(value, termType, datatype));
             break;
          case TermMap.TEMPLATE_VALUE:
-            R2RmlTemplate template = new R2RmlTemplate(value);
-            String templateString = template.getTemplateString();
-            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-            setObjectMapValue(getMappingObjectFactory().createUriTemplate(templateString, parameters));
+            setObjectMapValue(getTemplateTerm(value, termType, datatype));
             break;
       }
    }
@@ -242,6 +240,32 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       else {
          String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
          throw new R2RmlParserException(message);  
+      }
+   }
+
+   private ITerm getTemplateTerm(String value, String termType, String datatype)
+   {
+      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
+         if (StringUtils.isEmpty(datatype)) {
+            R2RmlTemplate template = new R2RmlTemplate(value);
+            String templateString = template.getTemplateString();
+            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
+            UriTemplate uriTemplate = getMappingObjectFactory().createUriTemplate(templateString, parameters);
+            return uriTemplate;
+         }
+         else {
+            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
+         }
+      }
+      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
+         throw new UnsupportedR2RmlFeatureException("rr:template for literal string construction");
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
+      }
+      else {
+         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
+         throw new R2RmlParserException(message);
       }
    }
 
