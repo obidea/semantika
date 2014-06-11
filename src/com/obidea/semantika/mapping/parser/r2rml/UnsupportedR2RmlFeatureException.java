@@ -19,16 +19,16 @@ public class UnsupportedR2RmlFeatureException extends R2RmlParserException
 {
    private static final long serialVersionUID = 629451L;
 
-   private String mFeatureName;
+   private String mFeatureDescription;
 
-   public UnsupportedR2RmlFeatureException(String featureName)
+   public UnsupportedR2RmlFeatureException(String featureDescription)
    {
-      mFeatureName = featureName;
+      mFeatureDescription = featureDescription;
    }
 
    @Override
    public String getMessage()
    {
-      return String.format("Unsupported R2RML feature \"%s\"", mFeatureName); //$NON-NLS-1$
+      return String.format("Semantika does not support R2RML feature \"%s\"", mFeatureDescription); //$NON-NLS-1$
    }
 }
