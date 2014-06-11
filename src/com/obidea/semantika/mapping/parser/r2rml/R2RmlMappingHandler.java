@@ -69,7 +69,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          case TermMap.COLUMN_VALUE:
             throw new IllegalR2RmlMappingException("Subject map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
-            setSubjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
+            setSubjectMapValue(getLiteralTerm(value, termType, datatype));
             break;
          case TermMap.TEMPLATE_VALUE:
             setSubjectMapValue(getTemplateTerm(value, termType, datatype));
@@ -112,11 +112,13 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       validatePredicateMap(arg);
       int termMap = arg.getType();
       String value = arg.getValue();
+      String termType = arg.getTermType();
+      String datatype = arg.getDatatype();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
-            setPredicateMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
+            setPredicateMapValue(getLiteralTerm(value, termType, datatype));
             break;
          case TermMap.TEMPLATE_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use template-valued term map"); //$NON-NLS-1$
