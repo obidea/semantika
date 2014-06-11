@@ -67,7 +67,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       String datatype = arg.getDatatype();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
-            throw new IllegalR2RmlMappingException("Subject map cannot use column-valued term map"); //$NON-NLS-1$
+            setSubjectMapValue(getColumnTerm(value, termType, datatype));
+            break;
          case TermMap.CONSTANT_VALUE:
             setSubjectMapValue(getLiteralTerm(value, termType, datatype));
             break;
