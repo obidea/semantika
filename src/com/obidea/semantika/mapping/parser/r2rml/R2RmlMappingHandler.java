@@ -37,6 +37,7 @@ import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.parser.AbstractMappingHandler;
+import com.obidea.semantika.mapping.parser.R2RmlVocabulary;
 
 public class R2RmlMappingHandler extends AbstractMappingHandler implements IMappingVisitor
 {
@@ -54,6 +55,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    @Override
    public void visit(SubjectMap arg)
    {
+      validateSubjectMap(arg);
       setClassUri(arg.getClassIri());
       
       int termMap = arg.getType();
@@ -78,6 +80,17 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
    }
 
+   /*
+    * Validation procedure based on http://www.w3.org/TR/r2rml/#termtype
+    */
+   private void validateSubjectMap(SubjectMap arg)
+   {
+      String termType = arg.getTermType();
+      if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         throw new SemantikaRuntimeException("Subject map cannot have term type rr:Literal");
+      }
+   }
+
    @Override
    public void visit(PredicateObjectMap arg)
    {
@@ -93,6 +106,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    @Override
    public void visit(PredicateMap arg)
    {
+      validatePredicateMap(arg);
       int termMap = arg.getType();
       String value = arg.getValue();
       switch (termMap) {
@@ -103,6 +117,20 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             break;
          case TermMap.TEMPLATE_VALUE:
             throw new SemantikaRuntimeException("Predicate map cannot use template-valued term map");
+      }
+   }
+
+   /*
+    * Validation procedure based on http://www.w3.org/TR/r2rml/#termtype
+    */
+   private void validatePredicateMap(PredicateMap arg)
+   {
+      String termType = arg.getTermType();
+      if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         throw new SemantikaRuntimeException("Subject map cannot have term type rr:Literal");
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+         throw new SemantikaRuntimeException("Subject map cannot have term type rr:BlankNode");
       }
    }
 
