@@ -88,7 +88,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    private void validateSubjectMap(SubjectMap arg)
    {
       String termType = arg.getTermType();
-      if (termType.equals(R2RmlVocabulary.LITERAL)) {
+      if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
       }
    }
@@ -128,10 +128,10 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    private void validatePredicateMap(PredicateMap arg)
    {
       String termType = arg.getTermType();
-      if (termType.equals(R2RmlVocabulary.LITERAL)) {
+      if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:BlankNode"); //$NON-NLS-1$
       }
    }
@@ -176,7 +176,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
 
    private SqlColumn getColumnTerm(String columnName, String termType, String datatype)
    {
-      if (termType.equals(R2RmlVocabulary.IRI)) {
+      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             SqlColumn column = getColumnTerm(columnName);
             column.setUserDatatype(DataType.ANY_URI); // make it as an IRI object
@@ -186,7 +186,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
       }
-      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             return getColumnTerm(columnName); // set as natural RDF literal
          }
@@ -196,7 +196,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             return column; // set as datatype-override RDF literal
          }
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
       }
       else {
@@ -217,7 +217,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
 
    private ITerm getLiteralTerm(String value, String termType, String datatype)
    {
-      if (termType.equals(R2RmlVocabulary.IRI)) {
+      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             UriReference uri = getExpressionObjectFactory().getUriReference(createUri(value));
             return uri;
@@ -226,7 +226,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
       }
-      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             Literal literal = getExpressionObjectFactory().getLiteral(value, DataType.STRING); // by default
             return literal;
@@ -236,7 +236,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             return literal;
          }
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
       }
       else {
