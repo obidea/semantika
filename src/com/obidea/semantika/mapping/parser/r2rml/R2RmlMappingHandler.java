@@ -177,10 +177,11 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
 
    private SqlColumn getColumnTerm(String columnName, String termType, String datatype)
    {
-      SqlColumn column = getColumnTerm(columnName);
       if (termType.equals(R2RmlVocabulary.IRI)) {
          if (StringUtils.isEmpty(datatype)) {
-            column.setUserDatatype(DataType.ANY_URI);
+            SqlColumn column = getColumnTerm(columnName);
+            column.setUserDatatype(DataType.ANY_URI); // make it as an IRI object
+            return column;
          }
          else {
             throw new SemantikaRuntimeException("Illegal operation: Can't use rr:datatype together with term type rr:IRI");
@@ -188,16 +189,18 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
          if (StringUtils.isEmpty(datatype)) {
-            // NO-OP: set as natural RDF literal
+            return getColumnTerm(columnName); // set as natural RDF literal
          }
          else {
-            column.setUserDatatype(datatype); // set as datatype-override RDF literal
+            SqlColumn column = getColumnTerm(columnName);
+            column.setUserDatatype(datatype);
+            return column; // set as datatype-override RDF literal
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
          throw new SemantikaRuntimeException("Blank node is not supported yet");
       }
-      return column;
+      throw new SemantikaRuntimeException("Unknown term type \"" + termType + "\"");
    }
 
    private SqlColumn getColumnTerm(String columnName)
