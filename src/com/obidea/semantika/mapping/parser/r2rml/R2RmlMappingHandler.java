@@ -31,7 +31,6 @@ import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
@@ -65,7 +64,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       String value = arg.getValue();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
-            throw new SemantikaRuntimeException("Subject map cannot use column-valued term map"); //$NON-NLS-1$
+            throw new IllegalR2RmlMappingException("Subject map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
             setSubjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
             break;
@@ -90,7 +89,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       String termType = arg.getTermType();
       if (termType.equals(R2RmlVocabulary.LITERAL)) {
-         throw new SemantikaRuntimeException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
+         throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
       }
    }
 
@@ -114,12 +113,12 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       String value = arg.getValue();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
-            throw new SemantikaRuntimeException("Predicate map cannot use column-valued term map"); //$NON-NLS-1$
+            throw new IllegalR2RmlMappingException("Predicate map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
             setPredicateMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
             break;
          case TermMap.TEMPLATE_VALUE:
-            throw new SemantikaRuntimeException("Predicate map cannot use template-valued term map"); //$NON-NLS-1$
+            throw new IllegalR2RmlMappingException("Predicate map cannot use template-valued term map"); //$NON-NLS-1$
       }
    }
 
@@ -130,10 +129,10 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       String termType = arg.getTermType();
       if (termType.equals(R2RmlVocabulary.LITERAL)) {
-         throw new SemantikaRuntimeException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
+         throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:Literal"); //$NON-NLS-1$
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new SemantikaRuntimeException("Subject map cannot have term type rr:BlankNode"); //$NON-NLS-1$
+         throw new IllegalR2RmlMappingException("Subject map cannot have term type rr:BlankNode"); //$NON-NLS-1$
       }
    }
 
@@ -184,7 +183,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             return column;
          }
          else {
-            throw new SemantikaRuntimeException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
+            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
@@ -198,9 +197,12 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new SemantikaRuntimeException("Blank node is not supported yet"); //$NON-NLS-1$
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
       }
-      throw new SemantikaRuntimeException("Unknown term type \"" + termType + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+      else {
+         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
+         throw new R2RmlParserException(message);
+      }
    }
 
    private SqlColumn getColumnTerm(String columnName)
@@ -209,7 +211,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       if (column != null) {
          return column;
       }
-      throw new SemantikaRuntimeException("Unknown column name \"" + columnName + "\")"); //$NON-NLS-1$ //$NON-NLS-2$
+      String message = String.format("Unknown column name \"%s\"", columnName); //$NON-NLS-1$
+      throw new R2RmlParserException(message);
    }
 
    private ITerm getLiteralTerm(String value, String termType, String datatype)
@@ -220,7 +223,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             return uri;
          }
          else {
-            throw new SemantikaRuntimeException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
+            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
@@ -234,9 +237,12 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new SemantikaRuntimeException("Blank node is not supported yet"); //$NON-NLS-1$
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
       }
-      throw new SemantikaRuntimeException("Unknown term type \"" + termType + "\""); //$NON-NLS-1$ //$NON-NLS-2$
+      else {
+         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
+         throw new R2RmlParserException(message);  
+      }
    }
 
    private List<SqlColumn> getColumnTerms(List<String> columnNames)
