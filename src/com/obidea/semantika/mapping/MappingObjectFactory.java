@@ -58,7 +58,7 @@ public class MappingObjectFactory
       return new TripleAtom( subjectMapValue, TermUtils.makeUriReference(predicate), objectMapValue);
    }
 
-   public UriTemplate createUriTemplate(String templateString, List<ITerm> parameters)
+   public UriTemplate createUriTemplate(String templateString, List<? extends ITerm> parameters)
    {
       return new UriTemplate(templateString, parameters);
    }

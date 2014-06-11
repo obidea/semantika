@@ -28,13 +28,12 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
-import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
-import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.parser.AbstractMappingHandler;
 
 public class R2RmlMappingHandler extends AbstractMappingHandler implements IMappingVisitor
@@ -65,11 +64,10 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             break;
          case TermMap.TEMPLATE_VALUE:
             R2RmlTemplate template = new R2RmlTemplate(value);
-            List<ITerm> parameters = getColumnTerms(template.getColumnNames());
+            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
             setSubjectMapValue(getMappingObjectFactory().createUriTemplate(template.getTemplateString(), parameters));
             break;
       }
-      
       // Create the class mapping if a class URI specified in the mapping
       if (getClassUri() != null) {
          ClassMapping cm = getMappingObjectFactory().createClassMapping(getClassUri(), getSqlQuery());
@@ -121,7 +119,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          case TermMap.TEMPLATE_VALUE:
             R2RmlTemplate template = new R2RmlTemplate(value);
             String templateString = template.getTemplateString();
-            List<ITerm> parameters = getColumnTerms(template.getColumnNames());
+            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
             setObjectMapValue(getMappingObjectFactory().createUriTemplate(templateString, parameters));
             break;
       }
@@ -142,18 +140,18 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       return ((UriReference) getPredicateMapValue()).toUri();
    }
 
-   private ITerm getColumnTerm(String columnName)
+   private SqlColumn getColumnTerm(String columnName)
    {
-      ISqlExpression column = getSqlQuery().findSelectItemExpression(columnName);
+      SqlColumn column = (SqlColumn) getSqlQuery().findSelectItemExpression(columnName);
       if (column != null) {
-         return (ITerm) column;
+         return column;
       }
-      throw new SemantikaRuntimeException("Unknown column name in template-valued term map (value=" + columnName + ")");
+      throw new SemantikaRuntimeException("Unknown column name in template-valued term map \"" + columnName + "\")");
    }
 
-   private List<ITerm> getColumnTerms(List<String> columnNames)
+   private List<SqlColumn> getColumnTerms(List<String> columnNames)
    {
-      List<ITerm> toReturn = new ArrayList<ITerm>();
+      List<SqlColumn> toReturn = new ArrayList<SqlColumn>();
       for (String columnName : columnNames) {
          toReturn.add(getColumnTerm(columnName));
       }
