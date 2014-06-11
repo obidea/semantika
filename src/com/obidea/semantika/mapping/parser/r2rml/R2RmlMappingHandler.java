@@ -19,6 +19,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import io.github.johardi.r2rmlparser.document.IMappingVisitor;
 import io.github.johardi.r2rmlparser.document.LogicalTable;
 import io.github.johardi.r2rmlparser.document.ObjectMap;
@@ -109,9 +111,10 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       int termMap = arg.getType();
       String value = arg.getValue();
+      String datatype = arg.getDatatype();
       switch (termMap) {
          case TermMap.COLUMN_VALUE:
-            setObjectMapValue(getColumnTerm(value));
+            setObjectMapValue(getColumnTerm(value, datatype));
             break;
          case TermMap.CONSTANT_VALUE:
             setObjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
@@ -138,6 +141,15 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    private URI getPropertyUri()
    {
       return ((UriReference) getPredicateMapValue()).toUri();
+   }
+
+   private SqlColumn getColumnTerm(String columnName, String datatype)
+   {
+      SqlColumn column = getColumnTerm(columnName);
+      if (!StringUtils.isEmpty(datatype)) {
+         column.setUserDatatype(datatype);
+      }
+      return column;
    }
 
    private SqlColumn getColumnTerm(String columnName)
