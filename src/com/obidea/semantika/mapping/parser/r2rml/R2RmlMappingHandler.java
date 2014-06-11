@@ -32,6 +32,8 @@ import io.github.johardi.r2rmlparser.document.TermMap;
 
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.base.ClassMapping;
@@ -147,7 +149,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             setObjectMapValue(getColumnTerm(value, termType, datatype));
             break;
          case TermMap.CONSTANT_VALUE:
-            setObjectMapValue(getExpressionObjectFactory().getUriReference(createUri(value)));
+            setObjectMapValue(getLiteralTerm(value, termType, datatype));
             break;
          case TermMap.TEMPLATE_VALUE:
             R2RmlTemplate template = new R2RmlTemplate(value);
@@ -205,6 +207,33 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          return column;
       }
       throw new SemantikaRuntimeException("Unknown column name in template-valued term map \"" + columnName + "\")");
+   }
+
+   private ITerm getLiteralTerm(String value, String termType, String datatype)
+   {
+      if (termType.equals(R2RmlVocabulary.IRI)) {
+         if (StringUtils.isEmpty(datatype)) {
+            UriReference uri = getExpressionObjectFactory().getUriReference(createUri(value));
+            return uri;
+         }
+         else {
+            throw new SemantikaRuntimeException("Illegal operation: Can't use rr:datatype together with term type rr:IRI");
+         }
+      }
+      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         if (StringUtils.isEmpty(datatype)) {
+            Literal literal = getExpressionObjectFactory().getLiteral(value, DataType.STRING); // by default
+            return literal;
+         }
+         else {
+            Literal literal = getExpressionObjectFactory().getLiteral(value, datatype);
+            return literal;
+         }
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+         throw new SemantikaRuntimeException("Blank node is not supported yet");
+      }
+      throw new SemantikaRuntimeException("Unknown term type \"" + termType + "\"");
    }
 
    private List<SqlColumn> getColumnTerms(List<String> columnNames)
