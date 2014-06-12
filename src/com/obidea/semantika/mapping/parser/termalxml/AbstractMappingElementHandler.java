@@ -305,7 +305,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       if (column != null) {
          return column;
       }
-      throw selectItemNameNotFoundException(columnName);
+      throw columnNotFoundException(columnName);
    }
 
    private List<SqlColumn> getColumnTerms(List<String> columnNames) throws MappingParserException

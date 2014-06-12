@@ -17,11 +17,11 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class SelectItemNotFoundException extends MappingParserException
+public class ColumnNotFoundException extends MappingParserException
 {
    private static final long serialVersionUID = 629451L;
 
-   public SelectItemNotFoundException(String message, int lineNumber, int columnNumber)
+   public ColumnNotFoundException(String message, int lineNumber, int columnNumber)
    {
       super(message, lineNumber, columnNumber);
    }

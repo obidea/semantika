@@ -189,9 +189,9 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected SelectItemNotFoundException selectItemNameNotFoundException(String value)
+   protected ColumnNotFoundException columnNotFoundException(String value)
    {
-      return new SelectItemNotFoundException("Column name not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new ColumnNotFoundException("Column name was not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
