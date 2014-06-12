@@ -15,9 +15,12 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
+import java.net.URI;
+
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.MappingSet;
-import com.obidea.semantika.mapping.base.IMapping;
+import com.obidea.semantika.mapping.base.IClassMapping;
+import com.obidea.semantika.mapping.base.IPropertyMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
@@ -68,17 +71,17 @@ public class MappingElementHandler extends AbstractTermalElementHandler
       mSourceQuery = sourceQuery;
    }
 
-   /* package */SqlQuery getSourceQuery()
+   protected SqlQuery getSourceQuery()
    {
       return mSourceQuery;
    }
 
-   private void setSubjectTermMap(ITerm template)
+   private void setSubjectMapValue(ITerm template)
    {
       mSubjectTermMap = template;
    }
 
-   /* package */ITerm getSubjectTermMap()
+   protected ITerm getSubjectMapValue()
    {
       return mSubjectTermMap;
    }
@@ -92,11 +95,6 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    @Override
    /* package */void handleChild(LogicalTableElementHandler handler)
    {
-      /*
-       * Create a wrapper object to make easy the object sharing for subject map
-       * and predicate-object map. Use the method
-       * <code>getParentElement().getSourceQuery()</code> to get this object.
-       */
       final SqlQuery query = handler.getSourceQuery();
       setSourceQuery(query);
    }
@@ -104,33 +102,24 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    @Override
    /* package */void handleChild(SubjectMapElementHandler handler) throws MappingParserException
    {
-      /*
-       * Users may not define the subject class, e.g., in the case of defining
-       * many-to-many relationship. If so, the handler will produce no class
-       * mapping and no new mapping is added to the mapping set.
-       */
-      final IMapping classMapping = handler.getMapping();
-      if (classMapping != null) {
-         mMappingSet.add(classMapping);
-      }
+      final ITerm subjectTerm = handler.getSubjectMapValue();
+      setSubjectMapValue(subjectTerm);
       
-      /*
-       * Save subject template object in this parent element so that it can be
-       * shared to the subsequent predicate-object map handlers. Use the method
-       * <code>getParentElement().getSubjectTemplate()</code> to get this
-       * object.
-       */
-      setSubjectTermMap(handler.getSubjectTermMap());
+      final URI classUri = handler.getClassUri();
+      if (classUri != null) {
+         IClassMapping cm = getMappingObjectFactory().createClassMapping(classUri, getSourceQuery());
+         cm.setSubjectMapValue(subjectTerm);
+         mMappingSet.add(cm);
+      }
    }
 
    @Override
    /* package */void handleChild(PredicateObjectMapElementHandler handler)
    {
-      /*
-       * The handler will always produce a property mapping if users make the
-       * definition properly in the mapping file.
-       */
-      final IMapping propertyMapping = handler.getMapping();
-      mMappingSet.add(propertyMapping);
+      final URI propertyUri = handler.getPropertyUri();
+      IPropertyMapping pm = getMappingObjectFactory().createPropertyMapping(propertyUri, getSourceQuery());
+      pm.setSubjectMapValue(getSubjectMapValue());
+      pm.setObjectMapValue(handler.getObjectMapValue());
+      mMappingSet.add(pm);
    }
 }

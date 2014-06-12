@@ -18,15 +18,11 @@ package com.obidea.semantika.mapping.parser.termalxml;
 import java.net.URI;
 
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.mapping.base.IClassMapping;
-import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
 public class SubjectMapElementHandler extends AbstractMappingElementHandler
 {
-   private URI mClassSignature;
-   private SqlQuery mSourceQuery;
-
+   private URI mClassUri;
    private ITerm mSubjectMapValue;
 
    public SubjectMapElementHandler(TermalXmlParserHandler handler)
@@ -38,13 +34,12 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    public void startElement(String name) throws MappingParserException
    {
       super.startElement(name);
-      mSourceQuery = getParentElement().getSourceQuery();
    }
 
    @Override
    public void endElement() throws MappingParserException
    {
-      setMapping(createMapping());
+      processSubjectMap();
       getParentElement().handleChild(this);
    }
 
@@ -52,35 +47,63 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    public void attribute(String name, String value) throws MappingParserException
    {
       if (name.equals(R2RmlVocabulary.CLASS.getQName())) {
-         URI classUri = getUri(value);
-         checkClassSignature(classUri);
-         mClassSignature = classUri;
+         setClassUri(getUri(value));
+      }
+      else if (name.equals(R2RmlVocabulary.COLUMN.getQName())) {
+         setTermMap(TermMap.COLUMN_VALUE);
+         setValue(value);
       }
       else if (name.equals(R2RmlVocabulary.TEMPLATE.getQName())) {
-         mSubjectMapValue = getUriTemplateFunction(value);
+         setTermMap(TermMap.TEMPLATE_VALUE);
+         setValue(value);
       }
       else if (name.equals(R2RmlVocabulary.SUBJECT.getQName())) {
-         mSubjectMapValue = getUriReference(value);
+         setTermMap(TermMap.CONSTANT_VALUE);
+         setValue(value);
+      }
+      else if (name.equals(R2RmlVocabulary.TERM_TYPE.getQName())) {
+         setTermType(getUri(value).toString());
+      }
+      else if (name.equals(R2RmlVocabulary.DATAYPE.getQName())) {
+         setDatatype(getUri(value).toString());
       }
       else {
          throw unknownXmlAttributeException(name);
       }
    }
 
-   @Override
-   protected IClassMapping createMapping()
+   private void processSubjectMap() throws MappingParserException
    {
-      if (mClassSignature == null) {
-         return null; // returns null if class atom isn't stated
-      }
-      else {
-         IClassMapping cm = getMappingObjectFactory().createClassMapping(mClassSignature, mSourceQuery);
-         cm.setSubjectMapValue(mSubjectMapValue); // subject template
-         return cm;
+      switch (getTermMap()) {
+         case COLUMN_VALUE:
+            setSubjectMapValue(getColumnTerm(getValue(), getTermType(), getDatatype()));
+            break;
+         case CONSTANT_VALUE:
+            setSubjectMapValue(getLiteralTerm(getValue(), getTermType(), getDatatype()));
+            break;
+         case TEMPLATE_VALUE:
+            setSubjectMapValue(getTemplateTerm(getValue(), getTermType(), getDatatype()));
+            break;
       }
    }
 
-   protected ITerm getSubjectTermMap()
+   private void setClassUri(URI classUri) throws ClassNotFoundException, PrefixNotFoundException
+   {
+      checkClassSignature(classUri);
+      mClassUri = classUri;
+   }
+
+   public URI getClassUri()
+   {
+      return mClassUri;
+   }
+
+   private void setSubjectMapValue(ITerm subjectTerm)
+   {
+      mSubjectMapValue = subjectTerm;
+   }
+
+   public ITerm getSubjectMapValue()
    {
       return mSubjectMapValue;
    }

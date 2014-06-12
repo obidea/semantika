@@ -147,7 +147,7 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
 
    protected UnsupportedTermTypeException unsupportedTermTypeException(String value)
    {
-      return new UnsupportedTermTypeException("Unsupported term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new UnsupportedTermTypeException("Unsupported term type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
@@ -205,6 +205,11 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
    {
       return new UnsupportedUriTemplateArgumentException("Only support column reference as URI template argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
+   }
+
+   protected IllegalTermalMappingException illegalTermalMappingException(String message)
+   {
+      return new IllegalTermalMappingException(message, getLineNumber(), getColumnNumber());
    }
 
    protected SourceQueryParsingException sourceQueryParsingException(SqlParserException e)
