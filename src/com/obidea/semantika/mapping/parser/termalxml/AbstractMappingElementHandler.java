@@ -37,10 +37,13 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
 {
    private TermMap mTermMap;
 
-   private String mTermType;
+   protected String mTermType;
+   
    private String mValue;
    private String mDatatype;
    private String mLanguage;
+
+   protected boolean bUserDefinedTermType = false;
 
    protected enum TermMap { COLUMN_VALUE, CONSTANT_VALUE, TEMPLATE_VALUE };
 
@@ -58,14 +61,26 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    protected void setTermMap(TermMap termMap)
    {
       mTermMap = termMap;
-      if (!hasTermType()) {
-         switch (mTermMap) {
-            case COLUMN_VALUE: setTermType(R2RmlVocabulary.LITERAL.getUri()); break;
-            case TEMPLATE_VALUE:
-            case CONSTANT_VALUE: setTermType(R2RmlVocabulary.IRI.getUri()); break;
-         }
+      if (!bUserDefinedTermType) {
+         decideDefaultTermType();
       }
    }
+
+   /**
+    * If the term map does not have a rr:termType property, then its term type is:
+    * <ol>
+    * <li>rr:Literal, if it is an object map and at least one of the following conditions is true:
+    *    <ul>
+    *    <li>It is a column-based term map.</li>
+    *    <li>It has a rr:language property (and thus a specified language tag).</li>
+    *    <li>It has a rr:datatype property (and thus a specified datatype).</li>
+    *    </ul>
+    * </li>
+    * <li>rr:IRI, otherwise.</li>
+    * </ol>
+    * (Reference: http://www.w3.org/TR/r2rml/#termtype)
+    */
+   protected abstract void decideDefaultTermType();
 
    protected TermMap getTermMap()
    {
@@ -75,16 +90,12 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    protected void setTermType(String type)
    {
       mTermType = type;
+      bUserDefinedTermType = true;
    }
 
    protected String getTermType()
    {
       return mTermType;
-   }
-
-   protected boolean hasTermType()
-   {
-      return (StringUtils.isEmpty(mTermType)) ? false : true;
    }
 
    protected void setValue(String value)
@@ -100,9 +111,6 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    protected void setDatatype(String datatype)
    {
       mDatatype = datatype;
-      if (!hasTermType()) {
-         setTermType(R2RmlVocabulary.LITERAL.getUri());
-      }
    }
 
    protected String getDatatype()
@@ -119,12 +127,9 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       return (StringUtils.isEmpty(mDatatype)) ? false : true;
    }
 
-   protected void setLanguage(String value)
+   protected void setLanguage(String language)
    {
-      mLanguage = value;
-      if (!hasTermType()) {
-         setTermType(R2RmlVocabulary.LITERAL.getUri());
-      }
+      mLanguage = language;
    }
 
    protected String getLanguage()

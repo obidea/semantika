@@ -31,6 +31,12 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    }
 
    @Override
+   protected void decideDefaultTermType()
+   {
+      mTermType = R2RmlVocabulary.IRI.getUri();
+   }
+
+   @Override
    public void startElement(String name) throws MappingParserException
    {
       super.startElement(name);

@@ -31,6 +31,16 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    }
 
    @Override
+   protected void decideDefaultTermType()
+   {
+      switch (getTermMap()) {
+         case COLUMN_VALUE: mTermType = R2RmlVocabulary.LITERAL.getUri(); break;
+         case CONSTANT_VALUE:
+         case TEMPLATE_VALUE: mTermType = R2RmlVocabulary.IRI.getUri(); break;
+      }
+   }
+
+   @Override
    public void startElement(String name) throws MappingParserException
    {
       super.startElement(name);
@@ -69,6 +79,24 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
       }
       else {
          throw unknownXmlAttributeException(name);
+      }
+   }
+
+   @Override
+   protected void setDatatype(String datatype)
+   {
+      super.setDatatype(datatype);
+      if (!bUserDefinedTermType) {
+         mTermType = R2RmlVocabulary.LITERAL.getUri();
+      }
+   }
+
+   @Override
+   protected void setLanguage(String language)
+   {
+      super.setLanguage(language);
+      if (!bUserDefinedTermType) {
+         mTermType = R2RmlVocabulary.LITERAL.getUri();
       }
    }
 
