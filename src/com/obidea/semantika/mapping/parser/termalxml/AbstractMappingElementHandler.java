@@ -313,7 +313,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
       boolean pass = TypeConversion.verify(sourceType, targetType);
       if (!pass) {
-         throw datatypeOverrideException(oldDatatype, newDatatype);
+         throw datatypeOverrideException(sourceType.toString(), targetType.toString());
       }
    }
 
