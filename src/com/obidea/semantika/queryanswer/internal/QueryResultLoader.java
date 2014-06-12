@@ -26,7 +26,6 @@ import java.util.List;
 
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.exception.SemantikaException;
-import com.obidea.semantika.mapping.UriTemplateBuilder;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
 import com.obidea.semantika.queryanswer.paging.SqlPaging;
 import com.obidea.semantika.queryanswer.paging.SqlPagingStrategy;
@@ -35,6 +34,7 @@ import com.obidea.semantika.queryanswer.result.QueryResult;
 import com.obidea.semantika.queryanswer.result.QueryResultBuilder;
 import com.obidea.semantika.queryanswer.result.Value;
 import com.obidea.semantika.queryanswer.result.ValueList;
+import com.obidea.semantika.util.TemplateStringHelper;
 
 public abstract class QueryResultLoader
 {
@@ -169,7 +169,7 @@ public abstract class QueryResultLoader
                 * We assume if the URI string is invalid it means the string is a
                 * URI template construction, i.e., <template> : <value1> <value2> etc. 
                 */
-               uriString = UriTemplateBuilder.getUri(uriString);
+               uriString = TemplateStringHelper.buildUri(uriString);
             }
             value = URI.create(uriString);
          }

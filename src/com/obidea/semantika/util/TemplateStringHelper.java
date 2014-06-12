@@ -13,16 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping;
+package com.obidea.semantika.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.obidea.semantika.util.StringUtils;
-
-public final class UriTemplateBuilder
+public final class TemplateStringHelper
 {
    private static final Pattern uriTemplateResult = Pattern.compile("([^\\s]*) :|\"([^\"]*)\""); //$NON-NLS-1$
 
@@ -48,7 +46,7 @@ public final class UriTemplateBuilder
       return arguments;
    }
 
-   public static String getUri(String input)
+   public static String buildUri(String input)
    {
       String templateString = getTemplateString(input);
       List<String> arguments = getTemplateArguments(input);

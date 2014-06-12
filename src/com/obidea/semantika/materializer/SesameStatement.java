@@ -23,7 +23,7 @@ import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.mapping.UriTemplateBuilder;
+import com.obidea.semantika.util.TemplateStringHelper;
 
 /* package */class SesameStatement implements Statement
 {
@@ -57,7 +57,7 @@ import com.obidea.semantika.mapping.UriTemplateBuilder;
       int category = mProjection.getDataCategory(1);
       switch (category) {
          case TriplesProjection.DATA_OBJECT_CATEGORY:
-            String uriString = UriTemplateBuilder.getUri(mSubjectValue);
+            String uriString = TemplateStringHelper.buildUri(mSubjectValue);
             return mValueFactory.createURI(uriString);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             throw new IllegalTermTypeException("Triple subject cannot be data value"); //$NON-NLS-1$
@@ -88,7 +88,7 @@ import com.obidea.semantika.mapping.UriTemplateBuilder;
       int category = mProjection.getDataCategory(3);
       switch (category) {
          case TriplesProjection.DATA_OBJECT_CATEGORY:
-            String uriString = UriTemplateBuilder.getUri(mObjectValue);
+            String uriString = TemplateStringHelper.buildUri(mObjectValue);
             return mValueFactory.createURI(uriString);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             String datatype = mProjection.getDatatype(3);
