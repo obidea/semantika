@@ -183,22 +183,15 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber()-1, getColumnNumber());
    }
 
-   protected TemplateNotFoundException templateNotFoundException(String value)
-   {
-      return new TemplateNotFoundException("Unspecified template name \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
-   }
-
    protected ColumnNotFoundException columnNotFoundException(String value)
    {
       return new ColumnNotFoundException("Column name was not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
-   protected InvalidFunctionCallException invalidFunctionCallException(String value)
+   protected IllegalTemplateCallException illegalTemplateCallException(String message)
    {
-      return new InvalidFunctionCallException("Invalid URI template usage \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
+      return new IllegalTemplateCallException(message, getLineNumber(), getColumnNumber());
    }
 
    protected IllegalTermalMappingException illegalTermalMappingException(String message)

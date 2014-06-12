@@ -17,11 +17,11 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class TemplateNotFoundException extends MappingParserException
+public class IllegalTemplateCallException extends MappingParserException
 {
    private static final long serialVersionUID = 629451L;
 
-   public TemplateNotFoundException(String message, int lineNumber, int columnNumber)
+   public IllegalTemplateCallException(String message, int lineNumber, int columnNumber)
    {
       super(message, lineNumber, columnNumber);
    }

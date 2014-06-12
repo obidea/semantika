@@ -273,30 +273,15 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
 
    private UriTemplate getUriTemplateFunction(String functionCall) throws MappingParserException
    {
-      // Get the URI template name
-      String templateName = FunctionCallUtils.getFunctionName(functionCall);
-      if (StringUtils.isEmpty(templateName)) {
-         throw invalidFunctionCallException(functionCall);
+      try {
+         TermalTemplate template = new TermalTemplate(functionCall, getUriTemplateMapper());
+         String templateString = template.getTemplateString();
+         List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
+         return getMappingObjectFactory().createUriTemplate(templateString, parameters);
       }
-      
-      // Get the URI template arguments
-      List<String> args = FunctionCallUtils.getFunctionParameters(functionCall);
-      if (args == null) {
-         throw invalidFunctionCallException(functionCall);
+      catch (Exception e) {
+         throw illegalTemplateCallException(e.getMessage());
       }
-      
-      // Construct the function symbol and the parameter objects.
-      String templateString = findTemplateString(templateName);
-      List<SqlColumn> parameters = getColumnTerms(args);
-      return getMappingObjectFactory().createUriTemplate(templateString, parameters);
-   }
-
-   private String findTemplateString(String templateName) throws TemplateNotFoundException
-   {
-      if (getUriTemplateMapper().containsKey(templateName)) {
-         return getUriTemplateMapper().get(templateName);
-      }
-      throw templateNotFoundException(templateName);
    }
 
    private SqlColumn getColumnTerm(String columnName) throws MappingParserException
