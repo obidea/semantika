@@ -75,4 +75,10 @@ public class XsdBoolean extends AbstractXmlType<Boolean>
    {
       return DataTypeConstants.BOOLEAN;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:boolean"; //$NON-NLS-1$
+   }
 }

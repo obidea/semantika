@@ -70,4 +70,10 @@ public class XsdString extends AbstractXmlType<String>
    {
       return DataTypeConstants.STRING;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:string"; //$NON-NLS-1$
+   }
 }

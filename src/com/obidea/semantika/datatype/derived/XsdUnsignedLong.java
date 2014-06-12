@@ -70,4 +70,10 @@ public class XsdUnsignedLong extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.UNSIGNED_LONG;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:unsignedLong"; //$NON-NLS-1$
+   }
 }

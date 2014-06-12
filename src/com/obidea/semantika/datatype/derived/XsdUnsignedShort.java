@@ -68,4 +68,10 @@ public class XsdUnsignedShort extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.UNSIGNED_SHORT;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:unsignedShort"; //$NON-NLS-1$
+   }
 }

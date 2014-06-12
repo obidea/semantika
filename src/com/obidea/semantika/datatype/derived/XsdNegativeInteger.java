@@ -65,4 +65,10 @@ public class XsdNegativeInteger extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.NEGATIVE_INTEGER;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:negativeInteger"; //$NON-NLS-1$
+   }
 }

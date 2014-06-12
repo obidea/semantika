@@ -52,4 +52,10 @@ public class XsdGYear extends AbstractTimelineType
    {
       return DataTypeConstants.G_YEAR;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:gYear"; //$NON-NLS-1$
+   }
 }

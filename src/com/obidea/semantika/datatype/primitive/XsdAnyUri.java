@@ -82,4 +82,10 @@ public class XsdAnyUri extends AbstractXmlType<URI>
    {
       return DataTypeConstants.ANY_URI;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:anyURI"; //$NON-NLS-1$
+   }
 }

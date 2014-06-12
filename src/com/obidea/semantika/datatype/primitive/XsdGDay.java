@@ -52,4 +52,10 @@ public class XsdGDay extends AbstractTimelineType
    {
       return DataTypeConstants.G_DAY;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:gDay"; //$NON-NLS-1$
+   }
 }

@@ -66,4 +66,10 @@ public class XsdShort extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.SHORT;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:short"; //$NON-NLS-1$
+   }
 }

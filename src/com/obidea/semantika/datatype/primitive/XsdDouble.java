@@ -75,4 +75,10 @@ public class XsdDouble extends AbstractXmlType<Double>
    {
       return DataTypeConstants.DOUBLE;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:double"; //$NON-NLS-1$
+   }
 }

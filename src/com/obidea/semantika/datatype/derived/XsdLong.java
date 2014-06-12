@@ -66,4 +66,10 @@ public class XsdLong extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.LONG;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:long"; //$NON-NLS-1$
+   }
 }

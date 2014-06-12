@@ -77,4 +77,10 @@ public class XsdDecimal extends AbstractXmlType<BigDecimal>
    {
       return DataTypeConstants.DECIMAL;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:decimal"; //$NON-NLS-1$
+   }
 }

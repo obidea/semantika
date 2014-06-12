@@ -75,4 +75,10 @@ public class XsdFloat extends AbstractXmlType<Float>
    {
       return DataTypeConstants.FLOAT;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:float"; //$NON-NLS-1$
+   }
 }

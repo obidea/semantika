@@ -62,4 +62,10 @@ public class XsdInteger extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.INTEGER;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:integer"; //$NON-NLS-1$
+   }
 }

@@ -63,4 +63,10 @@ public class XsdByte extends AbstractDerivedDecimalType
    {
       return DataTypeConstants.BYTE;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:byte"; //$NON-NLS-1$
+   }
 }
