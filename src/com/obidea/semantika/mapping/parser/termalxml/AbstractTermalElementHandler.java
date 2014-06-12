@@ -201,12 +201,6 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected UnsupportedUriTemplateArgumentException unsupportedUriTemplateArgumentException(String value)
-   {
-      return new UnsupportedUriTemplateArgumentException("Only support column reference as URI template argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
-   }
-
    protected IllegalTermalMappingException illegalTermalMappingException(String message)
    {
       return new IllegalTermalMappingException(message, getLineNumber(), getColumnNumber());
