@@ -125,13 +125,13 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
       return mParentElement;
    }
 
-   /* package */abstract void handleChild(MappingElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(MappingElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(LogicalTableElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(LogicalTableElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(SubjectMapElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(SubjectMapElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(PredicateObjectMapElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(PredicateObjectMapElementHandler handler) throws MappingParserException;
 
    protected UnknownXmlAttributeException unknownXmlAttributeException(String value)
    {

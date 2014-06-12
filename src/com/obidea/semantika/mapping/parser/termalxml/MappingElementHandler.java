@@ -87,20 +87,20 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    }
 
    @Override
-   /* package */void handleChild(MappingElementHandler handler)
+   protected void handleChild(MappingElementHandler handler)
    {
       // NO-OP: No recursive child
    }
 
    @Override
-   /* package */void handleChild(LogicalTableElementHandler handler)
+   protected void handleChild(LogicalTableElementHandler handler)
    {
       final SqlQuery query = handler.getSourceQuery();
       setSourceQuery(query);
    }
 
    @Override
-   /* package */void handleChild(SubjectMapElementHandler handler) throws MappingParserException
+   protected void handleChild(SubjectMapElementHandler handler) throws MappingParserException
    {
       final ITerm subjectTerm = handler.getSubjectMapValue();
       setSubjectMapValue(subjectTerm);
@@ -114,7 +114,7 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    }
 
    @Override
-   /* package */void handleChild(PredicateObjectMapElementHandler handler)
+   protected void handleChild(PredicateObjectMapElementHandler handler)
    {
       final URI propertyUri = handler.getPropertyUri();
       IPropertyMapping pm = getMappingObjectFactory().createPropertyMapping(propertyUri, getSourceQuery());

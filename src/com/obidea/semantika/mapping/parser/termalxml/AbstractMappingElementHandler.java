@@ -239,25 +239,25 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    }
 
    @Override
-   /* package */void handleChild(MappingElementHandler handler)
+   protected void handleChild(MappingElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(LogicalTableElementHandler handler)
+   protected void handleChild(LogicalTableElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(SubjectMapElementHandler handler)
+   protected void handleChild(SubjectMapElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(PredicateObjectMapElementHandler handler)
+   protected void handleChild(PredicateObjectMapElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
