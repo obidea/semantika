@@ -31,7 +31,11 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
+import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.DataType;
+import com.obidea.semantika.datatype.TypeConversion;
+import com.obidea.semantika.datatype.XmlDataTypeProfile;
+import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
@@ -193,6 +197,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
          else {
             SqlColumn column = getColumnTerm(columnName);
+            checkTypeConversion(column.getDatatype(), datatype);
             column.setUserDatatype(datatype);
             return column; // set as datatype-override RDF literal
          }
@@ -279,5 +284,26 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          toReturn.add(getColumnTerm(columnName));
       }
       return toReturn;
+   }
+
+   private void checkTypeConversion(String oldDatatype, String newDatatype) throws IllegalR2RmlMappingException
+   {
+      AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
+      AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
+      boolean pass = TypeConversion.verify(sourceType, targetType);
+      if (!pass) {
+         String message = String.format("Unable to cast value from %s to %s", sourceType, targetType); //$NON-NLS-1$
+         throw new IllegalR2RmlMappingException(message);
+      }
+   }
+
+   private AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws IllegalR2RmlMappingException
+   {
+      try {
+         return XmlDataTypeProfile.getXmlDatatype(datatypeUri);
+      }
+      catch (UnsupportedDataTypeException e) {
+         throw new IllegalR2RmlMappingException(e.getMessage());
+      }
    }
 }
