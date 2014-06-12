@@ -198,7 +198,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
       }
       else {
          String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
@@ -238,7 +238,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new UnsupportedR2RmlFeatureException("rr:BlankNode"); //$NON-NLS-1$
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
       }
       else {
          String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
