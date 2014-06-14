@@ -17,6 +17,14 @@ package com.obidea.semantika.queryanswer.internal;
 
 import java.util.List;
 
+import org.openrdf.query.MalformedQueryException;
+import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.algebra.Slice;
+import org.openrdf.query.algebra.TupleExpr;
+import org.openrdf.query.parser.ParsedQuery;
+import org.openrdf.query.parser.QueryParser;
+import org.openrdf.query.parser.QueryParserUtil;
+
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.IQueryEngineExt;
 import com.obidea.semantika.queryanswer.QueryEngineException;
@@ -27,24 +35,54 @@ import com.obidea.semantika.queryanswer.result.QueryResultHandlerException;
 
 public class SelectQuery implements ISelectQuery
 {
+   private static QueryParser sQueryValidator = QueryParserUtil.createParser(QueryLanguage.SPARQL);
+
    private QueryModifiers mQueryModifiers = new QueryModifiers();
    private StatementSettings mStatementSettings = new StatementSettings();
 
-   private String mQueryString;
+   private String mSparqlString;
    private IQueryEngineExt mQueryEngine;
    private QueryReturnMetadata mQueryReturnMetadata;
 
-   public SelectQuery(String sparql, final IQueryEngineExt queryEngine, final QueryReturnMetadata queryMetadata)
+   public SelectQuery(String sparqlString, final IQueryEngineExt queryEngine, final QueryReturnMetadata queryMetadata)
+         throws SemantikaException
    {
-      mQueryString = sparql;
+      validateQuery(sparqlString);
+      mSparqlString = sparqlString;
       mQueryEngine = queryEngine;
       mQueryReturnMetadata = queryMetadata;
+   }
+
+   private void validateQuery(String sparqlString) throws SemantikaException
+   {
+      try {
+         ParsedQuery query = sQueryValidator.parseQuery(sparqlString, null); // base URI is null
+         
+         /*
+          * If the validation ok, do a quick scan on the query object to collect
+          * any query modifers, if any.
+          */
+         addModifiersIfExist(query);
+      }
+      catch (MalformedQueryException e) {
+         throw new SemantikaException(e.getMessage());
+      }
+   }
+
+   private void addModifiersIfExist(ParsedQuery query)
+   {
+      TupleExpr expr = query.getTupleExpr();
+      if (expr instanceof Slice) {
+         Slice sliceExpr = (Slice) expr;
+         mQueryModifiers.setLimit((int) sliceExpr.getLimit());
+         mQueryModifiers.setOffset((int) sliceExpr.getOffset());
+      }
    }
 
    @Override
    public String getQueryString()
    {
-      return mQueryString;
+      return mSparqlString;
    }
 
    @Override
