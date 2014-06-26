@@ -46,7 +46,7 @@ public class XsdUnsignedByte extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Short parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          final short s = DatatypeConverter.parseShort(lexicalForm);

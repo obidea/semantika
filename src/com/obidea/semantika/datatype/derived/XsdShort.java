@@ -47,7 +47,7 @@ public class XsdShort extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Short parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          short s = DatatypeConverter.parseShort(lexicalForm);

@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.datatype.derived;
 
+import java.math.BigInteger;
+
 import javax.xml.bind.DatatypeConverter;
 
 import com.obidea.semantika.datatype.AbstractDerivedDecimalType;
@@ -47,7 +49,7 @@ public class XsdInteger extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected BigInteger parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          return DatatypeConverter.parseInteger(lexicalForm);

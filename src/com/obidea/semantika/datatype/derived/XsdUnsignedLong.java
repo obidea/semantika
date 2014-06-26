@@ -48,7 +48,7 @@ public class XsdUnsignedLong extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected BigInteger parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          final BigInteger n = DatatypeConverter.parseInteger(lexicalForm);
