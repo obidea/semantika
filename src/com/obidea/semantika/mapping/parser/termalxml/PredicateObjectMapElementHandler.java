@@ -86,15 +86,21 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    protected void setDatatype(String datatype)
    {
       super.setDatatype(datatype);
-      if (!bUserDefinedTermType) {
-         mTermType = R2RmlVocabulary.LITERAL.getUri();
-      }
+      setTermTypeAsLiteral(); // if data type is explicitly stated then term type = Literal
    }
 
    @Override
    protected void setLanguage(String language)
    {
       super.setLanguage(language);
+      setTermTypeAsLiteral(); // if language tag is explicitly stated then term type = Literal
+   }
+
+   private void setTermTypeAsLiteral()
+   {
+      /*
+       * Do not override user-defined term type
+       */
       if (!bUserDefinedTermType) {
          mTermType = R2RmlVocabulary.LITERAL.getUri();
       }
