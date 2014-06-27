@@ -57,18 +57,21 @@ import com.obidea.semantika.mapping.base.sql.SqlSubtract;
 import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
 import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
 
-public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
+public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpressionVisitor
 {
    private IDialect mDialect;
 
    private String mExpressionString = ""; //$NON-NLS-1$
-   private StringBuilder mStringBuilder;
-
-   private int mIndentIndex = 0;
 
    public SqlDeparser(IDialect dialect)
    {
       mDialect = dialect;
+   }
+
+   private SqlDeparser(SqlDeparser parent)
+   {
+      mDialect = parent.mDialect;
+      mTabCounter = parent.mTabCounter;
    }
 
    @Override
@@ -93,23 +96,11 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
    {
       initStringBuilder();
       visitSelect(query.getSelectItems(), query.isDistinct());
-      newline();
       visitFrom(query.getFromExpression());
       if (query.hasWhereExpression()) {
-         newline();
          visitWhere(query.getWhereExpression());
       }
       return flushStringBuilder();
-   }
-
-   private void initStringBuilder()
-   {
-      mStringBuilder = new StringBuilder();
-   }
-
-   private String flushStringBuilder()
-   {
-      return mStringBuilder.toString().trim();
    }
 
    private void visitSelect(List<SqlSelectItem> selectItemList, boolean isDistinct)
@@ -121,12 +112,15 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
          space();
       }
       boolean needComma = false;
+      boolean needShift = true;
       for (SqlSelectItem selectItem : selectItemList) {
          if (needComma) {
             append(","); //$NON-NLS-1$
-            setIndent(mIndentIndex+1); // indent projection newline
             newline();
-            setIndent(mIndentIndex-1); // restore indent
+            if (needShift) {
+               shiftRight();
+            }
+            needShift = false;
          }
          append(str(selectItem.getExpression()));
          if (selectItem.hasAliasName()) {
@@ -135,6 +129,8 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
          }
          needComma = true;
       }
+      newline();
+      shiftLeft();
    }
 
    private void visitFrom(ISqlExpression fromExpression)
@@ -142,6 +138,7 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
       append(Sql99.FROM);
       space();
       fromExpression.accept(this);
+      newline();
    }
 
    private void visitWhere(Set<ISqlExpression> whereExpressions)
@@ -149,22 +146,22 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
       append(Sql99.WHERE);
       space();
       boolean needAnd = false;
-      boolean needNewLine = false;
+      boolean needShift = true;
       for (ISqlExpression whereExpression : whereExpressions) {
          if (needAnd) {
             space();
             append(Sql99.AND);
-            space();
-         }
-         if (needNewLine) {
-            setIndent(mIndentIndex+1); // indent filter newline
             newline();
-            setIndent(mIndentIndex-1); // restore indent
+            if (needShift) {
+               shiftRight();
+            }
+            needShift = false;
          }
          append(str(whereExpression));
          needAnd = true;
-         needNewLine = true;
       }
+      newline();
+      shiftLeft();
    }
 
    private String str(ISqlExpression expression)
@@ -367,11 +364,11 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
        */
       if (hasInnerJoin(joinExpression)) {
          append("("); //$NON-NLS-1$
-         setIndent(mIndentIndex+1); // indent join
          newline();
+         shiftRight(); // tab
          joinExpression.getRightExpression().accept(this);
-         setIndent(mIndentIndex-1); // indent join
          newline();
+         shiftLeft(); // restore tab
          append(")"); //$NON-NLS-1$
       }
       else {
@@ -434,51 +431,23 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
    public void visit(ISqlSubQuery subQueryExpression)
    {
       append(Sql99.LPAREN);
-      setIndent(mIndentIndex+1); // indent join
       newline();
+      shiftRight(); // tab
       if (subQueryExpression instanceof SqlUserQuery) {
          SqlUserQuery userQuery = (SqlUserQuery) subQueryExpression;
          append(userQuery.getSqlString());
       }
       else {
-         SqlDeparser innerDeparser = new SqlDeparser(mDialect);
-         innerDeparser.setIndent(mIndentIndex);
+         SqlDeparser innerDeparser = new SqlDeparser(this);
          append(innerDeparser.deparse(subQueryExpression.getQuery()));
       }
-      setIndent(mIndentIndex-1);
       newline();
+      shiftLeft(); // restore tab
       append(Sql99.RPAREN);
       space();
       append(Sql99.AS);
       space();
       append(mDialect.view(subQueryExpression.getViewName()));
-   }
-
-   /*
-    * Private utility methods
-    */
-
-   private void append(String value)
-   {
-      mStringBuilder.append(value);
-   }
-
-   private void space()
-   {
-      mStringBuilder.append(" "); //$NON-NLS-1$
-   }
-
-   private void newline()
-   {
-      mStringBuilder.append("\n"); //$NON-NLS-1$
-      for (int i = 0; i < mIndentIndex; i++) {
-         mStringBuilder.append("   ");
-      }
-   }
-
-   private void setIndent(int indent)
-   {
-      mIndentIndex = indent;
    }
 
    private SqlException unknownSqlExpressionException(ISqlFunction sqlFunction)
