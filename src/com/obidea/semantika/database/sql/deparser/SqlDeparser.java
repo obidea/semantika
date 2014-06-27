@@ -74,35 +74,45 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
    @Override
    public String deparse(QuerySet<? extends ISqlQuery> querySet)
    {
-      StringBuilder sb = new StringBuilder();
+      StringBuilder unions = new StringBuilder();
       boolean needUnion = false;
       for (ISqlQuery query : querySet.getAll()) {
          if (needUnion) {
-            sb.append("\n");
-            sb.append(Sql99.UNION);
-            sb.append("\n");
+            unions.append("\n");
+            unions.append(Sql99.UNION);
+            unions.append("\n");
          }
-         sb.append(deparse(query));
+         unions.append(deparse(query));
          needUnion = true;
       }
-      return sb.toString();
+      return unions.toString();
    }
 
    @Override
    public String deparse(ISqlQuery query)
    {
       initStringBuilder();
-      produceSelectStatement(query.getSelectItems(), query.isDistinct());
+      visitSelect(query.getSelectItems(), query.isDistinct());
       newline();
-      produceFromStatement(query.getFromExpression());
+      visitFrom(query.getFromExpression());
       if (query.hasWhereExpression()) {
          newline();
-         produceWhereStatement(query.getWhereExpression());
+         visitWhere(query.getWhereExpression());
       }
-      return mStringBuilder.toString();
+      return flushStringBuilder();
    }
 
-   private void produceSelectStatement(List<SqlSelectItem> selectItemList, boolean isDistinct)
+   private void initStringBuilder()
+   {
+      mStringBuilder = new StringBuilder();
+   }
+
+   private String flushStringBuilder()
+   {
+      return mStringBuilder.toString().trim();
+   }
+
+   private void visitSelect(List<SqlSelectItem> selectItemList, boolean isDistinct)
    {
       append(Sql99.SELECT);
       space();
@@ -127,14 +137,14 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
       }
    }
 
-   private void produceFromStatement(ISqlExpression fromExpression)
+   private void visitFrom(ISqlExpression fromExpression)
    {
       append(Sql99.FROM);
       space();
       fromExpression.accept(this);
    }
 
-   private void produceWhereStatement(Set<ISqlExpression> whereExpressions)
+   private void visitWhere(Set<ISqlExpression> whereExpressions)
    {
       append(Sql99.WHERE);
       space();
@@ -155,6 +165,12 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
          needAnd = true;
          needNewLine = true;
       }
+   }
+
+   private String str(ISqlExpression expression)
+   {
+      expression.accept(this);
+      return mExpressionString;
    }
 
    @Override
@@ -441,6 +457,7 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
    /*
     * Private utility methods
     */
+
    private void append(String value)
    {
       mStringBuilder.append(value);
@@ -459,24 +476,13 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
       }
    }
 
-   private String str(ISqlExpression expression)
+   private void setIndent(int indent)
    {
-      expression.accept(this);
-      return mExpressionString;
+      mIndentIndex = indent;
    }
 
    private SqlException unknownSqlExpressionException(ISqlFunction sqlFunction)
    {
       return new SqlException("Unable to produce SQL string from expression: " + sqlFunction); //$NON-NLS-1$
-   }
-
-   protected void setIndent(int indent)
-   {
-      mIndentIndex = indent;
-   }
-
-   protected void initStringBuilder()
-   {
-      mStringBuilder = new StringBuilder();
    }
 }
