@@ -127,7 +127,7 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
       return mNameFragments;
    }
 
-   public void setUserDatatype(String datatype)
+   public void overrideType(String datatype)
    {
       notifyColumnTypeChanged(datatype);
    }

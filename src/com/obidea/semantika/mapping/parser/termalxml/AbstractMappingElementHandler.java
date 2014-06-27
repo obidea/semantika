@@ -151,7 +151,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             SqlColumn column = getColumnTerm(columnName);
-            column.setUserDatatype(DataType.ANY_URI); // make it as an IRI object
+            column.overrideType(DataType.ANY_URI); // make it as an IRI object
             return column;
          }
          else {
@@ -165,7 +165,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
          else {
             SqlColumn column = getColumnTerm(columnName);
             checkTypeConversion(column.getDatatype(), datatype);
-            column.setUserDatatype(datatype);
+            column.overrideType(datatype);
             return column; // set as datatype-override RDF literal
          }
       }
