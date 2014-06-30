@@ -52,4 +52,6 @@ public interface IDialect
    String concat(List<String> exprs);
    String regex(String text, String pattern, String flag);
    String lang(String text);
+
+   String cast(String text, int targetDatatype);
 }

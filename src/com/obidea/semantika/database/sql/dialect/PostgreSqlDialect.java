@@ -15,6 +15,10 @@
  */
 package com.obidea.semantika.database.sql.dialect;
 
+import java.sql.Types;
+
+import com.obidea.semantika.exception.SemantikaRuntimeException;
+
 public class PostgreSqlDialect extends Sql99Dialect
 {
    public PostgreSqlDialect()
@@ -37,5 +41,35 @@ public class PostgreSqlDialect extends Sql99Dialect
    public String lang(String textExpr)
    {
       return String.format("SUBSTR(SUBSTRING(%s from '@[A-z0-9_-]*$'), 2)", textExpr); //$NON-NLS-1$
+   }
+
+   @Override
+   public String cast(String column, int datatype)
+   {
+      return "CAST(" + column + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+   }
+
+   private String getTypeName(int datatype)
+   {
+      switch (datatype) {
+         case Types.VARCHAR:
+         case Types.NVARCHAR:
+         case Types.NCHAR:
+         case Types.LONGVARCHAR:
+         case Types.LONGNVARCHAR: return "VARCHAR"; //$NON-NLS-1$
+         case Types.NUMERIC:
+         case Types.DECIMAL: return "NUMERIC"; //$NON-NLS-1$
+         case Types.BIGINT:
+         case Types.INTEGER:
+         case Types.SMALLINT:
+         case Types.TINYINT: return "INTEGER"; //$NON-NLS-1$
+         case Types.REAL:
+         case Types.FLOAT:
+         case Types.DOUBLE: return "DOUBLE PRECISION"; //$NON-NLS-1$
+         case Types.DATE: return "DATE"; //$NON-NLS-1$
+         case Types.TIME: return "TIME"; //$NON-NLS-1$
+         case Types.TIMESTAMP: return "TIMESTAMP"; //$NON-NLS-1$
+      }
+      throw new SemantikaRuntimeException("Failed to construct CAST (datatype: " + datatype + ")");
    }
 }
