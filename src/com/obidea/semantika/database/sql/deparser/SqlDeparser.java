@@ -27,7 +27,6 @@ import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.database.sql.base.ISqlFunction;
 import com.obidea.semantika.database.sql.base.ISqlJoin;
 import com.obidea.semantika.database.sql.base.ISqlQuery;
-import com.obidea.semantika.database.sql.base.ISqlSelectItemVisitor;
 import com.obidea.semantika.database.sql.base.ISqlSubQuery;
 import com.obidea.semantika.database.sql.base.ISqlTable;
 import com.obidea.semantika.database.sql.base.ISqlUnaryFunction;
@@ -115,6 +114,7 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
       }
       boolean needComma = false;
       boolean needShift = true;
+      SelectItemVisitor selectItemVisitor = new SelectItemVisitor();
       for (SqlSelectItem selectItem : selectItemList) {
          if (needComma) {
             append(","); //$NON-NLS-1$
@@ -124,7 +124,7 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
             }
             needShift = false;
          }
-         append(str(selectItem.getExpression()));
+         append(str(selectItem.getExpression(), selectItemVisitor));
          if (selectItem.hasAliasName()) {
             space();
             append(mDialect.alias(selectItem.getAliasName()));
@@ -168,7 +168,12 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
 
    private String str(ISqlExpression expression)
    {
-      expression.accept(this);
+      return str(expression, this);
+   }
+
+   private String str(ISqlExpression expression, ISqlExpressionVisitor visitor)
+   {
+      expression.accept(visitor);
       return mExpressionString;
    }
 
@@ -440,7 +445,7 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
       return new SqlException("Unable to produce SQL string from expression: " + sqlFunction); //$NON-NLS-1$
    }
 
-   class SelectItemVisitor implements ISqlSelectItemVisitor
+   class SelectItemVisitor implements ISqlExpressionVisitor
    {
       @Override
       public void visit(ISqlColumn column)
@@ -460,12 +465,6 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
          else {
             throw new SqlException("Unable to produce SQL select item expresion: " + function); //$NON-NLS-1$
          }
-      }
-
-      @Override
-      public void visit(ISqlValue value)
-      {
-         visitLiteral(value);
       }
 
       private void visitSqlConcat(SqlConcat sqlConcat)
@@ -497,6 +496,30 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
          }
          arguments.add("'\"'"); //$NON-NLS-1$
          mExpressionString = mDialect.concat(arguments);
+      }
+
+      @Override
+      public void visit(ISqlValue value)
+      {
+         visitLiteral(value);
+      }
+
+      @Override
+      public void visit(ISqlTable tableExpression)
+      {
+         // NO-OP
+      }
+
+      @Override
+      public void visit(ISqlJoin joinExpression)
+      {
+         // NO-OP
+      }
+
+      @Override
+      public void visit(ISqlSubQuery subQueryExpression)
+      {
+         // NO-OP
       }
    }
 }
