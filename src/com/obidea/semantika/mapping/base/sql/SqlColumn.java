@@ -22,6 +22,8 @@ import com.obidea.semantika.database.base.IColumn;
 import com.obidea.semantika.database.base.IContainDatabaseObject;
 import com.obidea.semantika.database.sql.base.ISqlColumn;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
+import com.obidea.semantika.datatype.XmlTypeToSqlType;
+import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.util.CollectionUtils;
 import com.obidea.semantika.util.StringUtils;
 
@@ -35,8 +37,11 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    private String mTableName;
    private String mColumnName;
    private String mViewName = ""; //$NON-NLS-1$
+   private int mColumnType;
 
    private String[] mNameFragments;
+
+   private boolean bTypeOverriden = false;
 
    /**
     * Constructs a SQL column variable with input <code>column</code> as its
@@ -53,6 +58,7 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
       mSchemaName = column.getSchemaName();
       mTableName = column.getTableName();
       mColumnName = column.getLocalName();
+      mColumnType = column.getSqlType();
    }
 
    @Override
@@ -105,6 +111,12 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    }
 
    @Override
+   public int getColumnType()
+   {
+      return mColumnType;
+   }
+
+   @Override
    public String[] getNameFragments()
    {
       if (mNameFragments == null) {
@@ -127,9 +139,16 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
       return mNameFragments;
    }
 
-   public void overrideType(String datatype)
+   public void overrideType(String datatype) throws UnsupportedDataTypeException
    {
       notifyColumnTypeChanged(datatype);
+      mColumnType = XmlTypeToSqlType.get(datatype);
+      bTypeOverriden = true;
+   }
+
+   public boolean isOverriden()
+   {
+      return bTypeOverriden;
    }
 
    @Override

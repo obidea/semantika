@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
+import static java.lang.String.format;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +153,12 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             SqlColumn column = getColumnTerm(columnName);
-            column.overrideType(DataType.ANY_URI); // make it as an IRI object
+            try {
+               column.overrideType(DataType.ANY_URI);
+            }
+            catch (UnsupportedDataTypeException e) {
+               // NO-OP: This exception is expected and it is not a mapping parser exception
+            }
             return column;
          }
          else {
@@ -164,8 +171,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
          }
          else {
             SqlColumn column = getColumnTerm(columnName);
-            checkTypeConversion(column.getDatatype(), datatype);
-            column.overrideType(datatype);
+            overrideColumn(column, datatype);
             return column; // set as datatype-override RDF literal
          }
       }
@@ -307,13 +313,25 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       return toReturn;
    }
 
+   private void overrideColumn(SqlColumn column, String datatype) throws UnknownXmlDataTypeException, DataTypeOverrideException
+   {
+      checkTypeConversion(column.getDatatype(), datatype);
+      try {
+         column.overrideType(datatype);
+      }
+      catch (UnsupportedDataTypeException e) {
+         throw datatypeOverrideException(format("Unsupported datatype-override: %s", //$NON-NLS-1$
+               datatype));
+      }
+   }
+
    private void checkTypeConversion(String oldDatatype, String newDatatype) throws UnknownXmlDataTypeException, DataTypeOverrideException
    {
       AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
       AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
       boolean pass = TypeConversion.verify(sourceType, targetType);
       if (!pass) {
-         throw datatypeOverrideException(sourceType.toString(), targetType.toString());
+         throw datatypeOverrideException(format("Type conversion error %s to %s", sourceType, targetType)); //$NON-NLS-1$
       }
    }
 

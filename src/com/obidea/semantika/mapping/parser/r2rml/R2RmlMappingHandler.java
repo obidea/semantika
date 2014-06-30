@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.mapping.parser.r2rml;
 
+import static java.lang.String.format;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -184,7 +186,12 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       if (termType.equals(R2RmlVocabulary.IRI)) {
          if (StringUtils.isEmpty(datatype)) {
             SqlColumn column = getColumnTerm(columnName);
-            column.overrideType(DataType.ANY_URI); // make it as an IRI object
+            try {
+               column.overrideType(DataType.ANY_URI);
+            }
+            catch (UnsupportedDataTypeException e) {
+               // NO-OP: This exception is expected and it is not a mapping parser exception
+            }
             return column;
          }
          else {
@@ -197,9 +204,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          }
          else {
             SqlColumn column = getColumnTerm(columnName);
-            checkTypeConversion(column.getDatatype(), datatype);
-            column.overrideType(datatype);
-            return column; // set as datatype-override RDF literal
+            overrideColumn(column, datatype); // set as datatype-override RDF literal
+            return column;
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
@@ -247,7 +253,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
       else {
          String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
-         throw new R2RmlParserException(message);  
+         throw new R2RmlParserException(message);
       }
    }
 
@@ -286,14 +292,24 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       return toReturn;
    }
 
+   private void overrideColumn(SqlColumn column, String datatype) throws IllegalR2RmlMappingException
+   {
+      checkTypeConversion(column.getDatatype(), datatype);
+      try {
+         column.overrideType(datatype);
+      }
+      catch (UnsupportedDataTypeException e) {
+         throw new R2RmlParserException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$
+      }
+   }
+
    private void checkTypeConversion(String oldDatatype, String newDatatype) throws IllegalR2RmlMappingException
    {
       AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
       AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
       boolean pass = TypeConversion.verify(sourceType, targetType);
       if (!pass) {
-         String message = String.format("Unable to cast value from %s to %s", sourceType, targetType); //$NON-NLS-1$
-         throw new IllegalR2RmlMappingException(message);
+         throw new IllegalR2RmlMappingException(format("Type conversion error %s to %s", sourceType, targetType)); //$NON-NLS-1$
       }
    }
 

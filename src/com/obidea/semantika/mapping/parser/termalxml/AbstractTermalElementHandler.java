@@ -157,12 +157,6 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected DataTypeOverrideException datatypeOverrideException(String sourceType, String targetType)
-   {
-      return new DataTypeOverrideException("Unable to convert type \"" + sourceType + "\" to type \"" + targetType + "\"", //$NON-NLS-1$ //$NON-NLS-2$  //$NON-NLS-3$
-            getLineNumber(), getColumnNumber());
-   }
-
    protected ClassNotFoundException classNotFoundException(URI value)
    {
       // XXX Strange bug related to line number
@@ -187,6 +181,11 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
    {
       return new ColumnNotFoundException("Column name was not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
+   }
+
+   protected DataTypeOverrideException datatypeOverrideException(String message)
+   {
+      return new DataTypeOverrideException(message, getLineNumber(), getColumnNumber());
    }
 
    protected IllegalTemplateCallException illegalTemplateCallException(String message)
