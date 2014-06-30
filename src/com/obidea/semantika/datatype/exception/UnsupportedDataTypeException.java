@@ -15,17 +15,22 @@
  */
 package com.obidea.semantika.datatype.exception;
 
+import static java.lang.String.format;
+
 public class UnsupportedDataTypeException extends DataTypeReasonerException
 {
    private static final long serialVersionUID = 629451L;
 
-   public UnsupportedDataTypeException(String message)
+   private String mXmlType;
+
+   public UnsupportedDataTypeException(String xmlType)
    {
-      super(message);
+      super(format("Unsupported XML type (%s)", xmlType)); //$NON-NLS-1$
+      mXmlType = xmlType;
    }
 
-   public UnsupportedDataTypeException(String message, Throwable cause)
+   public String getType()
    {
-      super(message, cause);
+      return mXmlType;
    }
 }
