@@ -25,7 +25,7 @@ import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
  * A mapping specification from SQL datatypes to XML Schema datatypes.
  * Source: {@link http://www.w3.org/2001/sw/rdb2rdf/wiki/Mapping_SQL_datatypes_to_XML_Schema_datatypes}
  */
-public class SqlTypeToXmlType
+public final class SqlTypeToXmlType
 {
    private static HashMap<Integer, String> mTypeMapping;
    
