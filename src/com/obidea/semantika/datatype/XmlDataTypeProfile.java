@@ -106,12 +106,11 @@ public final class XmlDataTypeProfile
       }
    }
 
-   public static AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws UnsupportedDataTypeException
+   public static AbstractXmlType<?> getXmlDatatype(String xmlType) throws UnsupportedDataTypeException
    {
-      AbstractXmlType<?> dt = coreDatatypes.get(datatypeUri);
+      AbstractXmlType<?> dt = coreDatatypes.get(xmlType);
       if (dt == null) {
-         final String msg = String.format("The data type %s is not supported yet.", datatypeUri);
-         throw new UnsupportedDataTypeException(msg);
+         throw new UnsupportedDataTypeException(xmlType);
       }
       return dt;
    }
