@@ -69,4 +69,12 @@ public interface ISqlColumn extends ISqlExpression
     * @return column's name fragments.
     */
    String[] getNameFragments();
+
+   /**
+    * Gets the column's type in Java SQL Type.
+    * {@link http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html}
+    *
+    * @return column's type or "" if not applicable.
+    */
+   int getColumnType();
 }
