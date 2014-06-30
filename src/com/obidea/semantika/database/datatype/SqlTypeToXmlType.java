@@ -53,7 +53,6 @@ public final class SqlTypeToXmlType
       mTypeMapping.put(Types.TIME, DataType.TIME);
       mTypeMapping.put(Types.TIMESTAMP, DataType.DATE_TIME);
       mTypeMapping.put(Types.BOOLEAN, DataType.BOOLEAN);
-      mTypeMapping.put(Types.BIT, DataType.BOOLEAN);
       mTypeMapping.put(Types.OTHER, DataType.PLAIN_LITERAL);
    }
 
