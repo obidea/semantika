@@ -30,12 +30,12 @@ public abstract class VariableMediator extends AbstractVariable
       super(getColumnVariableName(column), getColumnVariableType(column));
    }
 
-   protected void notifyColumnNameChanged(String newName)
+   protected void notifyVariableNameChanged(String newName)
    {
       super.setName(newName); // update the variable name.
    }
 
-   protected void notifyColumnTypeChanged(String newDatatype)
+   protected void notifyVariableTypeChanged(String newDatatype)
    {
       super.setDatatype(newDatatype); // update the variable datatype.
    }

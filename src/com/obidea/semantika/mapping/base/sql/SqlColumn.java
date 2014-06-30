@@ -79,7 +79,7 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
       if (!StringUtils.isEmpty(viewName)) {
          mViewName = viewName;
          mNameFragments = null; // notify to update name fragments
-         notifyColumnNameChanged(createName(getNameFragments()));
+         notifyVariableNameChanged(createName(getNameFragments()));
       }
    }
 
@@ -131,7 +131,7 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
 
    public void overrideType(String datatype) throws UnsupportedDataTypeException
    {
-      notifyColumnTypeChanged(datatype);
+      notifyVariableTypeChanged(datatype);
       mColumnType = XmlTypeToSqlType.get(datatype);
       bTypeOverriden = true;
    }
