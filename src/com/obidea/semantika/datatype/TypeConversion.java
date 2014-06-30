@@ -17,7 +17,6 @@ package com.obidea.semantika.datatype;
 
 import org.slf4j.Logger;
 
-import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.util.LogUtils;
 
 /**
@@ -103,8 +102,6 @@ public class TypeConversion
     *           the target conversion type.
     * @return returns <code>true</code> if the source type can be or might be
     *         converted to the target type, or <code>false</code> otherwise.
-    * @throws UnsupportedDataTypeException
-    *            if the conversion function is not supported yet by the API.
     */
    public static boolean verify(final AbstractXmlType<?> source, final AbstractXmlType<?> target)
    {
