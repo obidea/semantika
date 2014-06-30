@@ -48,15 +48,6 @@ public interface ISqlColumn extends ISqlExpression
    boolean hasViewName();
 
    /**
-    * Changes the column's name in SQL string. Usually name changes
-    * to follow its alias name in a sub-query.
-    *
-    * @param columnName
-    *           Column name in SQL string.
-    */
-   void setColumnName(String columnName);
-
-   /**
     * Gets the column's name in SQL string.
     *
     * @return column's name or "" if not applicable.

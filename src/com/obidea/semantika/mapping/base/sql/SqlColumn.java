@@ -95,16 +95,6 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    }
 
    @Override
-   public void setColumnName(String columnName)
-   {
-      if (!StringUtils.isEmpty(columnName)) {
-         mColumnName = columnName;
-         mNameFragments = null; // notify to update name fragments
-         notifyColumnNameChanged(createName(getNameFragments()));
-      }
-   }
-
-   @Override
    public String getColumnName()
    {
       return mColumnName;
