@@ -313,7 +313,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       return toReturn;
    }
 
-   private void overrideColumn(SqlColumn column, String datatype) throws UnknownXmlDataTypeException, DataTypeOverrideException
+   private void overrideColumn(SqlColumn column, String datatype) throws UnsupportedXmlDataTypeException, DataTypeOverrideException
    {
       checkTypeConversion(column.getDatatype(), datatype);
       try {
@@ -325,7 +325,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       }
    }
 
-   private void checkTypeConversion(String oldDatatype, String newDatatype) throws UnknownXmlDataTypeException, DataTypeOverrideException
+   private void checkTypeConversion(String oldDatatype, String newDatatype) throws UnsupportedXmlDataTypeException, DataTypeOverrideException
    {
       AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
       AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
@@ -335,13 +335,13 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       }
    }
 
-   private AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws UnknownXmlDataTypeException
+   private AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws UnsupportedXmlDataTypeException
    {
       try {
          return XmlDataTypeProfile.getXmlDatatype(datatypeUri);
       }
       catch (UnsupportedDataTypeException e) {
-         throw unknownXmlDataTypeException(datatypeUri);
+         throw unsupportedXmlDataTypeException(datatypeUri);
       }
    }
 }

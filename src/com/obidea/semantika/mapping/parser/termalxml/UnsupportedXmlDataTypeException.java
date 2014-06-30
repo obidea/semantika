@@ -17,11 +17,11 @@ package com.obidea.semantika.mapping.parser.termalxml;
 
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class UnknownXmlDataTypeException extends MappingParserException
+public class UnsupportedXmlDataTypeException extends MappingParserException
 {
    private static final long serialVersionUID = 629451L;
 
-   public UnknownXmlDataTypeException(String message, int lineNumber, int columnNumber)
+   public UnsupportedXmlDataTypeException(String message, int lineNumber, int columnNumber)
    {
       super(message, lineNumber, columnNumber);
    }

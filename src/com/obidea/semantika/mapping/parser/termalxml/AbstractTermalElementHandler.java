@@ -139,9 +139,9 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected UnknownXmlDataTypeException unknownXmlDataTypeException(String value)
+   protected UnsupportedXmlDataTypeException unsupportedXmlDataTypeException(String value)
    {
-      return new UnknownXmlDataTypeException("Unknown XML data type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new UnsupportedXmlDataTypeException("Unsupported XML type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
