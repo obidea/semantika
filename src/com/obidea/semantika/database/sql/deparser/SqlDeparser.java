@@ -27,6 +27,7 @@ import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.database.sql.base.ISqlFunction;
 import com.obidea.semantika.database.sql.base.ISqlJoin;
 import com.obidea.semantika.database.sql.base.ISqlQuery;
+import com.obidea.semantika.database.sql.base.ISqlSelectItemVisitor;
 import com.obidea.semantika.database.sql.base.ISqlSubQuery;
 import com.obidea.semantika.database.sql.base.ISqlTable;
 import com.obidea.semantika.database.sql.base.ISqlUnaryFunction;
@@ -39,6 +40,7 @@ import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.mapping.base.sql.SqlAddition;
 import com.obidea.semantika.mapping.base.sql.SqlAnd;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlConcat;
 import com.obidea.semantika.mapping.base.sql.SqlDivide;
 import com.obidea.semantika.mapping.base.sql.SqlEqualsTo;
@@ -183,6 +185,21 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
    @Override
    public void visit(ISqlColumn column)
    {
+      if (((SqlColumn) column).isOverriden()) {
+         visitOverridenColumn(column);
+      }
+      else {
+         visitColumn(column);
+      }
+   }
+
+   private void visitOverridenColumn(ISqlColumn column)
+   {
+      mExpressionString = mDialect.cast(mDialect.identifier(column.getNameFragments()), column.getColumnType());
+   }
+
+   private void visitColumn(ISqlColumn column)
+   {
       mExpressionString = mDialect.identifier(column.getNameFragments());
    }
 
@@ -264,49 +281,12 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
 
    private void visitSqlNaryFunctionExpression(ISqlFunction naryFunction)
    {
-      if (naryFunction instanceof SqlConcat) {
-         visitSqlConcat((SqlConcat) naryFunction);
-      }
-      else if (naryFunction instanceof SqlUriConcat) {
-         visitSqlUriConcat((SqlUriConcat) naryFunction);
-      }
-      else if (naryFunction instanceof SqlRegex) {
+      if (naryFunction instanceof SqlRegex) {
          visitSqlRegex((SqlRegex) naryFunction);
       }
       else {
          throw unknownSqlExpressionException(naryFunction);
       }
-   }
-
-   private void visitSqlConcat(SqlConcat sqlConcat)
-   {
-      List<String> arguments = new ArrayList<String>();
-      for (ISqlExpression expression : sqlConcat.getParameterExpressions()) {
-         arguments.add(str(expression));
-      }
-      mExpressionString = mDialect.concat(arguments);
-   }
-
-   private void visitSqlUriConcat(SqlUriConcat sqlUriConcat)
-   {
-      List<String> arguments = new ArrayList<String>();
-      
-      Iterator<ISqlExpression> iter = sqlUriConcat.getParameterExpressions().iterator();
-      ISqlValue stringTemplateValue = (ISqlValue) iter.next(); // must be a value
-      arguments.add(mDialect.literal(stringTemplateValue.getValue()));
-      arguments.add("' : '"); //$NON-NLS-1$
-      arguments.add("'\"'"); //$NON-NLS-1$
-      boolean needSeparator = false;
-      while (iter.hasNext()) {
-         if (needSeparator) {
-            arguments.add("'\" \"'"); //$NON-NLS-1$
-         }
-         ISqlExpression expression = iter.next();
-         arguments.add(str(expression));
-         needSeparator = true;
-      }
-      arguments.add("'\"'"); //$NON-NLS-1$
-      mExpressionString = mDialect.concat(arguments);
    }
 
    private void visitSqlRegex(SqlRegex sqlRegex)
@@ -322,6 +302,11 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
 
    @Override
    public void visit(ISqlValue value)
+   {
+      visitLiteral(value);
+   }
+
+   private void visitLiteral(ISqlValue value)
    {
       String lexicalValue = value.getValue();
       String datatype = value.getDatatype();
@@ -453,5 +438,65 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
    private SqlException unknownSqlExpressionException(ISqlFunction sqlFunction)
    {
       return new SqlException("Unable to produce SQL string from expression: " + sqlFunction); //$NON-NLS-1$
+   }
+
+   class SelectItemVisitor implements ISqlSelectItemVisitor
+   {
+      @Override
+      public void visit(ISqlColumn column)
+      {
+         mExpressionString = mDialect.identifier(column.getNameFragments());
+      }
+
+      @Override
+      public void visit(ISqlFunction function)
+      {
+         if (function instanceof SqlConcat) {
+            visitSqlConcat((SqlConcat) function);
+         }
+         else if (function instanceof SqlUriConcat) {
+            visitSqlUriConcat((SqlUriConcat) function);
+         }
+         else {
+            throw new SqlException("Unable to produce SQL select item expresion: " + function); //$NON-NLS-1$
+         }
+      }
+
+      @Override
+      public void visit(ISqlValue value)
+      {
+         visitLiteral(value);
+      }
+
+      private void visitSqlConcat(SqlConcat sqlConcat)
+      {
+         List<String> arguments = new ArrayList<String>();
+         for (ISqlExpression expression : sqlConcat.getParameterExpressions()) {
+            arguments.add(str(expression));
+         }
+         mExpressionString = mDialect.concat(arguments);
+      }
+
+      private void visitSqlUriConcat(SqlUriConcat sqlUriConcat)
+      {
+         List<String> arguments = new ArrayList<String>();
+         
+         Iterator<ISqlExpression> iter = sqlUriConcat.getParameterExpressions().iterator();
+         ISqlValue stringTemplateValue = (ISqlValue) iter.next(); // must be a value
+         arguments.add(mDialect.literal(stringTemplateValue.getValue()));
+         arguments.add("' : '"); //$NON-NLS-1$
+         arguments.add("'\"'"); //$NON-NLS-1$
+         boolean needSeparator = false;
+         while (iter.hasNext()) {
+            if (needSeparator) {
+               arguments.add("'\" \"'"); //$NON-NLS-1$
+            }
+            ISqlExpression expression = iter.next();
+            arguments.add(str(expression));
+            needSeparator = true;
+         }
+         arguments.add("'\"'"); //$NON-NLS-1$
+         mExpressionString = mDialect.concat(arguments);
+      }
    }
 }
