@@ -20,4 +20,8 @@ public interface IMappingTerm
    void setTermType(int type);
 
    int getTermType();
+
+   String getName();
+
+   String getDatatype();
 }
