@@ -21,6 +21,8 @@ import java.util.List;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.mapping.base.IMappingTerm;
+import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
@@ -73,14 +75,10 @@ public class TriplesProjection
    public int getDataCategory(int position)
    {
       ISqlExpression expression = getSelectItem(position).getExpression();
-      if (expression instanceof SqlUriConcat) {
-         return DATA_URI;
-      }
-      else if (expression instanceof SqlUriValue) {
-         return DATA_URI;
-      }
-      else if (expression instanceof SqlColumn) {
-         return DATA_LITERAL;
+      IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
+      switch (mapTerm.getTermType()) {
+         case TermType.URI_TYPE: return DATA_URI;
+         case TermType.LITERAL_TYPE: return DATA_LITERAL;
       }
       throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
