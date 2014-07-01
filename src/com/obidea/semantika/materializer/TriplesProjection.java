@@ -31,12 +31,12 @@ public class TriplesProjection
    /**
     * A constant to indicate the projected data as an object identifier.
     */
-   static final int DATA_OBJECT_CATEGORY = 0;
+   static final int DATA_URI = 0;
 
    /**
     * A constant to indicate the projected data as a literal value.
     */
-   static final int DATA_LITERAL_VALUE_CATEGORY = 1;
+   static final int DATA_LITERAL = 1;
 
    private List<SqlSelectItem> mSelectItemList;
 
@@ -67,20 +67,20 @@ public class TriplesProjection
     * @param position
     *           The first index position is 1, the second is 2, etc.
     * @return the data category, which will be one of the following constants:
-    *         <code>IProjection.DATA_OBJECT_CATEGORY</code>,
-    *         <code>IProjection.DATA_LITERAL_VALUE_TYPE</code>.
+    *         <code>IProjection.DATA_URI</code>,
+    *         <code>IProjection.DATA_LITERAL</code>.
     */
    public int getDataCategory(int position)
    {
       ISqlExpression expression = getSelectItem(position).getExpression();
       if (expression instanceof SqlUriConcat) {
-         return DATA_OBJECT_CATEGORY;
-      }
-      else if (expression instanceof SqlColumn) {
-         return DATA_LITERAL_VALUE_CATEGORY;
+         return DATA_URI;
       }
       else if (expression instanceof SqlUriValue) {
-         return DATA_OBJECT_CATEGORY;
+         return DATA_URI;
+      }
+      else if (expression instanceof SqlColumn) {
+         return DATA_LITERAL;
       }
       throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
