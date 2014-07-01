@@ -463,7 +463,7 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
             visitSqlUriConcat((SqlUriConcat) function);
          }
          else {
-            throw new SqlException("Unable to produce SQL select item expresion: " + function); //$NON-NLS-1$
+            throw new SqlException("Unable to produce SQL select item expression: " + function); //$NON-NLS-1$
          }
       }
 
