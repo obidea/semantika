@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.materializer;
 
+import static java.lang.String.format;
+
 import java.net.URISyntaxException;
 
 import org.openrdf.model.Resource;
@@ -61,9 +63,10 @@ import com.obidea.semantika.util.TemplateStringHelper;
          case TriplesProjection.DATA_URI:
             return mValueFactory.createURI(getUriString(mSubjectValue));
          case TriplesProjection.DATA_LITERAL:
-            throw new IllegalTermTypeException("Triple subject cannot be literal"); //$NON-NLS-1$
+            throw new TriplesStatementException("Subject cannot be literal"); //$NON-NLS-1$
+         default:
+            throw new TriplesStatementException(format("Illegal data category (%s)", category)); //$NON-NLS-1$
       }
-      throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    @Override
@@ -74,9 +77,10 @@ import com.obidea.semantika.util.TemplateStringHelper;
          case TriplesProjection.DATA_URI:
             return mValueFactory.createURI(mPredicateValue);
          case TriplesProjection.DATA_LITERAL:
-            throw new IllegalTermTypeException("Triple predicate cannot be literal"); //$NON-NLS-1$
+            throw new TriplesStatementException("Predicate cannot be literal"); //$NON-NLS-1$
+         default:
+            throw new TriplesStatementException(format("Illegal data category (%s)", category)); //$NON-NLS-1$
       }
-      throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    @Override
@@ -92,7 +96,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
                mValueFactory.createLiteral(mObjectValue) : // use syntactic sugar for xsd:string
                mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
       }
-      throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+      throw new TriplesStatementException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    private String getUriString(String value)

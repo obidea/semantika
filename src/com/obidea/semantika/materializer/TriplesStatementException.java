@@ -17,14 +17,14 @@ package com.obidea.semantika.materializer;
 
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 
-public class IllegalTermTypeException extends SemantikaRuntimeException
+public class TriplesStatementException extends SemantikaRuntimeException
 {
    private static final long serialVersionUID = 629451L;
 
    /**
     * Create a new IllegalTermTypeException with no detailed message.
     */
-   public IllegalTermTypeException()
+   public TriplesStatementException()
    {
       super();
    }
@@ -35,7 +35,7 @@ public class IllegalTermTypeException extends SemantikaRuntimeException
     * @param message
     *           The String that contains a detailed message.
     */
-   public IllegalTermTypeException(String message)
+   public TriplesStatementException(String message)
    {
       super(message);
    }
@@ -49,7 +49,7 @@ public class IllegalTermTypeException extends SemantikaRuntimeException
     * @param cause
     *           The Throwable object that contains a specified cause.
     */
-   public IllegalTermTypeException(String message, Throwable cause)
+   public TriplesStatementException(String message, Throwable cause)
    {
       super(message, cause);
    }
