@@ -153,7 +153,7 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
 
    protected UnknownTermTypeException unknownTermTypeException(String value)
    {
-      return new UnknownTermTypeException("Unknown term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new UnknownTermTypeException("Unknown term type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 

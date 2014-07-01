@@ -27,8 +27,6 @@ import com.obidea.semantika.datatype.TypeConversion;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.Literal;
-import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
@@ -152,75 +150,53 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    protected SqlColumn getColumnTerm(String columnName, String termType, String datatype) throws MappingParserException
    {
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
-         if (StringUtils.isEmpty(datatype)) {
-            SqlColumn column = getColumnTerm(columnName);
-            column.setTermType(TermType.URI_TYPE);
-            return column;
-         }
-         else {
+         if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
+         SqlColumn column = getColumnTerm(columnName);
+         column.setTermType(TermType.URI_TYPE);
+         return column;
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
-         if (StringUtils.isEmpty(datatype)) {
-            SqlColumn column = getColumnTerm(columnName);
-            column.setTermType(TermType.LITERAL_TYPE); // set as natural RDF literal
-            return column;
-         }
-         else {
-            SqlColumn column = getColumnTerm(columnName);
-            column.setTermType(TermType.LITERAL_TYPE);
+         SqlColumn column = getColumnTerm(columnName);
+         column.setTermType(TermType.LITERAL_TYPE);
+         if (!StringUtils.isEmpty(datatype)) {
             overrideColumn(column, datatype); // set as datatype-override RDF literal
-            return column;
          }
+         return column;
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
-      else {
-         throw unknownTermTypeException(termType);
-      }
+      throw unknownTermTypeException(termType);
    }
 
    protected ITerm getLiteralTerm(String value, String termType, String datatype) throws MappingParserException
    {
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
-         if (StringUtils.isEmpty(datatype)) {
-            UriReference uri = getExpressionObjectFactory().getUriReference(getUri(value));
-            return uri;
-         }
-         else {
+         if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
+         return getExpressionObjectFactory().getUriReference(getUri(value));
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
-         if (StringUtils.isEmpty(datatype)) {
-            Literal literal = getExpressionObjectFactory().getLiteral(value, DataType.STRING); // by default
-            return literal;
-         }
-         else {
-            Literal literal = getExpressionObjectFactory().getLiteral(value, datatype);
-            return literal;
-         }
+         return (StringUtils.isEmpty(datatype)) ?
+            getExpressionObjectFactory().getLiteral(value, DataType.STRING) : // by default
+            getExpressionObjectFactory().getLiteral(value, datatype);
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
-      else {
-         throw unknownTermTypeException(termType);
-      }
+      throw unknownTermTypeException(termType);
    }
 
    protected ITerm getTemplateTerm(String value, String termType, String datatype) throws MappingParserException
    {
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
-         if (StringUtils.isEmpty(datatype)) {
-            UriTemplate uriTemplate = getUriTemplateFunction(value);
-            return uriTemplate;
-         }
-         else {
+         if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
+         return getUriTemplateFunction(value);
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          throw illegalTermalMappingException("Cannot use rr:template together with term type rr:Literal");
@@ -228,9 +204,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
-      else {
-         throw unknownTermTypeException(termType);
-      }
+      throw unknownTermTypeException(termType);
    }
 
    protected URI getUri(String abbreviatedUri) throws PrefixNotFoundException
@@ -319,8 +293,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
          column.overrideType(datatype);
       }
       catch (UnsupportedDataTypeException e) {
-         throw datatypeOverrideException(format("Unsupported datatype-override: %s", //$NON-NLS-1$
-               datatype));
+         throw datatypeOverrideException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$
       }
    }
 
