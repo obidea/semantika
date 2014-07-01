@@ -39,12 +39,12 @@ import com.obidea.semantika.datatype.TypeConversion;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
+import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.parser.AbstractMappingHandler;
 
@@ -181,40 +181,68 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       return ((UriReference) getPredicateMapValue()).toUri();
    }
 
-   private SqlColumn getColumnTerm(String columnName, String termType, String datatype)
+   private ITerm getColumnTerm(String columnName, String termType, String datatype)
    {
       if (termType.equals(R2RmlVocabulary.IRI)) {
-         if (StringUtils.isEmpty(datatype)) {
-            SqlColumn column = getColumnTerm(columnName);
-            try {
-               column.overrideType(DataType.ANY_URI);
-            }
-            catch (UnsupportedDataTypeException e) {
-               // NO-OP: This exception is expected and it is not a mapping parser exception
-            }
-            return column;
-         }
-         else {
+         if (!StringUtils.isEmpty(datatype)) {
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
+         SqlColumn column = getColumnTerm(columnName);
+         column.setTermType(TermType.URI_TYPE);
+         return column;
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
-         if (StringUtils.isEmpty(datatype)) {
-            return getColumnTerm(columnName); // set as natural RDF literal
-         }
-         else {
-            SqlColumn column = getColumnTerm(columnName);
+         SqlColumn column = getColumnTerm(columnName);
+         column.setTermType(TermType.LITERAL_TYPE);
+         if (!StringUtils.isEmpty(datatype)) {
             overrideColumn(column, datatype); // set as datatype-override RDF literal
-            return column;
          }
+         return column;
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
          throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
       }
-      else {
-         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
-         throw new R2RmlParserException(message);
+      throw new R2RmlParserException(format("Unknown term type \"%s\"", termType)); //$NON-NLS-1$
+   }
+
+   private ITerm getLiteralTerm(String value, String termType, String datatype)
+   {
+      if (termType.equals(R2RmlVocabulary.IRI)) {
+         if (!StringUtils.isEmpty(datatype)) {
+            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
+         }
+         return getExpressionObjectFactory().getUriReference(createUri(value));
       }
+      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         return (StringUtils.isEmpty(datatype)) ?
+            getExpressionObjectFactory().getLiteral(value, DataType.STRING) : // by default
+            getExpressionObjectFactory().getLiteral(value, datatype);
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
+      }
+      throw new R2RmlParserException(format("Unknown term type \"%s\"", termType)); //$NON-NLS-1$
+   }
+
+   private ITerm getTemplateTerm(String value, String termType, String datatype)
+   {
+      if (termType.equals(R2RmlVocabulary.IRI)) {
+         if (!StringUtils.isEmpty(datatype)) {
+            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
+         }
+         R2RmlTemplate template = new R2RmlTemplate(value);
+         String templateString = template.getTemplateString();
+         List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
+         UriTemplate uriTemplate = getMappingObjectFactory().createUriTemplate(templateString, parameters);
+         return uriTemplate;
+      }
+      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
+         throw new UnsupportedR2RmlFeatureException("rr:template for literal string construction");
+      }
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
+         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
+      }
+      throw new R2RmlParserException(format("Unknown term type \"%s\"", termType)); //$NON-NLS-1$
    }
 
    private SqlColumn getColumnTerm(String columnName)
@@ -223,64 +251,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       if (column != null) {
          return column;
       }
-      String message = String.format("Unknown column name \"%s\"", columnName); //$NON-NLS-1$
-      throw new R2RmlParserException(message);
-   }
-
-   private ITerm getLiteralTerm(String value, String termType, String datatype)
-   {
-      if (termType.equals(R2RmlVocabulary.IRI)) {
-         if (StringUtils.isEmpty(datatype)) {
-            UriReference uri = getExpressionObjectFactory().getUriReference(createUri(value));
-            return uri;
-         }
-         else {
-            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
-         }
-      }
-      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
-         if (StringUtils.isEmpty(datatype)) {
-            Literal literal = getExpressionObjectFactory().getLiteral(value, DataType.STRING); // by default
-            return literal;
-         }
-         else {
-            Literal literal = getExpressionObjectFactory().getLiteral(value, datatype);
-            return literal;
-         }
-      }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
-      }
-      else {
-         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
-         throw new R2RmlParserException(message);
-      }
-   }
-
-   private ITerm getTemplateTerm(String value, String termType, String datatype)
-   {
-      if (termType.equals(R2RmlVocabulary.IRI)) {
-         if (StringUtils.isEmpty(datatype)) {
-            R2RmlTemplate template = new R2RmlTemplate(value);
-            String templateString = template.getTemplateString();
-            List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-            UriTemplate uriTemplate = getMappingObjectFactory().createUriTemplate(templateString, parameters);
-            return uriTemplate;
-         }
-         else {
-            throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
-         }
-      }
-      else if (termType.equals(R2RmlVocabulary.LITERAL)) {
-         throw new UnsupportedR2RmlFeatureException("rr:template for literal string construction");
-      }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
-         throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
-      }
-      else {
-         String message = String.format("Unknown term type \"%s\"", termType); //$NON-NLS-1$
-         throw new R2RmlParserException(message);
-      }
+      throw new R2RmlParserException(format("Unknown column name \"%s\"", columnName)); //$NON-NLS-1$
    }
 
    private List<SqlColumn> getColumnTerms(List<String> columnNames)
