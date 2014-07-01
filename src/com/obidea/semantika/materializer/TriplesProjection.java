@@ -38,11 +38,6 @@ public class TriplesProjection
     */
    static final int DATA_LITERAL_VALUE_CATEGORY = 1;
 
-   /**
-    * A constant to indicate the projected data as a URI literal value.
-    */
-   static final int DATA_URI_VALUE_CATEGORY = 2;
-
    private List<SqlSelectItem> mSelectItemList;
 
    /**
@@ -73,8 +68,7 @@ public class TriplesProjection
     *           The first index position is 1, the second is 2, etc.
     * @return the data category, which will be one of the following constants:
     *         <code>IProjection.DATA_OBJECT_CATEGORY</code>,
-    *         <code>IProjection.DATA_LITERAL_VALUE_TYPE</code>,
-    *         <code>IProjection.DATA_URI_VALUE_TYPE</code>.
+    *         <code>IProjection.DATA_LITERAL_VALUE_TYPE</code>.
     */
    public int getDataCategory(int position)
    {
@@ -86,7 +80,7 @@ public class TriplesProjection
          return DATA_LITERAL_VALUE_CATEGORY;
       }
       else if (expression instanceof SqlUriValue) {
-         return DATA_URI_VALUE_CATEGORY;
+         return DATA_OBJECT_CATEGORY;
       }
       throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }

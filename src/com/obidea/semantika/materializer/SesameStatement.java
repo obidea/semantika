@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.materializer;
 
+import java.net.URISyntaxException;
+
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
@@ -57,12 +59,19 @@ import com.obidea.semantika.util.TemplateStringHelper;
       int category = mProjection.getDataCategory(1);
       switch (category) {
          case TriplesProjection.DATA_OBJECT_CATEGORY:
-            String uriString = TemplateStringHelper.buildUri(mSubjectValue);
+            String uriString = mSubjectValue;
+            /*
+             * Check if the given subject value is a URI-template string or a URI string.
+             */
+            if (!validUri(uriString)) {
+               /*
+                * If it is a URI template string then reconstruct it to be a URI string.
+                */
+               uriString = TemplateStringHelper.buildUri(mSubjectValue);
+            }
             return mValueFactory.createURI(uriString);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             throw new IllegalTermTypeException("Triple subject cannot be data value"); //$NON-NLS-1$
-         case TriplesProjection.DATA_URI_VALUE_CATEGORY:
-            return mValueFactory.createURI(mSubjectValue);
       }
       throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
@@ -73,11 +82,9 @@ import com.obidea.semantika.util.TemplateStringHelper;
       int category = mProjection.getDataCategory(2);
       switch (category) {
          case TriplesProjection.DATA_OBJECT_CATEGORY:
-            throw new IllegalTermTypeException("Triple predicate cannot be data object"); //$NON-NLS-1$
+            return mValueFactory.createURI(mPredicateValue);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             throw new IllegalTermTypeException("Triple predicate cannot be data value"); //$NON-NLS-1$
-         case TriplesProjection.DATA_URI_VALUE_CATEGORY:
-            return mValueFactory.createURI(mPredicateValue);
       }
       throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
@@ -88,20 +95,43 @@ import com.obidea.semantika.util.TemplateStringHelper;
       int category = mProjection.getDataCategory(3);
       switch (category) {
          case TriplesProjection.DATA_OBJECT_CATEGORY:
-            String uriString = TemplateStringHelper.buildUri(mObjectValue);
+            String uriString = mObjectValue;
+            /*
+             * Check if the given object value is a URI-template string or a URI string.
+             */
+            if (!validUri(uriString)) {
+               /*
+                * If it is a URI template string then reconstruct it to be a URI string.
+                */
+               uriString = TemplateStringHelper.buildUri(mObjectValue);
+            }
             return mValueFactory.createURI(uriString);
          case TriplesProjection.DATA_LITERAL_VALUE_CATEGORY:
             String datatype = mProjection.getDatatype(3);
-            if (datatype.equals(DataType.STRING)) {
+             if (datatype.equals(DataType.STRING)) {
                // Create a literal object without a datatype URI for string type.
                return mValueFactory.createLiteral(mObjectValue);
             }
             else {
                return mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
             }
-         case TriplesProjection.DATA_URI_VALUE_CATEGORY:
-            return mValueFactory.createURI(mObjectValue);
       }
       throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
+   }
+
+   /*
+    * A utility method to check if the given URI string is a valid URI construction.
+    * This method is used exclusively to check if the given value is in the form of
+    * a URI template string or an already URI string.
+    */
+   private static boolean validUri(String uriString)
+   {
+      try {
+         new java.net.URI(uriString);
+      }
+      catch (URISyntaxException e) {
+         return false;
+      }
+      return true;
    }
 }
