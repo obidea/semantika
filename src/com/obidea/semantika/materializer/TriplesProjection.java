@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.materializer;
 
+import static java.lang.String.format;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +25,7 @@ import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.mapping.base.IMappingTerm;
 import com.obidea.semantika.mapping.base.TermType;
-import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
-import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.base.sql.SqlUriValue;
 
 public class TriplesProjection
 {
@@ -79,8 +78,9 @@ public class TriplesProjection
       switch (mapTerm.getTermType()) {
          case TermType.URI_TYPE: return DATA_URI;
          case TermType.LITERAL_TYPE: return DATA_LITERAL;
+         default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
+               mapTerm.getTermType(), expression));
       }
-      throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    /**
@@ -93,16 +93,13 @@ public class TriplesProjection
    public String getDatatype(int position)
    {
       ISqlExpression expression = getSelectItem(position).getExpression();
-      if (expression instanceof SqlUriConcat) {
-         return ((SqlUriConcat) expression).getDatatype();
+      IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
+      switch (mapTerm.getTermType()) {
+         case TermType.URI_TYPE: return null; // no datatype for object identifier
+         case TermType.LITERAL_TYPE: return mapTerm.getDatatype();
+         default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
+               mapTerm.getTermType(), expression));
       }
-      else if (expression instanceof SqlColumn) {
-         return ((SqlColumn) expression).getDatatype();
-      }
-      else if (expression instanceof SqlUriValue) {
-         return ((SqlUriValue) expression).getDatatype();
-      }
-      throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    private SqlSelectItem getSelectItem(int position)
