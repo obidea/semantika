@@ -26,7 +26,9 @@ import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
 import org.openrdf.model.impl.ValueFactoryImpl;
 
-import com.obidea.semantika.datatype.DataType;
+import com.obidea.semantika.datatype.AbstractXmlType;
+import com.obidea.semantika.datatype.XmlDataTypeProfile;
+import com.obidea.semantika.datatype.primitive.XsdString;
 import com.obidea.semantika.util.TemplateStringHelper;
 
 /* package */class SesameStatement implements Statement
@@ -91,12 +93,19 @@ import com.obidea.semantika.util.TemplateStringHelper;
          case TriplesProjection.DATA_URI:
             return mValueFactory.createURI(getUriString(mObjectValue));
          case TriplesProjection.DATA_LITERAL:
-            String datatype = mProjection.getDatatype(3);
-            return (datatype.equals(DataType.STRING)) ?
-               mValueFactory.createLiteral(mObjectValue) : // use syntactic sugar for xsd:string
-               mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
+            try {
+               AbstractXmlType<?> xmlType = XmlDataTypeProfile.getXmlDatatype(mProjection.getDatatype(3));
+               Object value = xmlType.getValue(mObjectValue);
+               return (xmlType instanceof XsdString) ?
+                     mValueFactory.createLiteral(String.valueOf(value)) : // use syntactic sugar
+                     mValueFactory.createLiteral(String.valueOf(value), xmlType.getName());
+            }
+            catch (Exception e) {
+               throw new TriplesStatementException("Failed to create literal", e); //$NON-NLS-1$
+            }
+         default:
+            throw new TriplesStatementException(format("Illegal data category (%s)", category)); //$NON-NLS-1$
       }
-      throw new TriplesStatementException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    private String getUriString(String value)
