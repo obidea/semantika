@@ -21,9 +21,9 @@ public abstract class Term implements ITerm
 {
    private static final long serialVersionUID = 629451L;
 
-   protected String mName;
-   protected String mDatatype;
-   protected String mAlias;
+   private String mName;
+   private String mDatatype;
+   private String mAlias;
 
    public Term(String name, String datatype)
    {
