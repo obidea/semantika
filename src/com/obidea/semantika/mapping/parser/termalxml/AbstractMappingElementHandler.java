@@ -30,6 +30,7 @@ import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.UriTemplate;
+import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
@@ -153,12 +154,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
             SqlColumn column = getColumnTerm(columnName);
-            try {
-               column.overrideType(DataType.ANY_URI);
-            }
-            catch (UnsupportedDataTypeException e) {
-               // NO-OP: This exception is expected and it is not a mapping parser exception
-            }
+            column.setTermType(TermType.URI_TYPE);
             return column;
          }
          else {
@@ -167,12 +163,15 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
          if (StringUtils.isEmpty(datatype)) {
-            return getColumnTerm(columnName); // set as natural RDF literal
+            SqlColumn column = getColumnTerm(columnName);
+            column.setTermType(TermType.LITERAL_TYPE); // set as natural RDF literal
+            return column;
          }
          else {
             SqlColumn column = getColumnTerm(columnName);
-            overrideColumn(column, datatype);
-            return column; // set as datatype-override RDF literal
+            column.setTermType(TermType.LITERAL_TYPE);
+            overrideColumn(column, datatype); // set as datatype-override RDF literal
+            return column;
          }
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
