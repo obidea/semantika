@@ -69,6 +69,7 @@ public class PostgreSqlDialect extends Sql99Dialect
          case Types.DATE: return "DATE"; //$NON-NLS-1$
          case Types.TIME: return "TIME"; //$NON-NLS-1$
          case Types.TIMESTAMP: return "TIMESTAMP"; //$NON-NLS-1$
+         case Types.OTHER: return "VARCHAR"; //$NON-NLS-1$
       }
       throw new SemantikaRuntimeException("Failed to construct CAST (datatype: " + datatype + ")");
    }

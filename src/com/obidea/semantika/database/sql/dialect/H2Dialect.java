@@ -85,6 +85,7 @@ public class H2Dialect extends Sql99Dialect
          case Types.DATE: return "DATE"; //$NON-NLS-1$
          case Types.TIME: return "TIME"; //$NON-NLS-1$
          case Types.TIMESTAMP: return "DATETIME"; //$NON-NLS-1$
+         case Types.OTHER: return "CHAR"; //$NON-NLS-1$
       }
       throw new SemantikaRuntimeException("Failed to construct CAST (datatype: " + datatype + ")");
    }
