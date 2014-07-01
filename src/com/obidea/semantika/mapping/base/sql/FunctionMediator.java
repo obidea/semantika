@@ -28,10 +28,14 @@ import com.obidea.semantika.expression.base.ITermVisitor;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.Term;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
+import com.obidea.semantika.mapping.base.IMappingTerm;
+import com.obidea.semantika.mapping.base.TermType;
 
-public abstract class FunctionMediator extends AbstractFunction
+public abstract class FunctionMediator extends AbstractFunction implements IMappingTerm
 {
    private static final long serialVersionUID = 629451L;
+
+   private int mTermType = TermType.LITERAL_TYPE; // by default
 
    public FunctionMediator(String name, String returnType, List<ISqlExpression> parameters)
    {
@@ -43,15 +47,16 @@ public abstract class FunctionMediator extends AbstractFunction
       this(name, returnType, Arrays.asList(expressions));
    }
 
-   private static List<? extends Term> getFunctionTerms(List<ISqlExpression> expressions)
+   @Override
+   public void setTermType(int type)
    {
-      List<Term> toReturn = new ArrayList<Term>();
-      for (ISqlExpression expression : expressions) {
-         if (expression instanceof Term) {
-            toReturn.add((Term) expression);
-         }
-      }
-      return toReturn;
+      mTermType = type;
+   }
+
+   @Override
+   public int getTermType()
+   {
+      return mTermType;
    }
 
    @Override
@@ -85,5 +90,20 @@ public abstract class FunctionMediator extends AbstractFunction
    public void accept(ITermVisitor visitor)
    {
       visitor.visit(this);
+   }
+
+   /*
+    * Private utility method
+    */
+
+   private static List<? extends Term> getFunctionTerms(List<ISqlExpression> expressions)
+   {
+      List<Term> toReturn = new ArrayList<Term>();
+      for (ISqlExpression expression : expressions) {
+         if (expression instanceof Term) {
+            toReturn.add((Term) expression);
+         }
+      }
+      return toReturn;
    }
 }

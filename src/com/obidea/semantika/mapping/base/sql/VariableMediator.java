@@ -20,14 +20,30 @@ import com.obidea.semantika.database.base.IColumn;
 import com.obidea.semantika.database.datatype.SqlTypeToXmlType;
 import com.obidea.semantika.expression.base.AbstractVariable;
 import com.obidea.semantika.expression.base.ITermVisitor;
+import com.obidea.semantika.mapping.base.IMappingTerm;
+import com.obidea.semantika.mapping.base.TermType;
 
-public abstract class VariableMediator extends AbstractVariable
+public abstract class VariableMediator extends AbstractVariable implements IMappingTerm
 {
    private static final long serialVersionUID = 629451L;
+
+   private int mTermType = TermType.LITERAL_TYPE; // by default
 
    public VariableMediator(IColumn column)
    {
       super(getColumnVariableName(column), getColumnVariableType(column));
+   }
+
+   @Override
+   public void setTermType(int type)
+   {
+      mTermType = type;
+   }
+
+   @Override
+   public int getTermType()
+   {
+      return mTermType;
    }
 
    protected void notifyVariableNameChanged(String newName)
