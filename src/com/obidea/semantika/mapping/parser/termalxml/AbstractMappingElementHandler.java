@@ -290,7 +290,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
    {
       checkTypeConversion(column.getDatatype(), datatype);
       try {
-         column.overrideType(datatype);
+         column.overrideDatatype(datatype);
       }
       catch (UnsupportedDataTypeException e) {
          throw datatypeOverrideException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$

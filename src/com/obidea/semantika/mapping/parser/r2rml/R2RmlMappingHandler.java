@@ -267,7 +267,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       checkTypeConversion(column.getDatatype(), datatype);
       try {
-         column.overrideType(datatype);
+         column.overrideDatatype(datatype);
       }
       catch (UnsupportedDataTypeException e) {
          throw new R2RmlParserException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$
