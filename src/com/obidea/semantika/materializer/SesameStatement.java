@@ -88,13 +88,9 @@ import com.obidea.semantika.util.TemplateStringHelper;
             return mValueFactory.createURI(getUriString(mObjectValue));
          case TriplesProjection.DATA_LITERAL:
             String datatype = mProjection.getDatatype(3);
-             if (datatype.equals(DataType.STRING)) {
-               // Create a literal object without a datatype URI for string type.
-               return mValueFactory.createLiteral(mObjectValue);
-            }
-            else {
-               return mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
-            }
+            return (datatype.equals(DataType.STRING)) ?
+               mValueFactory.createLiteral(mObjectValue) : // use syntactic sugar for xsd:string
+               mValueFactory.createLiteral(mObjectValue, mValueFactory.createURI(datatype));
       }
       throw new IllegalTermTypeException("Unknown data category [" + category + "]"); //$NON-NLS-1$ //$NON-NLS-2$
    }
