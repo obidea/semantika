@@ -20,6 +20,7 @@ import java.util.List;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.datatype.DataType;
+import com.obidea.semantika.mapping.base.TermType;
 
 public class SqlUriConcat extends SqlFunction
 {
@@ -27,12 +28,23 @@ public class SqlUriConcat extends SqlFunction
 
    public SqlUriConcat(List<ISqlExpression> expressions)
    {
+      /*
+       * As a logical term, this function has a datatype xsd:anyURI. However,
+       * as a mapping term, this function has no datatype since it will
+       * construct an object identifier.
+       */
       super("URICONCAT", DataType.ANY_URI, expressions); //$NON-NLS-1$
    }
 
    public SqlUriConcat(ISqlExpression... expressions)
    {
       super("URICONCAT", DataType.ANY_URI, expressions); //$NON-NLS-1$
+   }
+
+   @Override
+   public int getTermType()
+   {
+      return TermType.URI_TYPE; // This function constructs an object identifier
    }
 
    @Override

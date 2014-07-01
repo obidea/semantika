@@ -18,6 +18,7 @@ package com.obidea.semantika.mapping.base.sql;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.datatype.DataType;
+import com.obidea.semantika.mapping.base.TermType;
 
 public class SqlUriValue extends ConstantMediator implements ISqlValue
 {
@@ -25,7 +26,18 @@ public class SqlUriValue extends ConstantMediator implements ISqlValue
 
    public SqlUriValue(String value)
    {
+      /*
+       * As a logical term, this constant has a datatype xsd:anyURI. However,
+       * as a mapping term, this constant has no datatype since it is treated
+       * as an object identifier.
+       */
       super(value, DataType.ANY_URI);
+   }
+
+   @Override
+   public int getTermType()
+   {
+      return TermType.URI_TYPE; // This function constructs an object identifier
    }
 
    @Override
