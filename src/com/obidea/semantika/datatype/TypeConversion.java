@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.datatype;
 
+import static java.lang.String.format;
+
 import org.slf4j.Logger;
 
 import com.obidea.semantika.util.LogUtils;
@@ -112,15 +114,15 @@ public class TypeConversion
          case YES:
             return true;
          case MAY :
-            String msgMay = String.format(
-                  "Conversion from source type %s to target type %s is subjected to the restrictions in target type", //$NON-NLS-1$
-                  source.getName(), target.getName());
+            String msgMay = format(
+                  "Conversion from \"%s\" to \"%s\" is subjected to the restrictions in target type", //$NON-NLS-1$
+                  source, target);
             LOG.warn(msgMay);
             return true;
          case LOS :
-            String msgLos = String.format(
-                  "Conversion from source type %s to target type %s can result precision loss", //$NON-NLS-1$
-                  source.getName(), target.getName());
+            String msgLos = format(
+                  "Conversion from \"%s\" to \"%s\" can result precision loss", //$NON-NLS-1$
+                  source, target);
             LOG.warn(msgLos);
             return true;
          case NOT:
