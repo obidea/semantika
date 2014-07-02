@@ -23,7 +23,6 @@ public abstract class Term implements ITerm
 
    private String mName;
    private String mDatatype;
-   private String mAlias;
 
    public Term(String name, String datatype)
    {
@@ -57,21 +56,5 @@ public abstract class Term implements ITerm
    public boolean isTyped()
    {
       return StringUtils.isEmpty(mDatatype) ? false : true;
-   }
-
-   public void setAlias(String alias)
-   {
-      mAlias = alias;
-   }
-
-   @Override
-   public String getAlias()
-   {
-      return mAlias;
-   }
-
-   public boolean hasAlias()
-   {
-      return StringUtils.isEmpty(mAlias) ? false : true;
    }
 }

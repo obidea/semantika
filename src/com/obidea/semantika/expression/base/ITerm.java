@@ -39,13 +39,6 @@ public interface ITerm extends IExpressionObject
    public boolean isTyped();
 
    /**
-    * Get the alias name of this term.
-    *
-    * @return the string alias name.
-    */
-   public String getAlias();
-
-   /**
     * Get a hash code value of this term.
     * 
     * @return the hash code of this term.
