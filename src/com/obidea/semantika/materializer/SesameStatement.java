@@ -98,7 +98,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
                Object value = xmlType.getValue(mObjectValue);
                return (xmlType instanceof XsdString) ?
                      mValueFactory.createLiteral(String.valueOf(value)) : // use syntactic sugar
-                     mValueFactory.createLiteral(String.valueOf(value), xmlType.getName());
+                     mValueFactory.createLiteral(String.valueOf(value), mValueFactory.createURI(xmlType.getName()));
             }
             catch (Exception e) {
                throw new TriplesStatementException("Failed to create literal", e); //$NON-NLS-1$
