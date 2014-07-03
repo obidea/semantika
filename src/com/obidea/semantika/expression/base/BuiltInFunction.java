@@ -382,7 +382,7 @@ public enum BuiltInFunction
       }
    }),
 
-   Str(ExpressionConstant.CAST_STRING, 1, new IFunctionOperation() {
+   Str(ExpressionConstant.STR, 1, new IFunctionOperation() {
       private static final long serialVersionUID = 629451L;
       @Override
       public ILiteral execute(List<? extends IConstant> args)
