@@ -133,8 +133,17 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    public void overrideDatatype(String datatype) throws UnsupportedDataTypeException
    {
       notifyVariableTypeChanged(datatype);
-      mColumnType = XmlTypeToSqlType.get(datatype);
-      bTypeOverriden = true;
+      notifyColumnTypeChanged(datatype);
+   }
+
+   private void notifyColumnTypeChanged(String datatype) throws UnsupportedDataTypeException
+   {
+      int oldSqlType = mColumnType;
+      int newSqlType = XmlTypeToSqlType.get(datatype);
+      if (newSqlType != oldSqlType) {
+         mColumnType = newSqlType;
+         bTypeOverriden = true;
+      }
    }
 
    public boolean isOverriden()
