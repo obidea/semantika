@@ -15,6 +15,7 @@
  */
 package com.obidea.semantika.database.sql.deparser;
 
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -39,6 +40,7 @@ import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.mapping.base.sql.SqlAddition;
 import com.obidea.semantika.mapping.base.sql.SqlAnd;
+import com.obidea.semantika.mapping.base.sql.SqlStr;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlConcat;
 import com.obidea.semantika.mapping.base.sql.SqlDivide;
@@ -233,6 +235,9 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
       }
       else if (unaryFunction instanceof SqlLang) {
          mExpressionString =  mDialect.lang(argument);
+      }
+      else if (unaryFunction instanceof SqlStr) {
+         mExpressionString =  mDialect.cast(argument, Types.VARCHAR);
       }
       else {
          throw unknownSqlExpressionException(unaryFunction);
