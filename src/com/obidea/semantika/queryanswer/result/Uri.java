@@ -31,7 +31,7 @@ public class Uri implements IUri
    }
 
    @Override
-   public String getLexicalValue()
+   public String stringValue()
    {
       return mValue;
    }

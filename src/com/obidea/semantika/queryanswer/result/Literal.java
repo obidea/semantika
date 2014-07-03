@@ -38,7 +38,7 @@ public class Literal implements ILiteral
    }
 
    @Override
-   public String getLexicalValue()
+   public String stringValue()
    {
       return mValue;
    }

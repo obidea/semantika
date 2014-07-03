@@ -19,7 +19,7 @@ import java.io.Serializable;
 
 public interface IValue extends Serializable
 {
-   public String getLexicalValue();
+   public String stringValue();
 
    public Object getObject();
 }
