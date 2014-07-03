@@ -15,11 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
-import java.io.Serializable;
-
-public interface IValue extends Serializable
+public interface IUri extends IValue
 {
-   public String getLexicalValue();
+   public String getNamespace();
 
-   public Object getObject();
+   public String getLocalName();
 }

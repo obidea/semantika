@@ -15,11 +15,42 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
-import java.io.Serializable;
+import java.net.URI;
 
-public interface IValue extends Serializable
+import com.obidea.semantika.util.XmlUtils;
+
+public class Uri implements IUri
 {
-   public String getLexicalValue();
+   private static final long serialVersionUID = 629451L;
 
-   public Object getObject();
+   private String mValue;
+
+   public Uri(String value)
+   {
+      mValue = value;
+   }
+
+   @Override
+   public String getLexicalValue()
+   {
+      return mValue;
+   }
+
+   @Override
+   public String getNamespace()
+   {
+      return XmlUtils.getNCNamePrefix(mValue);
+   }
+
+   @Override
+   public String getLocalName()
+   {
+      return XmlUtils.getNCNameSuffix(mValue);
+   }
+
+   @Override
+   public URI getObject()
+   {
+      return URI.create(mValue);
+   }
 }

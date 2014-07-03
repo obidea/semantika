@@ -24,14 +24,14 @@ public class ValueList implements IValueList
    private static final long serialVersionUID = 629451L;
 
    private List<String> mSelectNames;
-   private List<? extends IValue> mValues;
+   private List<IValue> mValues;
 
-   public ValueList(List<String> selectNames, Value... values)
+   public ValueList(List<String> selectNames, IValue... values)
    {
       this(selectNames, Arrays.asList(values));
    }
 
-   public ValueList(List<String> selectNames, List<Value> values)
+   public ValueList(List<String> selectNames, List<IValue> values)
    {
       assert selectNames.size() == values.size() : "Number of select names and values are not equal"; //$NON-NLS-1$
       mSelectNames = selectNames;

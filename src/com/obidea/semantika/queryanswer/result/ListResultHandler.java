@@ -41,7 +41,7 @@ public class ListResultHandler implements IQueryResultHandler
       List<String> selectNames = valueList.getSelectNames();
       for (int i = 0; i < cols; i++) {
          String selectName = selectNames.get(i);
-         rowResults[i] = valueList.get(selectName).getValue();
+         rowResults[i] = valueList.get(selectName).getObject();
       }
       return rowResults;
    }
