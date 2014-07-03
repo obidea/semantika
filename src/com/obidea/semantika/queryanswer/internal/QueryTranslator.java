@@ -16,13 +16,15 @@
 package com.obidea.semantika.queryanswer.internal;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.deparser.SqlDeparser;
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.expression.base.IQueryExt;
-import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.QuerySet;
+import com.obidea.semantika.mapping.base.IMappingTerm;
+import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
 import com.obidea.semantika.queryanswer.parser.SparqlFactory;
@@ -37,8 +39,7 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
    private String mQueryString;
    private String mSqlString;
 
-   private String[] mReturnLabels;
-   private String[] mReturnTypes;
+   private QueryMetadata mQueryMetadata;
 
    public QueryTranslator(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslatorException
    {
@@ -70,8 +71,10 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
              */
             renderSql(unfoldedQuery);
             
-            collectReturnLabels(unfoldedQuery.get(0)); // collect from one sample query
-            collectReturnTypes(unfoldedQuery.get(0));
+//            collectReturnLabels(unfoldedQuery.get(0));
+//            collectReturnTypes(unfoldedQuery.get(0));
+            
+            buildQueryMetadata(unfoldedQuery.get(0)); // get from one sample query
          }
          else {
             throw new QueryTranslatorException("No SQL was produced for input query:\n" + queryString); //$NON-NLS-1$
@@ -112,38 +115,43 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       mSqlString = deparser.deparse(inputQuery);
    }
 
-   private void collectReturnLabels(SqlQuery sqlQuery)
-   {
-      int returnSize = sqlQuery.getSelectItems().size();
-      
-      mReturnLabels = new String[returnSize];
-      for (int i = 0; i < returnSize; i++) {
-         SqlSelectItem selectItem = sqlQuery.getSelectItems().get(i);
-         mReturnLabels[i] = selectItem.getLabelName();
-      }
-   }
 
-   private void collectReturnTypes(SqlQuery sqlQuery)
+
+   private void buildQueryMetadata(SqlQuery sqlQuery)
    {
-      int returnSize = sqlQuery.getDistTerms().size();
+      List<SqlSelectItem> selectItems = sqlQuery.getSelectItems();
+      int selectSize = selectItems.size();
       
-      mReturnTypes = new String[returnSize];
-      for (int i = 0; i < returnSize; i++) {
-         ITerm selectTerm = sqlQuery.getDistTerms().get(i);
-         mReturnTypes[i] = selectTerm.getDatatype();
+      String[] selectNames = new String[selectSize];
+      String[] selectTypes = new String[selectSize];
+      
+      for (int i = 0; i < selectSize; i++) {
+         final SqlSelectItem selectItem = selectItems.get(i);
+         
+         /*
+          * Get the select name from the SQL projection labels.
+          */
+         selectNames[i] = selectItem.getLabelName();
+         
+         /*
+          * Get the select type from the SQL expression. However, we need to
+          * be able to determine if the expression has a semantic as a
+          * literal-value or object-value. This can be obtained by casting the
+          * object as a mapping term expression.
+          */
+         IMappingTerm mt = (IMappingTerm) selectItem.getExpression();
+         switch (mt.getTermType()) {
+            case TermType.LITERAL_TYPE: selectTypes[i] = mt.getDatatype(); break;
+            case TermType.URI_TYPE: selectTypes[i] = null; break;
+         }
       }
+      mQueryMetadata = new QueryMetadata(selectNames, selectTypes);
    }
 
    @Override
-   public String[] getReturnLabels()
+   public QueryMetadata getQueryMetadata()
    {
-      return mReturnLabels;
-   }
-
-   @Override
-   public String[] getReturnTypes()
-   {
-      return mReturnTypes;
+      return mQueryMetadata;
    }
 
    @Override

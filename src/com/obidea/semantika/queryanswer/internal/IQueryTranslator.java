@@ -19,10 +19,6 @@ import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 public interface IQueryTranslator
 {
-   String[] getReturnLabels();
-
-   String[] getReturnTypes();
-
    String getQueryString();
 
    String getSqlString();

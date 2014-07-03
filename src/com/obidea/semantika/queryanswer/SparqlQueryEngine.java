@@ -93,7 +93,7 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    @Override
    public ISelectQuery createQuery(String sparql) throws SemantikaException
    {
-      return new SelectQuery(sparql, this, getQueryPlan(sparql).getReturnMetadata());
+      return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
    }
 
    @Override

@@ -17,25 +17,18 @@ package com.obidea.semantika.queryanswer.internal;
 
 public final class QueryParameters
 {
-   private QueryReturnMetadata mQueryReturnMetadata;
    private QueryModifiers mQueryModifiers;
    private StatementSettings mStatementSettings;
 
-   public QueryParameters(QueryReturnMetadata metadata)
+   public QueryParameters()
    {
-      this(metadata, new QueryModifiers(), new StatementSettings());
+      this(new QueryModifiers(), new StatementSettings());
    }
 
-   public QueryParameters(QueryReturnMetadata metadata, QueryModifiers modifiers, StatementSettings settings)
+   public QueryParameters(QueryModifiers modifiers, StatementSettings settings)
    {
-      mQueryReturnMetadata = metadata;
       mQueryModifiers = modifiers;
       mStatementSettings = settings;
-   }
-
-   public QueryReturnMetadata getQueryReturnMetadata()
-   {
-      return mQueryReturnMetadata;
    }
 
    public QueryModifiers getQueryModifiers()

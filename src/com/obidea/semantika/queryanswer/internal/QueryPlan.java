@@ -23,19 +23,17 @@ public class QueryPlan
 {
    private String mQueryString;
 
-   private IQueryTranslator mTranslator;
-   private QueryReturnMetadata mReturnMetadata;
+   private QueryTranslator mTranslator;
 
    public QueryPlan(String queryString, AbstractQueryEngine queryEngine) throws SemantikaException
    {
       mQueryString = queryString;
       mTranslator = new QueryTranslator(queryString, queryEngine);
-      mReturnMetadata = new QueryReturnMetadata(mTranslator.getReturnLabels(), mTranslator.getReturnTypes());
    }
 
-   public QueryReturnMetadata getReturnMetadata()
+   public QueryMetadata getQueryMetadata()
    {
-      return mReturnMetadata;
+      return mTranslator.getQueryMetadata();
    }
 
    public String getQueryString()

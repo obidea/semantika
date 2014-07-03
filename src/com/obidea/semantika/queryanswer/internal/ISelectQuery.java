@@ -25,8 +25,6 @@ public interface ISelectQuery
 {
    String getQueryString();
 
-   QueryReturnMetadata getReturnMetadata();
-
    QueryModifiers getModifiers();
 
    ISelectQuery setMaxResults(int limit);

@@ -26,8 +26,8 @@ import org.openrdf.query.parser.QueryParser;
 import org.openrdf.query.parser.QueryParserUtil;
 
 import com.obidea.semantika.exception.SemantikaException;
-import com.obidea.semantika.queryanswer.IQueryEngineExt;
 import com.obidea.semantika.queryanswer.QueryEngineException;
+import com.obidea.semantika.queryanswer.SparqlQueryEngine;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 import com.obidea.semantika.queryanswer.result.IQueryResultHandler;
 import com.obidea.semantika.queryanswer.result.ListResultHandler;
@@ -41,16 +41,15 @@ public class SelectQuery implements ISelectQuery
    private StatementSettings mStatementSettings = new StatementSettings();
 
    private String mSparqlString;
-   private IQueryEngineExt mQueryEngine;
-   private QueryReturnMetadata mQueryReturnMetadata;
+   private SparqlQueryEngine mQueryEngine;
+   private QueryMetadata mQueryMetadata;
 
-   public SelectQuery(String sparqlString, final IQueryEngineExt queryEngine, final QueryReturnMetadata queryMetadata)
-         throws SemantikaException
+   public SelectQuery(String sparql, final SparqlQueryEngine engine, final QueryMetadata metadata) throws SemantikaException
    {
-      validateQuery(sparqlString);
-      mSparqlString = sparqlString;
-      mQueryEngine = queryEngine;
-      mQueryReturnMetadata = queryMetadata;
+      validateQuery(sparql);
+      mSparqlString = sparql;
+      mQueryEngine = engine;
+      mQueryMetadata = metadata;
    }
 
    private void validateQuery(String sparqlString) throws SemantikaException
@@ -79,16 +78,15 @@ public class SelectQuery implements ISelectQuery
       }
    }
 
+   public QueryMetadata getProjection()
+   {
+      return mQueryMetadata;
+   }
+
    @Override
    public String getQueryString()
    {
       return mSparqlString;
-   }
-
-   @Override
-   public QueryReturnMetadata getReturnMetadata()
-   {
-      return mQueryReturnMetadata;
    }
 
    @Override
@@ -151,7 +149,7 @@ public class SelectQuery implements ISelectQuery
 
    private QueryParameters getQueryParameters()
    {
-      return new QueryParameters(getReturnMetadata(), getModifiers(), mStatementSettings);
+      return new QueryParameters(getModifiers(), mStatementSettings);
    }
 
    @Override

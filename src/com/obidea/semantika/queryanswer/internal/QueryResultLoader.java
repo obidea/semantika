@@ -21,18 +21,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
+import com.obidea.semantika.queryanswer.internal.QueryMetadata.Column;
 import com.obidea.semantika.queryanswer.paging.SqlPaging;
 import com.obidea.semantika.queryanswer.paging.SqlPagingStrategy;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
+import com.obidea.semantika.queryanswer.result.IValue;
+import com.obidea.semantika.queryanswer.result.Literal;
 import com.obidea.semantika.queryanswer.result.QueryResult;
 import com.obidea.semantika.queryanswer.result.QueryResultBuilder;
-import com.obidea.semantika.queryanswer.result.Value;
+import com.obidea.semantika.queryanswer.result.Uri;
 import com.obidea.semantika.queryanswer.result.ValueList;
 import com.obidea.semantika.util.TemplateStringHelper;
 
@@ -53,7 +54,7 @@ public abstract class QueryResultLoader
       
       IQueryResult result = null;
       try {
-         result = buildQueryResult(rs, queryParameters.getQueryReturnMetadata());
+         result = buildQueryResult(rs, getQueryMetadata());
       }
       finally {
          mQueryEngine.getQueryEvaluator().closeQueryStatement(ps, rs);
@@ -75,6 +76,8 @@ public abstract class QueryResultLoader
    }
 
    protected abstract String getSqlString();
+
+   protected abstract QueryMetadata getQueryMetadata();
 
    private String preprocessSql(String sql, QueryModifiers modifiers)
    {
@@ -120,10 +123,10 @@ public abstract class QueryResultLoader
       return ps;
    }
 
-   private static QueryResult buildQueryResult(ResultSet rs, QueryReturnMetadata metadata) throws SQLException
+   private static QueryResult buildQueryResult(ResultSet rs, QueryMetadata metadata) throws SQLException
    {
       QueryResultBuilder builder = new QueryResultBuilder();
-      builder.start(Arrays.asList(metadata.getReturnLabels()));
+      builder.start(metadata.getSelectNames());
       while (rs.next()) {
          ValueList valueList = getValueListFromResultSet(rs, metadata);
          builder.handleResultFragment(valueList);
@@ -131,52 +134,47 @@ public abstract class QueryResultLoader
       return builder.getQueryResult();
    }
 
-   private static ValueList getValueListFromResultSet(ResultSet rs, QueryReturnMetadata metadata) throws SQLException
+   private static ValueList getValueListFromResultSet(ResultSet rs, QueryMetadata metadata) throws SQLException
    {
       List<String> selectLabels = new ArrayList<String>();
-      List<Value> values = getSelectValues(rs, metadata, selectLabels);
+      List<IValue> values = getSelectValues(rs, metadata, selectLabels);
       return new ValueList(selectLabels, values);
    }
 
-   private static List<Value> getSelectValues(ResultSet rs, QueryReturnMetadata metadata, List<String> selectLabels) throws SQLException
+   private static List<IValue> getSelectValues(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException
    {
-      int cols = metadata.getReturnSize();
-      
-      List<Value> values = new ArrayList<Value>();
-      for (int i = 1; i <= cols; i++) {
-         String name = getName(metadata, i);
-         selectLabels.add(name);
-         Value value = getValue(rs, metadata, i);
+      List<IValue> values = new ArrayList<IValue>();
+      for (int i = 1; i <= metadata.size(); i++) {
+         String label = getLabel(metadata, i);
+         selectLabels.add(label);
+         IValue value = getValue(rs, metadata, i);
          values.add(value);
       }
       return values;
    }
 
-   private static String getName(QueryReturnMetadata metadata, int position) throws SQLException
+   private static String getLabel(QueryMetadata metadata, int position) throws SQLException
    {
-      return metadata.getReturnLabel(position);
+      return metadata.getColumn(position).getLabel();
    }
 
-   private static Value getValue(ResultSet resultSet, QueryReturnMetadata metadata, int position) throws SQLException
+   private static IValue getValue(ResultSet resultSet, QueryMetadata metadata, int position) throws SQLException
    {
-      Object value = resultSet.getObject(position);
-      String datatype = metadata.getReturnType(position);
-      if (value != null) {
-         if (datatype.equals(DataType.ANY_URI)) {
-            String uriString = (String) value;
-            if (!validUri(uriString)) {
-               /*
-                * We assume if the URI string is invalid it means the string is a
-                * URI template construction, i.e., <template> : <value1> <value2> etc. 
-                */
-               uriString = TemplateStringHelper.buildUri(uriString);
-            }
-            value = URI.create(uriString);
-         }
-         return new Value(value, datatype);
+      Column c = metadata.getColumn(position);
+      if (c.isLiteral()) {
+         String value = resultSet.getString(position);
+         return new Literal(value, c.getDatatype());
       }
       else {
-         return new Value(null, datatype); // if the database returns null then put null to Value object.
+         String value = resultSet.getString(position);
+         if (value != null && !validUri(value)) {
+            /*
+             * We assume if the URI string is invalid it means the given value is a
+             * URI template construction, i.e., <template> : <value1> <value2> etc. 
+             */
+            value = TemplateStringHelper.buildUri(value);
+         }
+         return new Uri(value);
       }
    }
 
