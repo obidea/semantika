@@ -181,8 +181,8 @@ public class SqlMappingFactory
       return new SqlLang(text);
    }
 
-   public SqlCastString createCastStringExpression(ISqlExpression parameter)
+   public SqlStr createStrExpression(ISqlExpression parameter)
    {
-      return new SqlCastString(parameter);
+      return new SqlStr(parameter);
    }
 }

@@ -5,19 +5,19 @@ import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.mapping.base.sql.SqlUnaryFunction;
 
-public class SqlCastString extends SqlUnaryFunction
+public class SqlStr extends SqlUnaryFunction
 {
    private static final long serialVersionUID = 629451L;
 
-   public SqlCastString(ISqlExpression expression)
+   public SqlStr(ISqlExpression expression)
    {
-      super("CAST_STR", DataType.STRING, expression); //$NON-NLS-1$
+      super("STR", DataType.STRING, expression); //$NON-NLS-1$
    }
 
    @Override
    public String getStringExpression()
    {
-      return "CAST"; //$NON-NLS-1$
+      return "STR"; //$NON-NLS-1$
    }
 
    @Override
