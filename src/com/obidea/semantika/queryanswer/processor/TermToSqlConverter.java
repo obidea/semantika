@@ -207,6 +207,12 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       return sSqlFactory.createLangExpression(e);
    }
 
+   private ISqlExpression toSqlStr(IFunction function)
+   {
+      ISqlExpression e = getExpression(function.getParameter(0));
+      return sSqlFactory.createStrExpression(e);
+   }
+
    /*
     * Implementation of visitor methods.
     */
@@ -329,6 +335,9 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       }
       else if (functionName.equals(ExpressionConstant.LANG)) {
          mReturnExpression = toSqlLang(function);
+      }
+      else if (functionName.equals(ExpressionConstant.STR)) {
+         mReturnExpression = toSqlStr(function);
       }
       else {
          throw new SemantikaRuntimeException("Unknown function name: " + functionName); //$NON-NLS-1$
