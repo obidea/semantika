@@ -48,11 +48,11 @@ public final class XmlTypeToSqlType
       mTypeMapping.put(DataType.DATE_TIME_STAMP, Types.TIMESTAMP);
       mTypeMapping.put(DataType.DATE, Types.DATE);
       mTypeMapping.put(DataType.TIME, Types.TIME);
-      mTypeMapping.put(DataType.G_YEAR_MONTH, Types.OTHER);
-      mTypeMapping.put(DataType.G_MONTH_DAY, Types.OTHER);
-      mTypeMapping.put(DataType.G_YEAR, Types.INTEGER);
-      mTypeMapping.put(DataType.G_MONTH,Types.INTEGER);
-      mTypeMapping.put(DataType.G_DAY, Types.INTEGER);
+      mTypeMapping.put(DataType.G_YEAR_MONTH, Types.VARCHAR);
+      mTypeMapping.put(DataType.G_MONTH_DAY, Types.VARCHAR);
+      mTypeMapping.put(DataType.G_YEAR, Types.VARCHAR);
+      mTypeMapping.put(DataType.G_MONTH,Types.VARCHAR);
+      mTypeMapping.put(DataType.G_DAY, Types.VARCHAR);
    }
 
    /**
