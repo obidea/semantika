@@ -343,7 +343,11 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Extension arg0) throws SparqlParserException
    {
-      throw new UnsupportedSparqlExpressionException("Extension"); //$NON-NLS-1$
+      List<String> unknownVariables = new ArrayList<String>();
+      for (ExtensionElem el : arg0.getElements()) {
+         unknownVariables.add(el.getName());
+      }
+      throw new SparqlParserException("Unknown projection variables: " + unknownVariables); //$NON-NLS-1$
    }
 
    @Override
