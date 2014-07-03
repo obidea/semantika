@@ -17,7 +17,18 @@ package com.obidea.semantika.mapping.parser;
 
 public final class MappingParserConfiguration
 {
+   private String mBaseIri = "http://www.obidea.com/semantika#"; // default base IRI
    private boolean mIsStrict;
+
+   public void setBaseIri(String iri)
+   {
+      mBaseIri = iri;
+   }
+
+   public String getBaseIri()
+   {
+      return mBaseIri;
+   }
 
    public void setStrictParsing(boolean isStrict)
    {

@@ -15,33 +15,29 @@
  */
 package com.obidea.semantika.materializer;
 
+import static java.lang.String.format;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
-import com.obidea.semantika.mapping.sql.SqlColumn;
-import com.obidea.semantika.mapping.sql.SqlQuery;
-import com.obidea.semantika.mapping.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.sql.SqlUriValue;
+import com.obidea.semantika.mapping.base.IMappingTerm;
+import com.obidea.semantika.mapping.base.TermType;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class TriplesProjection
 {
    /**
     * A constant to indicate the projected data as an object identifier.
     */
-   static final int DATA_OBJECT_CATEGORY = 0;
+   static final int DATA_URI = 0;
 
    /**
     * A constant to indicate the projected data as a literal value.
     */
-   static final int DATA_LITERAL_VALUE_CATEGORY = 1;
-
-   /**
-    * A constant to indicate the projected data as a URI literal value.
-    */
-   static final int DATA_URI_VALUE_CATEGORY = 2;
+   static final int DATA_LITERAL = 1;
 
    private List<SqlSelectItem> mSelectItemList;
 
@@ -72,23 +68,19 @@ public class TriplesProjection
     * @param position
     *           The first index position is 1, the second is 2, etc.
     * @return the data category, which will be one of the following constants:
-    *         <code>IProjection.DATA_OBJECT_CATEGORY</code>,
-    *         <code>IProjection.DATA_LITERAL_VALUE_TYPE</code>,
-    *         <code>IProjection.DATA_URI_VALUE_TYPE</code>.
+    *         <code>IProjection.DATA_URI</code>,
+    *         <code>IProjection.DATA_LITERAL</code>.
     */
    public int getDataCategory(int position)
    {
       ISqlExpression expression = getSelectItem(position).getExpression();
-      if (expression instanceof SqlUriConcat) {
-         return DATA_OBJECT_CATEGORY;
+      IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
+      switch (mapTerm.getTermType()) {
+         case TermType.URI_TYPE: return DATA_URI;
+         case TermType.LITERAL_TYPE: return DATA_LITERAL;
+         default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
+               mapTerm.getTermType(), expression));
       }
-      else if (expression instanceof SqlColumn) {
-         return DATA_LITERAL_VALUE_CATEGORY;
-      }
-      else if (expression instanceof SqlUriValue) {
-         return DATA_URI_VALUE_CATEGORY;
-      }
-      throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    /**
@@ -101,16 +93,13 @@ public class TriplesProjection
    public String getDatatype(int position)
    {
       ISqlExpression expression = getSelectItem(position).getExpression();
-      if (expression instanceof SqlUriConcat) {
-         return ((SqlUriConcat) expression).getDatatype();
+      IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
+      switch (mapTerm.getTermType()) {
+         case TermType.URI_TYPE: return null; // no datatype for object identifier
+         case TermType.LITERAL_TYPE: return mapTerm.getDatatype();
+         default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
+               mapTerm.getTermType(), expression));
       }
-      else if (expression instanceof SqlColumn) {
-         return ((SqlColumn) expression).getDatatype();
-      }
-      else if (expression instanceof SqlUriValue) {
-         return ((SqlUriValue) expression).getDatatype();
-      }
-      throw new SemantikaRuntimeException("Expression " + expression + " is not supported in query projection"); //$NON-NLS-1$ //$NON-NLS-2$
    }
 
    private SqlSelectItem getSelectItem(int position)

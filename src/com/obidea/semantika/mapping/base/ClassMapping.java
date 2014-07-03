@@ -22,7 +22,7 @@ import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Predicate;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class ClassMapping extends AbstractMapping implements IClassMapping
 {

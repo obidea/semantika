@@ -46,7 +46,7 @@ public class XsdPositiveInteger extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected BigInteger parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          final BigInteger n = DatatypeConverter.parseInteger(lexicalForm);
@@ -64,5 +64,11 @@ public class XsdPositiveInteger extends AbstractDerivedDecimalType
    public int getType()
    {
       return DataTypeConstants.POSITIVE_INTEGER;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:positiveInteger"; //$NON-NLS-1$
    }
 }

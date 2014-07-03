@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
-public abstract class AbstractMappingQueryElementHandler extends AbstractTermalElementHandler<SqlQuery>
+public abstract class AbstractMappingQueryElementHandler extends AbstractTermalElementHandler
 {
    private SqlQuery mQuery;
 
@@ -26,8 +26,7 @@ public abstract class AbstractMappingQueryElementHandler extends AbstractTermalE
       super(handler);
    }
 
-   @Override
-   public SqlQuery getMappingObject()
+   public SqlQuery getSourceQuery()
    {
       return mQuery;
    }
@@ -40,25 +39,25 @@ public abstract class AbstractMappingQueryElementHandler extends AbstractTermalE
    protected abstract SqlQuery createQuery() throws Exception;
 
    @Override
-   /* package */void handleChild(MappingElementHandler handler)
+   protected void handleChild(MappingElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(LogicalTableElementHandler handler)
+   protected void handleChild(LogicalTableElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(SubjectMapElementHandler handler)
+   protected void handleChild(SubjectMapElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }
 
    @Override
-   /* package */void handleChild(PredicateObjectMapElementHandler handler)
+   protected void handleChild(PredicateObjectMapElementHandler handler)
    {
       // NO-OP: No child node afterwards
    }

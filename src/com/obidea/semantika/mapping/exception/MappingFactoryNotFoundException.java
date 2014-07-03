@@ -17,9 +17,9 @@ package com.obidea.semantika.mapping.exception;
 
 import java.net.URI;
 
-import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.exception.NotFoundException;
 
-public class MappingFactoryNotFoundException extends SemantikaRuntimeException
+public class MappingFactoryNotFoundException extends NotFoundException
 {
    private static final long serialVersionUID = 629451L;
 
@@ -27,12 +27,13 @@ public class MappingFactoryNotFoundException extends SemantikaRuntimeException
 
    public MappingFactoryNotFoundException(URI documentUri)
    {
+      super("[MappingFactory]"); // $NON-NLS-1$
       mDocumentUri = documentUri;
    }
 
    @Override
    public String getMessage()
    {
-      return "Could not find a suitable factory to load mapping set from mapping document:" + mDocumentUri; //$NON-NLS-1$
+      return "Unable to find a suitable factory to load mapping set from document: " + mDocumentUri; //$NON-NLS-1$
    }
 }

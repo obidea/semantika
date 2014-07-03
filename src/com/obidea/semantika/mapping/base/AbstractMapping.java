@@ -21,7 +21,7 @@ import java.util.Set;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.mapping.MappingObjectFactory;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 /**
  * Provides a skeletal implementation of the <code>IMapping</code> interface.

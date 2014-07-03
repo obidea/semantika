@@ -23,7 +23,7 @@ import com.obidea.semantika.expression.base.TermUtils;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.util.Namespaces;
 
 public class MappingObjectFactory
@@ -58,7 +58,7 @@ public class MappingObjectFactory
       return new TripleAtom( subjectMapValue, TermUtils.makeUriReference(predicate), objectMapValue);
    }
 
-   public UriTemplate createUriTemplate(String templateString, List<ITerm> parameters)
+   public UriTemplate createUriTemplate(String templateString, List<? extends ITerm> parameters)
    {
       return new UriTemplate(templateString, parameters);
    }

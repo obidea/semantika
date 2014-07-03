@@ -47,7 +47,7 @@ public class XsdLong extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Long parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          long l = DatatypeConverter.parseLong(lexicalForm);
@@ -65,5 +65,11 @@ public class XsdLong extends AbstractDerivedDecimalType
    public int getType()
    {
       return DataTypeConstants.LONG;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:long"; //$NON-NLS-1$
    }
 }

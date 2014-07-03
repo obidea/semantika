@@ -16,7 +16,7 @@
 package com.obidea.semantika.queryanswer.processor;
 
 import com.obidea.semantika.expression.base.QuerySet;
-import com.obidea.semantika.mapping.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public interface IOptimizer
 {

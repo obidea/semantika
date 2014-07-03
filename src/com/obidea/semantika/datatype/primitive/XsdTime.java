@@ -55,4 +55,10 @@ public class XsdTime extends AbstractTimelineType
    {
       return DataTypeConstants.TIME;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:gTime"; //$NON-NLS-1$
+   }
 }

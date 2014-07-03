@@ -46,7 +46,7 @@ public class XsdUnsignedInt extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Long parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          final long l = DatatypeConverter.parseLong(lexicalForm);
@@ -67,5 +67,11 @@ public class XsdUnsignedInt extends AbstractDerivedDecimalType
    public int getType()
    {
       return DataTypeConstants.UNSIGNED_INT;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:unsignedInt"; //$NON-NLS-1$
    }
 }

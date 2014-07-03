@@ -48,15 +48,6 @@ public interface ISqlColumn extends ISqlExpression
    boolean hasViewName();
 
    /**
-    * Changes the column's name in SQL string. Usually name changes
-    * to follow its alias name in a sub-query.
-    *
-    * @param columnName
-    *           Column name in SQL string.
-    */
-   void setColumnName(String columnName);
-
-   /**
     * Gets the column's name in SQL string.
     *
     * @return column's name or "" if not applicable.
@@ -69,4 +60,12 @@ public interface ISqlColumn extends ISqlExpression
     * @return column's name fragments.
     */
    String[] getNameFragments();
+
+   /**
+    * Gets the column's type in Java SQL Type.
+    * {@link http://docs.oracle.com/javase/7/docs/api/java/sql/Types.html}
+    *
+    * @return column's type or "" if not applicable.
+    */
+   int getColumnType();
 }

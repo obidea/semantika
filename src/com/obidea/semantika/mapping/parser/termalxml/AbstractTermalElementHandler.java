@@ -21,20 +21,20 @@ import java.util.Map;
 import org.slf4j.Logger;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
-import com.obidea.semantika.mapping.sql.parser.SqlMappingParserException;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 import com.obidea.semantika.util.LogUtils;
 
-public abstract class AbstractTermalElementHandler<E> implements IMappingElementHandler<E>
+public abstract class AbstractTermalElementHandler implements IMappingElementHandler
 {
    private TermalXmlParserHandler mHandler;
 
-   private AbstractTermalElementHandler<?> mParentElement;
+   private AbstractTermalElementHandler mParentElement;
 
    private StringBuilder mStringBuilder;
 
@@ -115,23 +115,23 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
       return mElementName;
    }
 
-   public void setParentElement(AbstractTermalElementHandler<?> handler)
+   public void setParentElement(AbstractTermalElementHandler handler)
    {
       mParentElement = handler;
    }
 
-   protected AbstractTermalElementHandler<?> getParentElement()
+   protected AbstractTermalElementHandler getParentElement()
    {
       return mParentElement;
    }
 
-   /* package */abstract void handleChild(MappingElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(MappingElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(LogicalTableElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(LogicalTableElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(SubjectMapElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(SubjectMapElementHandler handler) throws MappingParserException;
 
-   /* package */abstract void handleChild(PredicateObjectMapElementHandler handler) throws MappingParserException;
+   protected abstract void handleChild(PredicateObjectMapElementHandler handler) throws MappingParserException;
 
    protected UnknownXmlAttributeException unknownXmlAttributeException(String value)
    {
@@ -139,27 +139,21 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
             getLineNumber(), getColumnNumber());
    }
 
-   protected UnknownXmlDataTypeException unknownXmlDataTypeException(String value)
+   protected UnsupportedXmlDataTypeException unsupportedXmlDataTypeException(String value)
    {
-      return new UnknownXmlDataTypeException("Unknown XML data type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new UnsupportedXmlDataTypeException("Unsupported XML type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
    protected UnsupportedTermTypeException unsupportedTermTypeException(String value)
    {
-      return new UnsupportedTermTypeException("Unsupported term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new UnsupportedTermTypeException("Unsupported term type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
    protected UnknownTermTypeException unknownTermTypeException(String value)
    {
-      return new UnknownTermTypeException("Unknown term type argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
-   }
-
-   protected DataTypeOverrideException datatypeOverrideException(String sourceType, String targetType)
-   {
-      return new DataTypeOverrideException("Unable to convert type \"" + sourceType + "\" to type \"" + targetType + "\"", //$NON-NLS-1$ //$NON-NLS-2$  //$NON-NLS-3$
+      return new UnknownTermTypeException("Unknown term type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
@@ -183,31 +177,28 @@ public abstract class AbstractTermalElementHandler<E> implements IMappingElement
             getLineNumber()-1, getColumnNumber());
    }
 
-   protected TemplateNotFoundException templateNotFoundException(String value)
+   protected ColumnNotFoundException columnNotFoundException(String value)
    {
-      return new TemplateNotFoundException("Unspecified template name \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new ColumnNotFoundException("Column name was not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
-   protected SelectItemNotFoundException selectItemNameNotFoundException(String value)
+   protected DataTypeOverrideException datatypeOverrideException(String message)
    {
-      return new SelectItemNotFoundException("Column name not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
+      return new DataTypeOverrideException(message, getLineNumber(), getColumnNumber());
    }
 
-   protected InvalidFunctionCallException invalidFunctionCallException(String value)
+   protected IllegalTemplateCallException illegalTemplateCallException(String message)
    {
-      return new InvalidFunctionCallException("Invalid URI template usage \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
+      return new IllegalTemplateCallException(message, getLineNumber(), getColumnNumber());
    }
 
-   protected UnsupportedUriTemplateArgumentException unsupportedUriTemplateArgumentException(String value)
+   protected IllegalTermalMappingException illegalTermalMappingException(String message)
    {
-      return new UnsupportedUriTemplateArgumentException("Only support column reference as URI template argument \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
+      return new IllegalTermalMappingException(message, getLineNumber(), getColumnNumber());
    }
 
-   protected SourceQueryParsingException sourceQueryParsingException(SqlMappingParserException e)
+   protected SourceQueryParsingException sourceQueryParsingException(SqlParserException e)
    {
       return new SourceQueryParsingException(e.getMessage(), getLineNumber(), getColumnNumber());
    }

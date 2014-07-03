@@ -21,7 +21,11 @@ import java.util.HashMap;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 
-public class SqlTypeToXmlType
+/**
+ * A mapping specification from SQL datatypes to XML Schema datatypes.
+ * Source: {@link http://www.w3.org/2001/sw/rdb2rdf/wiki/Mapping_SQL_datatypes_to_XML_Schema_datatypes}
+ */
+public final class SqlTypeToXmlType
 {
    private static HashMap<Integer, String> mTypeMapping;
    
@@ -33,7 +37,7 @@ public class SqlTypeToXmlType
       mTypeMapping.put(Types.NUMERIC, DataType.DECIMAL);
       mTypeMapping.put(Types.DECIMAL, DataType.DECIMAL);
       mTypeMapping.put(Types.BIGINT, DataType.LONG);
-      mTypeMapping.put(Types.INTEGER, DataType.INT);
+      mTypeMapping.put(Types.INTEGER, DataType.INTEGER);
       mTypeMapping.put(Types.SMALLINT, DataType.SHORT);
       mTypeMapping.put(Types.TINYINT, DataType.BYTE);
       mTypeMapping.put(Types.REAL, DataType.FLOAT);
@@ -50,7 +54,7 @@ public class SqlTypeToXmlType
       mTypeMapping.put(Types.TIMESTAMP, DataType.DATE_TIME);
       mTypeMapping.put(Types.BOOLEAN, DataType.BOOLEAN);
       mTypeMapping.put(Types.BIT, DataType.BOOLEAN);
-      mTypeMapping.put(Types.OTHER, DataType.PLAIN_LITERAL);
+      mTypeMapping.put(Types.OTHER, DataType.STRING);
    }
 
    /**

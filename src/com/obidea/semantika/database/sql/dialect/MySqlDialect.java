@@ -15,7 +15,10 @@
  */
 package com.obidea.semantika.database.sql.dialect;
 
+import java.sql.Types;
 import java.util.List;
+
+import com.obidea.semantika.exception.SemantikaRuntimeException;
 
 public class MySqlDialect extends Sql99Dialect
 {
@@ -52,5 +55,36 @@ public class MySqlDialect extends Sql99Dialect
    public String lang(String textExpr)
    {
       return String.format("SUBSTRING(%s, LENGTH(%s) - LOCATE('@', REVERSE(%s)) + 2)", textExpr, textExpr, textExpr); //$NON-NLS-1$
+   }
+
+   @Override
+   public String cast(String column, int datatype)
+   {
+      return "CAST(" + column + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+   }
+
+   private String getTypeName(int datatype)
+   {
+      switch (datatype) {
+         case Types.VARCHAR:
+         case Types.NVARCHAR:
+         case Types.NCHAR:
+         case Types.LONGVARCHAR:
+         case Types.LONGNVARCHAR: return "CHAR"; //$NON-NLS-1$
+         case Types.NUMERIC:
+         case Types.DECIMAL:
+         case Types.BIGINT:
+         case Types.INTEGER:
+         case Types.SMALLINT:
+         case Types.TINYINT:
+         case Types.REAL:
+         case Types.FLOAT:
+         case Types.DOUBLE: return "DECIMAL"; //$NON-NLS-1$
+         case Types.DATE: return "DATE"; //$NON-NLS-1$
+         case Types.TIME: return "TIME"; //$NON-NLS-1$
+         case Types.TIMESTAMP: return "DATETIME"; //$NON-NLS-1$
+         case Types.OTHER: return "CHAR"; //$NON-NLS-1$
+      }
+      throw new SemantikaRuntimeException("Failed to construct CAST (datatype: " + datatype + ")");
    }
 }

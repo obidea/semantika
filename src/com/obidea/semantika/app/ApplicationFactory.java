@@ -57,7 +57,7 @@ public class ApplicationFactory
 
    protected ApplicationFactory(SettingFactory factory)
    {
-      LOG.debug("// Initializing ApplicationFactory."); //$NON-NLS-1$
+      LOG.debug("Initializing ApplicationFactory."); //$NON-NLS-1$
       mSettingFactory = factory;
       mXmlHelper = new XmlHelper();
       mProperties = Environment.getProperties();
@@ -66,6 +66,36 @@ public class ApplicationFactory
    public ApplicationFactory()
    {
       this(new DefaultSettingFactory());
+   }
+
+   public ApplicationFactory addProperty(String propertyName, Object value)
+   {
+      mProperties.setProperty(propertyName, value);
+      return this;
+   }
+
+   public ApplicationFactory setName(String name)
+   {
+      mProperties.setProperty(Environment.APPLICATION_FACTORY_NAME, name);
+      return this;
+   }
+
+   public ApplicationFactory setOntologySource(String resource)
+   {
+      mProperties.setProperty(Environment.ONTOLOGY_SOURCE, resource);
+      return this;
+   }
+
+   public ApplicationFactory addMappingSource(String resource)
+   {
+      return addMappingSource(resource, true);
+   }
+
+   public ApplicationFactory addMappingSource(String resource, boolean useStrictParsing)
+   {
+      mProperties.addProperty(Environment.MAPPING_SOURCE, resource);
+      mProperties.addProperty(Environment.STRICT_PARSING, useStrictParsing);
+      return this;
    }
 
    public ApplicationFactory configure() throws ConfigurationException
@@ -106,8 +136,9 @@ public class ApplicationFactory
 
    public ApplicationManager createApplicationManager()
    {
-      LOG.info("// Initializing ApplicationManager."); //$NON-NLS-1$
+      LOG.info("Initializing ApplicationManager."); //$NON-NLS-1$
       try {
+         debugConfigurationProperties();
          Environment.verify(mProperties);
          PropertiesConfiguration copy = new PropertiesConfiguration();
          copy.append(mProperties);
@@ -116,6 +147,27 @@ public class ApplicationFactory
       }
       catch (SemantikaException e) {
          throw new ApplicationStartupException("Failed to create ApplicationManager", e); //$NON-NLS-1$
+      }
+   }
+
+   private void debugConfigurationProperties()
+   {
+      LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.APPLICATION_FACTORY_NAME,
+            mProperties.getString(Environment.APPLICATION_FACTORY_NAME));
+      LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.CONNECTION_URL,
+            mProperties.getString(Environment.CONNECTION_URL));
+      LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.ONTOLOGY_SOURCE,
+            mProperties.getString(Environment.ONTOLOGY_SOURCE));
+      
+      String[] mappingSources = mProperties.getStringArray(Environment.MAPPING_SOURCE);
+      String[] useStrictParsing = mProperties.getStringArray(Environment.STRICT_PARSING);
+      for (int i = 0; i < mappingSources.length; i++) {
+         LOG.debug("* {} = {} (strict-parsing={})", //$NON-NLS-1$
+               Environment.MAPPING_SOURCE,
+               mappingSources[i], useStrictParsing[i]);
       }
    }
 
@@ -187,9 +239,6 @@ public class ApplicationFactory
       if (!StringUtils.isEmpty(name)) {
          mProperties.setProperty(Environment.APPLICATION_FACTORY_NAME, name);
       }
-      LOG.debug("* {} = {}", //$NON-NLS-1$
-            Environment.APPLICATION_FACTORY_NAME, 
-            mProperties.getString(Environment.APPLICATION_FACTORY_NAME));
    }
 
    private static NodeList getElementsByTagName(Document doc, String elementName)
@@ -214,7 +263,6 @@ public class ApplicationFactory
             mProperties.setProperty(name, value);
          }
       }
-      LOG.debug("* {} = {}", Environment.URL, mProperties.getString(Environment.URL)); //$NON-NLS-1$
    }
 
    private void addOntologyResource(Element parent)
@@ -226,7 +274,6 @@ public class ApplicationFactory
       if (parent != null) {
          String value = parent.getAttribute("resource"); //$NON-NLS-1$
          mProperties.setProperty(Environment.ONTOLOGY_SOURCE, value);
-         LOG.debug("* {} = {}", Environment.ONTOLOGY_SOURCE, mProperties.getString(Environment.ONTOLOGY_SOURCE)); //$NON-NLS-1$
       }
    }
 
@@ -238,17 +285,7 @@ public class ApplicationFactory
          mProperties.addProperty(Environment.MAPPING_SOURCE, value);
          String isStrict = parent.getAttribute("strict-parsing"); //$NON-NLS-1$
          mProperties.addProperty(Environment.STRICT_PARSING, isStrict);
-         
-         LOG.debug("* {} = {} (strict-parsing={})", //$NON-NLS-1$
-               Environment.MAPPING_SOURCE,
-               lastEntry(mProperties.getStringArray(Environment.MAPPING_SOURCE)),
-               lastEntry(mProperties.getStringArray(Environment.STRICT_PARSING)));
       }
-   }
-
-   private String lastEntry(String[] list)
-   {
-      return list[list.length-1];
    }
 
    public PropertiesConfiguration getProperties()

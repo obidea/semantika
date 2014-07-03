@@ -52,4 +52,10 @@ public class XsdGMonthDay extends AbstractTimelineType
    {
       return DataTypeConstants.G_MONTH_DAY;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:gMonthDay"; //$NON-NLS-1$
+   }
 }

@@ -72,4 +72,10 @@ public class RdfPlainLiteral extends AbstractXmlType<String>
    {
       return DataTypeConstants.PLAIN_LITERAL;
    }
+
+   @Override
+   public String toString()
+   {
+      return "rdf:PlainLiteral"; //$NON-NLS-1$
+   }
 }

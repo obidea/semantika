@@ -38,9 +38,9 @@ import com.obidea.semantika.knowledgebase.Unifier;
 import com.obidea.semantika.mapping.IUriTemplate;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlJoin;
-import com.obidea.semantika.mapping.sql.SqlQuery;
-import com.obidea.semantika.mapping.sql.SqlSubQuery;
+import com.obidea.semantika.mapping.base.sql.SqlJoin;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlSubQuery;
 import com.obidea.semantika.util.Serializer;
 
 public class MappingContainmentChecker

@@ -15,10 +15,13 @@
  */
 package com.obidea.semantika.database.sql.parser;
 
+import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.sql.base.ISqlQuery;
 
 public interface ISqlParser
 {
+   ISqlQuery parse(String sqlString, IDatabaseMetadata metadata) throws SqlParserException;
+
    ISqlQuery parse(String sqlString) throws SqlParserException;
 
    String getName();

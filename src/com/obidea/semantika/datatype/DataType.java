@@ -66,7 +66,7 @@ public class DataType
    public static final String DATE = Namespaces.XSD + "date"; //$NON-NLS-1$
    public static final String G_YEAR_MONTH = Namespaces.XSD + "gYearMonth"; //$NON-NLS-1$
    public static final String G_YEAR = Namespaces.XSD + "gYear"; //$NON-NLS-1$
-   public static final String G_MONTH_DAY = Namespaces.XSD + "gMonthYear"; //$NON-NLS-1$
+   public static final String G_MONTH_DAY = Namespaces.XSD + "gMonthDay"; //$NON-NLS-1$
    public static final String G_DAY = Namespaces.XSD + "gDay"; //$NON-NLS-1$
    public static final String G_MONTH = Namespaces.XSD + "gMonth"; //$NON-NLS-1$
 

@@ -28,7 +28,7 @@ import com.obidea.semantika.database.sql.base.ISqlUnaryFunction;
 import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
-import com.obidea.semantika.mapping.sql.SqlUserQuery;
+import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
 
 public class SqlPrinter implements ISqlExpressionVisitor
 {

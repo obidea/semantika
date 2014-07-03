@@ -34,75 +34,77 @@ import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.dialect.IDialect;
+import com.obidea.semantika.database.sql.parser.SqlException;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.QuerySet;
-import com.obidea.semantika.mapping.sql.SqlAddition;
-import com.obidea.semantika.mapping.sql.SqlAnd;
-import com.obidea.semantika.mapping.sql.SqlConcat;
-import com.obidea.semantika.mapping.sql.SqlDivide;
-import com.obidea.semantika.mapping.sql.SqlEqualsTo;
-import com.obidea.semantika.mapping.sql.SqlGreaterThan;
-import com.obidea.semantika.mapping.sql.SqlGreaterThanEquals;
-import com.obidea.semantika.mapping.sql.SqlIsNotNull;
-import com.obidea.semantika.mapping.sql.SqlIsNull;
-import com.obidea.semantika.mapping.sql.SqlLang;
-import com.obidea.semantika.mapping.sql.SqlLessThan;
-import com.obidea.semantika.mapping.sql.SqlLessThanEquals;
-import com.obidea.semantika.mapping.sql.SqlMultiply;
-import com.obidea.semantika.mapping.sql.SqlNotEqualsTo;
-import com.obidea.semantika.mapping.sql.SqlOr;
-import com.obidea.semantika.mapping.sql.SqlRegex;
-import com.obidea.semantika.mapping.sql.SqlSubtract;
-import com.obidea.semantika.mapping.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.sql.SqlUserQuery;
-import com.obidea.semantika.mapping.sql.parser.SqlException;
+import com.obidea.semantika.mapping.base.sql.SqlAddition;
+import com.obidea.semantika.mapping.base.sql.SqlAnd;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlConcat;
+import com.obidea.semantika.mapping.base.sql.SqlDivide;
+import com.obidea.semantika.mapping.base.sql.SqlEqualsTo;
+import com.obidea.semantika.mapping.base.sql.SqlGreaterThan;
+import com.obidea.semantika.mapping.base.sql.SqlGreaterThanEquals;
+import com.obidea.semantika.mapping.base.sql.SqlIsNotNull;
+import com.obidea.semantika.mapping.base.sql.SqlIsNull;
+import com.obidea.semantika.mapping.base.sql.SqlLang;
+import com.obidea.semantika.mapping.base.sql.SqlLessThan;
+import com.obidea.semantika.mapping.base.sql.SqlLessThanEquals;
+import com.obidea.semantika.mapping.base.sql.SqlMultiply;
+import com.obidea.semantika.mapping.base.sql.SqlNotEqualsTo;
+import com.obidea.semantika.mapping.base.sql.SqlOr;
+import com.obidea.semantika.mapping.base.sql.SqlRegex;
+import com.obidea.semantika.mapping.base.sql.SqlSubtract;
+import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
+import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
 
-public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
+public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpressionVisitor
 {
    private IDialect mDialect;
 
    private String mExpressionString = ""; //$NON-NLS-1$
-   private StringBuilder mStringBuilder;
-
-   private int mIndentIndex = 0;
 
    public SqlDeparser(IDialect dialect)
    {
       mDialect = dialect;
    }
 
+   private SqlDeparser(SqlDeparser parent)
+   {
+      mDialect = parent.mDialect;
+      mTabCounter = parent.mTabCounter;
+   }
+
    @Override
    public String deparse(QuerySet<? extends ISqlQuery> querySet)
    {
-      StringBuilder sb = new StringBuilder();
+      StringBuilder unions = new StringBuilder();
       boolean needUnion = false;
       for (ISqlQuery query : querySet.getAll()) {
          if (needUnion) {
-            sb.append("\n");
-            sb.append(Sql99.UNION);
-            sb.append("\n");
+            unions.append("\n");
+            unions.append(Sql99.UNION);
+            unions.append("\n");
          }
-         sb.append(deparse(query));
+         unions.append(deparse(query));
          needUnion = true;
       }
-      return sb.toString();
+      return unions.toString();
    }
 
    @Override
    public String deparse(ISqlQuery query)
    {
       initStringBuilder();
-      produceSelectStatement(query.getSelectItems(), query.isDistinct());
-      newline();
-      produceFromStatement(query.getFromExpression());
+      visitSelect(query.getSelectItems(), query.isDistinct());
+      visitFrom(query.getFromExpression());
       if (query.hasWhereExpression()) {
-         newline();
-         produceWhereStatement(query.getWhereExpression());
+         visitWhere(query.getWhereExpression());
       }
-      return mStringBuilder.toString();
+      return flushStringBuilder();
    }
 
-   private void produceSelectStatement(List<SqlSelectItem> selectItemList, boolean isDistinct)
+   private void visitSelect(List<SqlSelectItem> selectItemList, boolean isDistinct)
    {
       append(Sql99.SELECT);
       space();
@@ -111,50 +113,68 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
          space();
       }
       boolean needComma = false;
+      boolean needShift = true;
+      SelectItemVisitor selectItemVisitor = new SelectItemVisitor();
       for (SqlSelectItem selectItem : selectItemList) {
          if (needComma) {
             append(","); //$NON-NLS-1$
-            setIndent(mIndentIndex+1); // indent projection newline
             newline();
-            setIndent(mIndentIndex-1); // restore indent
+            if (needShift) {
+               shiftRight();
+            }
+            needShift = false;
          }
-         append(str(selectItem.getExpression()));
+         append(str(selectItem.getExpression(), selectItemVisitor));
          if (selectItem.hasAliasName()) {
             space();
             append(mDialect.alias(selectItem.getAliasName()));
          }
          needComma = true;
       }
+      newline();
+      shiftLeft();
    }
 
-   private void produceFromStatement(ISqlExpression fromExpression)
+   private void visitFrom(ISqlExpression fromExpression)
    {
       append(Sql99.FROM);
       space();
       fromExpression.accept(this);
+      newline();
    }
 
-   private void produceWhereStatement(Set<ISqlExpression> whereExpressions)
+   private void visitWhere(Set<ISqlExpression> whereExpressions)
    {
       append(Sql99.WHERE);
       space();
       boolean needAnd = false;
-      boolean needNewLine = false;
+      boolean needShift = true;
       for (ISqlExpression whereExpression : whereExpressions) {
          if (needAnd) {
             space();
             append(Sql99.AND);
-            space();
-         }
-         if (needNewLine) {
-            setIndent(mIndentIndex+1); // indent filter newline
             newline();
-            setIndent(mIndentIndex-1); // restore indent
+            if (needShift) {
+               shiftRight();
+            }
+            needShift = false;
          }
          append(str(whereExpression));
          needAnd = true;
-         needNewLine = true;
       }
+      newline();
+      shiftLeft();
+   }
+
+   private String str(ISqlExpression expression)
+   {
+      return str(expression, this);
+   }
+
+   private String str(ISqlExpression expression, ISqlExpressionVisitor visitor)
+   {
+      expression.accept(visitor);
+      return mExpressionString;
    }
 
    @Override
@@ -169,6 +189,21 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
 
    @Override
    public void visit(ISqlColumn column)
+   {
+      if (((SqlColumn) column).isOverriden()) {
+         visitOverridenColumn(column);
+      }
+      else {
+         visitColumn(column);
+      }
+   }
+
+   private void visitOverridenColumn(ISqlColumn column)
+   {
+      mExpressionString = mDialect.cast(mDialect.identifier(column.getNameFragments()), column.getColumnType());
+   }
+
+   private void visitColumn(ISqlColumn column)
    {
       mExpressionString = mDialect.identifier(column.getNameFragments());
    }
@@ -251,49 +286,12 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
 
    private void visitSqlNaryFunctionExpression(ISqlFunction naryFunction)
    {
-      if (naryFunction instanceof SqlConcat) {
-         visitSqlConcat((SqlConcat) naryFunction);
-      }
-      else if (naryFunction instanceof SqlUriConcat) {
-         visitSqlUriConcat((SqlUriConcat) naryFunction);
-      }
-      else if (naryFunction instanceof SqlRegex) {
+      if (naryFunction instanceof SqlRegex) {
          visitSqlRegex((SqlRegex) naryFunction);
       }
       else {
          throw unknownSqlExpressionException(naryFunction);
       }
-   }
-
-   private void visitSqlConcat(SqlConcat sqlConcat)
-   {
-      List<String> arguments = new ArrayList<String>();
-      for (ISqlExpression expression : sqlConcat.getParameterExpressions()) {
-         arguments.add(str(expression));
-      }
-      mExpressionString = mDialect.concat(arguments);
-   }
-
-   private void visitSqlUriConcat(SqlUriConcat sqlUriConcat)
-   {
-      List<String> arguments = new ArrayList<String>();
-      
-      Iterator<ISqlExpression> iter = sqlUriConcat.getParameterExpressions().iterator();
-      ISqlValue stringTemplateValue = (ISqlValue) iter.next(); // must be a value
-      arguments.add(mDialect.literal(stringTemplateValue.getValue()));
-      arguments.add("' : '"); //$NON-NLS-1$
-      arguments.add("'\"'"); //$NON-NLS-1$
-      boolean needSeparator = false;
-      while (iter.hasNext()) {
-         if (needSeparator) {
-            arguments.add("'\" \"'"); //$NON-NLS-1$
-         }
-         ISqlExpression expression = iter.next();
-         arguments.add(str(expression));
-         needSeparator = true;
-      }
-      arguments.add("'\"'"); //$NON-NLS-1$
-      mExpressionString = mDialect.concat(arguments);
    }
 
    private void visitSqlRegex(SqlRegex sqlRegex)
@@ -309,6 +307,11 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
 
    @Override
    public void visit(ISqlValue value)
+   {
+      visitLiteral(value);
+   }
+
+   private void visitLiteral(ISqlValue value)
    {
       String lexicalValue = value.getValue();
       String datatype = value.getDatatype();
@@ -351,11 +354,11 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
        */
       if (hasInnerJoin(joinExpression)) {
          append("("); //$NON-NLS-1$
-         setIndent(mIndentIndex+1); // indent join
          newline();
+         shiftRight(); // tab
          joinExpression.getRightExpression().accept(this);
-         setIndent(mIndentIndex-1); // indent join
          newline();
+         shiftLeft(); // restore tab
          append(")"); //$NON-NLS-1$
       }
       else {
@@ -418,19 +421,18 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
    public void visit(ISqlSubQuery subQueryExpression)
    {
       append(Sql99.LPAREN);
-      setIndent(mIndentIndex+1); // indent join
       newline();
+      shiftRight(); // tab
       if (subQueryExpression instanceof SqlUserQuery) {
          SqlUserQuery userQuery = (SqlUserQuery) subQueryExpression;
          append(userQuery.getSqlString());
       }
       else {
-         SqlDeparser innerDeparser = new SqlDeparser(mDialect);
-         innerDeparser.setIndent(mIndentIndex);
+         SqlDeparser innerDeparser = new SqlDeparser(this);
          append(innerDeparser.deparse(subQueryExpression.getQuery()));
       }
-      setIndent(mIndentIndex-1);
       newline();
+      shiftLeft(); // restore tab
       append(Sql99.RPAREN);
       space();
       append(Sql99.AS);
@@ -438,45 +440,86 @@ public class SqlDeparser implements ISqlDeparser, ISqlExpressionVisitor
       append(mDialect.view(subQueryExpression.getViewName()));
    }
 
-   /*
-    * Private utility methods
-    */
-   private void append(String value)
-   {
-      mStringBuilder.append(value);
-   }
-
-   private void space()
-   {
-      mStringBuilder.append(" "); //$NON-NLS-1$
-   }
-
-   private void newline()
-   {
-      mStringBuilder.append("\n"); //$NON-NLS-1$
-      for (int i = 0; i < mIndentIndex; i++) {
-         mStringBuilder.append("   ");
-      }
-   }
-
-   private String str(ISqlExpression expression)
-   {
-      expression.accept(this);
-      return mExpressionString;
-   }
-
    private SqlException unknownSqlExpressionException(ISqlFunction sqlFunction)
    {
       return new SqlException("Unable to produce SQL string from expression: " + sqlFunction); //$NON-NLS-1$
    }
 
-   protected void setIndent(int indent)
+   class SelectItemVisitor implements ISqlExpressionVisitor
    {
-      mIndentIndex = indent;
-   }
+      @Override
+      public void visit(ISqlColumn column)
+      {
+         mExpressionString = mDialect.identifier(column.getNameFragments());
+      }
 
-   protected void initStringBuilder()
-   {
-      mStringBuilder = new StringBuilder();
+      @Override
+      public void visit(ISqlFunction function)
+      {
+         if (function instanceof SqlConcat) {
+            visitSqlConcat((SqlConcat) function);
+         }
+         else if (function instanceof SqlUriConcat) {
+            visitSqlUriConcat((SqlUriConcat) function);
+         }
+         else {
+            throw new SqlException("Unable to produce SQL select item expression: " + function); //$NON-NLS-1$
+         }
+      }
+
+      private void visitSqlConcat(SqlConcat sqlConcat)
+      {
+         List<String> arguments = new ArrayList<String>();
+         for (ISqlExpression expression : sqlConcat.getParameterExpressions()) {
+            arguments.add(str(expression));
+         }
+         mExpressionString = mDialect.concat(arguments);
+      }
+
+      private void visitSqlUriConcat(SqlUriConcat sqlUriConcat)
+      {
+         List<String> arguments = new ArrayList<String>();
+         
+         Iterator<ISqlExpression> iter = sqlUriConcat.getParameterExpressions().iterator();
+         ISqlValue stringTemplateValue = (ISqlValue) iter.next(); // must be a value
+         arguments.add(mDialect.literal(stringTemplateValue.getValue()));
+         arguments.add("' : '"); //$NON-NLS-1$
+         arguments.add("'\"'"); //$NON-NLS-1$
+         boolean needSeparator = false;
+         while (iter.hasNext()) {
+            if (needSeparator) {
+               arguments.add("'\" \"'"); //$NON-NLS-1$
+            }
+            ISqlExpression expression = iter.next();
+            arguments.add(str(expression));
+            needSeparator = true;
+         }
+         arguments.add("'\"'"); //$NON-NLS-1$
+         mExpressionString = mDialect.concat(arguments);
+      }
+
+      @Override
+      public void visit(ISqlValue value)
+      {
+         visitLiteral(value);
+      }
+
+      @Override
+      public void visit(ISqlTable tableExpression)
+      {
+         // NO-OP
+      }
+
+      @Override
+      public void visit(ISqlJoin joinExpression)
+      {
+         // NO-OP
+      }
+
+      @Override
+      public void visit(ISqlSubQuery subQueryExpression)
+      {
+         // NO-OP
+      }
    }
 }

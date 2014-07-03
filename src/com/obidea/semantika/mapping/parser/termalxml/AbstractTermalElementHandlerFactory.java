@@ -35,5 +35,5 @@ public abstract class AbstractTermalElementHandlerFactory implements IMappingEle
       return mElementName;
    }
    
-   public abstract AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler parentHandler);
+   public abstract AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler parentHandler);
 }

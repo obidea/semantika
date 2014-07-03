@@ -15,10 +15,10 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import com.obidea.semantika.mapping.MutableMappingSet;
+import com.obidea.semantika.mapping.MappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
-public class ProgramElementHandler extends AbstractTermalElementHandler<MutableMappingSet>
+public class ProgramElementHandler extends AbstractTermalElementHandler
 {
    public ProgramElementHandler(TermalXmlParserHandler handler)
    {
@@ -38,32 +38,26 @@ public class ProgramElementHandler extends AbstractTermalElementHandler<MutableM
    }
 
    @Override
-   public MutableMappingSet getMappingObject()
+   protected void handleChild(MappingElementHandler handler)
    {
-      return getMappingSet();
-   }
-
-   @Override
-   /* package */void handleChild(MappingElementHandler handler)
-   {
-      final MutableMappingSet mappingSet = handler.getMappingObject();
+      final MappingSet mappingSet = handler.getMappingSet();
       getMappingSet().copy(mappingSet);
    }
 
    @Override
-   /* package */void handleChild(LogicalTableElementHandler handler)
+   protected void handleChild(LogicalTableElementHandler handler)
    {
       // NO-OP: Not an immediate child.
    }
 
    @Override
-   /* package */void handleChild(SubjectMapElementHandler handler)
+   protected void handleChild(SubjectMapElementHandler handler)
    {
       // NO-OP: Not an immediate child.
    }
 
    @Override
-   /* package */void handleChild(PredicateObjectMapElementHandler handler)
+   protected void handleChild(PredicateObjectMapElementHandler handler)
    {
       // NO-OP: Not an immediate child.
    }

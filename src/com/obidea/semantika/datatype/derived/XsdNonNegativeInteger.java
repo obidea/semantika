@@ -46,7 +46,7 @@ public class XsdNonNegativeInteger extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected BigInteger parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          final BigInteger n = DatatypeConverter.parseInteger(lexicalForm);
@@ -64,5 +64,11 @@ public class XsdNonNegativeInteger extends AbstractDerivedDecimalType
    public int getType()
    {
       return DataTypeConstants.NON_NEGATIVE_INTEGER;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:nonNegativeInteger"; //$NON-NLS-1$
    }
 }

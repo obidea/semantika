@@ -38,12 +38,12 @@ import com.obidea.semantika.knowledgebase.model.KnowledgeBase;
 import com.obidea.semantika.mapping.IUriTemplate;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
-import com.obidea.semantika.mapping.sql.SqlColumn;
-import com.obidea.semantika.mapping.sql.SqlIsNotNull;
-import com.obidea.semantika.mapping.sql.SqlQuery;
-import com.obidea.semantika.mapping.sql.SqlSelectQuery;
-import com.obidea.semantika.mapping.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.sql.SqlUriValue;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlIsNotNull;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.mapping.base.sql.SqlSelectQuery;
+import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
+import com.obidea.semantika.mapping.base.sql.SqlUriValue;
 import com.obidea.semantika.queryanswer.processor.TermToSqlConverter;
 import com.obidea.semantika.util.LogUtils;
 

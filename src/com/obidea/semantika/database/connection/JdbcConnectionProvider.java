@@ -41,7 +41,7 @@ public class JdbcConnectionProvider implements IConnectionProvider
    @Override
    public void configure(Properties properties) throws ConfigurationException
    {
-      String driverClass = properties.getProperty(Environment.DRIVER);
+      String driverClass = properties.getProperty(Environment.CONNECTION_DRIVER);
       if (StringUtils.isEmpty(driverClass)) {
          throw new ConfigurationException("JDBC driver is not specified in the configuration file."); //$NON-NLS-1$
       }
@@ -53,17 +53,17 @@ public class JdbcConnectionProvider implements IConnectionProvider
          throw new ConfigurationException("JDBC driver class not found.", e); //$NON-NLS-1$
       }
 
-      mUrl = properties.getProperty(Environment.URL);
+      mUrl = properties.getProperty(Environment.CONNECTION_URL);
       if (StringUtils.isEmpty(mUrl)) {
          throw new ConfigurationException("JDBC URL is not specified in the configuration file."); //$NON-NLS-1$
       }
 
-      mUser = properties.getProperty(Environment.USER);
+      mUser = properties.getProperty(Environment.CONNECTION_USERNAME);
       if (StringUtils.isEmpty(mUser)) {
          throw new ConfigurationException("JDBC user is not specified in the configuration file."); //$NON-NLS-1$
       }
 
-      mPassword = properties.getProperty(Environment.PASS);
+      mPassword = properties.getProperty(Environment.CONNECTION_PASSWORD);
       if (StringUtils.isEmpty(mPassword)) {
          LOG.warn("An empty password is being used."); //$NON-NLS-1$
       }
@@ -74,7 +74,7 @@ public class JdbcConnectionProvider implements IConnectionProvider
    @Override
    public Connection getConnection() throws SQLException
    {
-      LOG.debug("** Opening new JDBC connection."); //$NON-NLS-1$
+      LOG.debug("Opening new JDBC connection."); //$NON-NLS-1$
       Connection conn = DriverManager.getConnection(mUrl, mUser, mPassword);
       conn.setAutoCommit(false); // always execute query in transaction block
       return conn;
@@ -83,7 +83,7 @@ public class JdbcConnectionProvider implements IConnectionProvider
    @Override
    public void closeConnection(Connection conn) throws SQLException
    {
-      LOG.debug("** Closing JDBC connection."); //$NON-NLS-1$
+      LOG.debug("Closing JDBC connection."); //$NON-NLS-1$
       conn.close();
    }
 

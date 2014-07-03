@@ -34,22 +34,22 @@ public final class Environment
    /**
     * JDBC driver class
     */
-   public static final String DRIVER = "connection.driver_class"; //$NON-NLS-1$
+   public static final String CONNECTION_DRIVER = "connection.driver_class"; //$NON-NLS-1$
 
    /**
     * JDBC url string
     */
-   public static final String URL = "connection.url"; //$NON-NLS-1$
+   public static final String CONNECTION_URL = "connection.url"; //$NON-NLS-1$
 
    /**
     * JDBC user
     */
-   public static final String USER = "connection.username"; //$NON-NLS-1$
+   public static final String CONNECTION_USERNAME = "connection.username"; //$NON-NLS-1$
 
    /**
     * JDBC password
     */
-   public static final String PASS = "connection.password"; //$NON-NLS-1$
+   public static final String CONNECTION_PASSWORD = "connection.password"; //$NON-NLS-1$
 
    /**
     * Initial size for connection pool

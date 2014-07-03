@@ -76,4 +76,10 @@ public class XsdDateTimeStamp extends AbstractTimelineType
    {
       return DataTypeConstants.DATE_TIME_STAMP;
    }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:dateTimeStamp"; //$NON-NLS-1$
+   }
 }

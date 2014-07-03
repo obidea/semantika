@@ -44,7 +44,7 @@ public class XsdByte extends AbstractDerivedDecimalType
    }
 
    @Override
-   protected Number parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Byte parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
    {
       try {
          byte b = DatatypeConverter.parseByte(lexicalForm);
@@ -62,5 +62,11 @@ public class XsdByte extends AbstractDerivedDecimalType
    public int getType()
    {
       return DataTypeConstants.BYTE;
+   }
+
+   @Override
+   public String toString()
+   {
+      return "xsd:byte"; //$NON-NLS-1$
    }
 }

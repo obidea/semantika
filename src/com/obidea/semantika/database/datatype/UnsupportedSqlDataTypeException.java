@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.mapping.sql.parser.SqlException;
+import com.obidea.semantika.database.sql.parser.SqlException;
 
 public class UnsupportedSqlDataTypeException extends SqlException
 {

@@ -343,7 +343,11 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Extension arg0) throws SparqlParserException
    {
-      throw new UnsupportedSparqlExpressionException("Extension"); //$NON-NLS-1$
+      List<String> unknownVariables = new ArrayList<String>();
+      for (ExtensionElem el : arg0.getElements()) {
+         unknownVariables.add(el.getName());
+      }
+      throw new SparqlParserException("Unknown projection variables: " + unknownVariables); //$NON-NLS-1$
    }
 
    @Override
@@ -687,7 +691,12 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Slice arg0) throws SparqlParserException
    {
-      throw new UnsupportedSparqlExpressionException("Query modifier: Slice"); //$NON-NLS-1$
+      /*
+       * Basically this method does nothing. It just passes the next TupleExpr
+       * to the next handler. Query modifiers have been handled when constructing
+       * the SelectQuery object initially.
+       */
+      arg0.getArg().visit(this);
    }
 
    @Override

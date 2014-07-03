@@ -36,6 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;
@@ -62,23 +63,23 @@ public class TermalXmlParserHandler extends DefaultHandler
 
    private Map<String, AbstractTermalElementHandlerFactory> mHandlerMap;
 
-   private Stack<AbstractTermalElementHandler<?>> mHandlerStack;
+   private Stack<AbstractTermalElementHandler> mHandlerStack;
 
-   public TermalXmlParserHandler(MutableMappingSet mappingSet, IMetaModel metaModel, MappingParserConfiguration configuration) throws MappingParserException
+   public TermalXmlParserHandler(IMappingSet mappingSet, IMetaModel metaModel, MappingParserConfiguration configuration) throws MappingParserException
    {
-      mMappingSet = mappingSet;
+      mMappingSet = (MutableMappingSet) mappingSet;
       mConfiguration = configuration;
       mDatabaseMetadata = metaModel.getDatabaseMetadata();
       mOntology = owlOntology(metaModel.getOntology());
       mPrefixMapper = new HashMap<String, String>();
       mUriTemplateMapper = new HashMap<String, String>();
       mHandlerMap = new HashMap<String, AbstractTermalElementHandlerFactory>();
-      mHandlerStack = new Stack<AbstractTermalElementHandler<?>>();
+      mHandlerStack = new Stack<AbstractTermalElementHandler>();
       
       addFactory(new AbstractTermalElementHandlerFactory(PROGRAM)
       {
          @Override
-         public AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler handler) {
+         public AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler handler) {
             return new ProgramElementHandler(handler);
          }
       });
@@ -86,7 +87,7 @@ public class TermalXmlParserHandler extends DefaultHandler
       addFactory(new AbstractTermalElementHandlerFactory(MAPPING)
       {
          @Override
-         public AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler handler) {
+         public AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler handler) {
             return new MappingElementHandler(handler);
          }
       });
@@ -94,7 +95,7 @@ public class TermalXmlParserHandler extends DefaultHandler
       addFactory(new AbstractTermalElementHandlerFactory(LOGICAL_TABLE)
       {
          @Override
-         public AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler handler) {
+         public AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler handler) {
             return new LogicalTableElementHandler(handler);
          }
       });
@@ -102,7 +103,7 @@ public class TermalXmlParserHandler extends DefaultHandler
       addFactory(new AbstractTermalElementHandlerFactory(SUBJECT_MAP)
       {
          @Override
-         public AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler handler) {
+         public AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler handler) {
             return new SubjectMapElementHandler(handler);
          }
       });
@@ -110,7 +111,7 @@ public class TermalXmlParserHandler extends DefaultHandler
       addFactory(new AbstractTermalElementHandlerFactory(PREDICATE_OBJECT_MAP)
       {
          @Override
-         public AbstractTermalElementHandler<?> createElementHandler(TermalXmlParserHandler handler) {
+         public AbstractTermalElementHandler createElementHandler(TermalXmlParserHandler handler) {
             return new PredicateObjectMapElementHandler(handler);
          }
       });
@@ -221,9 +222,9 @@ public class TermalXmlParserHandler extends DefaultHandler
          
          AbstractTermalElementHandlerFactory handlerFactory = mHandlerMap.get(localName);
          if (handlerFactory != null) {
-            AbstractTermalElementHandler<?> handler = handlerFactory.createElementHandler(this);
+            AbstractTermalElementHandler handler = handlerFactory.createElementHandler(this);
             if (!mHandlerStack.isEmpty()) {
-               AbstractTermalElementHandler<?> topElement = mHandlerStack.peek();
+               AbstractTermalElementHandler topElement = mHandlerStack.peek();
                handler.setParentElement(topElement);
             }
             mHandlerStack.push(handler);
@@ -256,7 +257,7 @@ public class TermalXmlParserHandler extends DefaultHandler
             return; // ignore this tag
          }
          if (!mHandlerStack.isEmpty()) {
-            AbstractTermalElementHandler<?> handler = mHandlerStack.pop();
+            AbstractTermalElementHandler handler = mHandlerStack.pop();
             handler.endElement();
          }
       }
@@ -270,7 +271,7 @@ public class TermalXmlParserHandler extends DefaultHandler
    {
       try {
          if (!mHandlerStack.isEmpty()) {
-            AbstractTermalElementHandler<?> handler = mHandlerStack.peek();
+            AbstractTermalElementHandler handler = mHandlerStack.peek();
             String localName = handler.getElementName();
             if (localName.equals(LOGICAL_TABLE.getLocalName())) {
                handler.characters(ch, start, length);

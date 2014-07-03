@@ -21,9 +21,8 @@ public abstract class Term implements ITerm
 {
    private static final long serialVersionUID = 629451L;
 
-   protected String mName;
-   protected String mDatatype;
-   protected String mAlias;
+   private String mName;
+   private String mDatatype;
 
    public Term(String name, String datatype)
    {
@@ -57,21 +56,5 @@ public abstract class Term implements ITerm
    public boolean isTyped()
    {
       return StringUtils.isEmpty(mDatatype) ? false : true;
-   }
-
-   public void setAlias(String alias)
-   {
-      mAlias = alias;
-   }
-
-   @Override
-   public String getAlias()
-   {
-      return mAlias;
-   }
-
-   public boolean hasAlias()
-   {
-      return StringUtils.isEmpty(mAlias) ? false : true;
    }
 }
