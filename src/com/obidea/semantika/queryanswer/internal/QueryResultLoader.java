@@ -170,7 +170,7 @@ public abstract class QueryResultLoader
       Column c = metadata.getColumn(position);
       if (c.isLiteral()) {
          String value = resultSet.getString(position);
-         return new Literal(value, c.getDatatype());
+         return new Literal(value, URI.create(c.getDatatype()));
       }
       else {
          String value = resultSet.getString(position);

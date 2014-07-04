@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import java.net.URI;
+
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 
@@ -26,16 +28,18 @@ public class Literal implements ILiteral
    private String mLang;
    private String mDatatype;
 
-   public Literal(String value, String datatype)
+   public Literal(String value, URI datatype)
    {
-      this(value, "", datatype); //$NON-NLS-1$
+      mValue = value;
+      mLang = ""; //$NON-NLS-1$
+      mDatatype = datatype.toString();
    }
 
-   public Literal(String value, String lang, String datatype)
+   public Literal(String value, String lang)
    {
       mValue = value;
       mLang = lang;
-      mDatatype = datatype;
+      mDatatype = DataType.PLAIN_LITERAL;
    }
 
    @Override
