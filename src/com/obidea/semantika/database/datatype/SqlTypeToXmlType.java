@@ -19,7 +19,6 @@ import java.sql.Types;
 import java.util.HashMap;
 
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 
 /**
  * A mapping specification from SQL datatypes to XML Schema datatypes.
@@ -63,7 +62,7 @@ public final class SqlTypeToXmlType
     * @param sqlType
     *           The JDBC SQL type (see {@link java.sql.Types}).
     * @return a URI string representing the XML type.
-    * @throws UnsupportedDataTypeException
+    * @throws UnsupportedSqlDataTypeException
     *            if the data type has no corresponding XML type.
     */
    public static String get(int sqlType)
