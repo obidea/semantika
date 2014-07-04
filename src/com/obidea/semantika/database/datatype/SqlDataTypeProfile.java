@@ -83,8 +83,7 @@ public final class SqlDataTypeProfile
    {
       AbstractSqlType<?> dt = coreDatatypes.get(datatypeUri);
       if (dt == null) {
-         final String msg = String.format("The data type %s is not supported yet.", datatypeUri); //$NON-NLS-1$
-         throw new UnsupportedDataTypeException(msg);
+         throw new UnsupportedDataTypeException(datatypeUri);
       }
       return dt;
    }
