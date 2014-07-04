@@ -54,7 +54,7 @@ public class XsdFloat extends AbstractXmlType<Float>
    }
 
    @Override
-   public Float getValue(String lexicalForm) throws InvalidLexicalFormException
+   public Float getValue(String lexicalForm)
    {
       try {
          return DatatypeConverter.parseFloat(lexicalForm);

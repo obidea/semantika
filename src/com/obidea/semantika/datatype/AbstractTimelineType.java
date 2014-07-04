@@ -45,7 +45,7 @@ public abstract class AbstractTimelineType extends AbstractXmlType<XMLGregorianC
    }
 
    @Override
-   public XMLGregorianCalendar getValue(String lexicalForm) throws InvalidLexicalFormException
+   public XMLGregorianCalendar getValue(String lexicalForm)
    {
       try {
          XMLGregorianCalendar c = mDtFactory.newXMLGregorianCalendar(lexicalForm);

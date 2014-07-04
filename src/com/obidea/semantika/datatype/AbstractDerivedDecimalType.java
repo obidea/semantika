@@ -32,7 +32,7 @@ public abstract class AbstractDerivedDecimalType extends AbstractXmlType<Number>
    }
 
    @Override
-   public Number getValue(String lexicalForm) throws InvalidLexicalFormException
+   public Number getValue(String lexicalForm)
    {
       return parseLexicalForm(lexicalForm);
    }

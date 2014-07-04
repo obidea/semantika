@@ -17,8 +17,6 @@ package com.obidea.semantika.expression.base;
 
 import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 
 public class LiteralUtils
 {
@@ -30,9 +28,8 @@ public class LiteralUtils
     *           the <code>term</code> object.
     * @return the <code>Datatype</code> if the data type in the
     *         <code>term</code> is recognized, or <code>null</code> otherwise
-    * @throws UnsupportedDataTypeException 
     */
-   public static AbstractXmlType<?> getDatatype(ITerm term) throws UnsupportedDataTypeException
+   public static AbstractXmlType<?> getDatatype(ITerm term)
    {
       String datatypeUri = term.getDatatype();
       return XmlDataTypeProfile.getXmlDatatype(datatypeUri);
@@ -46,10 +43,8 @@ public class LiteralUtils
     * @param literal
     *           the <code>literal</code> object.
     * @return Java object representation of <code>literal</code>
-    * @throws UnsupportedDataTypeException 
-    * @throws InvalidLexicalFormException 
     */
-   public static Object getValue(ILiteral literal) throws UnsupportedDataTypeException, InvalidLexicalFormException
+   public static Object getValue(ILiteral literal)
    {
       AbstractXmlType<?> dt = getDatatype(literal);
       String lexicalValue = literal.getLexicalValue();

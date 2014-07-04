@@ -56,7 +56,7 @@ public class XsdAnyUri extends AbstractXmlType<URI>
    }
 
    @Override
-   public URI getValue(String lexicalForm) throws InvalidLexicalFormException
+   public URI getValue(String lexicalForm)
    {
       try {
          return new URI(encode(lexicalForm.trim())).normalize();

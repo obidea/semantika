@@ -54,7 +54,7 @@ public class XsdDouble extends AbstractXmlType<Double>
    }
 
    @Override
-   public Double getValue(String lexicalForm) throws InvalidLexicalFormException
+   public Double getValue(String lexicalForm)
    {
       try {
          return DatatypeConverter.parseDouble(lexicalForm);

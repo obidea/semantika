@@ -54,7 +54,7 @@ public class XsdBoolean extends AbstractXmlType<Boolean>
    }
 
    @Override
-   public Boolean getValue(String lexicalForm) throws InvalidLexicalFormException
+   public Boolean getValue(String lexicalForm)
    {
       try {
          return DatatypeConverter.parseBoolean(lexicalForm);

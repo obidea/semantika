@@ -21,7 +21,6 @@ import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.DataTypeConstants;
 import com.obidea.semantika.datatype.IDatatype;
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
 
 /**
  * Singleton implementation of <code>xsd:string</code> datatype.
@@ -54,7 +53,7 @@ public class XsdString extends AbstractXmlType<String>
    }
 
    @Override
-   public String getValue(String lexicalForm) throws InvalidLexicalFormException
+   public String getValue(String lexicalForm)
    {
       return DatatypeConverter.parseString(lexicalForm);
    }

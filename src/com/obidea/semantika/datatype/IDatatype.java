@@ -15,8 +15,6 @@
  */
 package com.obidea.semantika.datatype;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public interface IDatatype<T>
 {
    /**
@@ -41,7 +39,7 @@ public interface IDatatype<T>
     *           a lexical form of a string.
     * @return the Java object representation of the given a lexical form of a string.
     */
-   public T getValue(String lexicalForm) throws InvalidLexicalFormException;
+   public T getValue(String lexicalForm);
 
    /**
     * Check if the datatype is primitive. All datatypes are either primitive or

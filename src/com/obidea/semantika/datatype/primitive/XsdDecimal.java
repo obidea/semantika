@@ -56,7 +56,7 @@ public class XsdDecimal extends AbstractXmlType<BigDecimal>
    }
 
    @Override
-   public BigDecimal getValue(String lexicalForm) throws InvalidLexicalFormException
+   public BigDecimal getValue(String lexicalForm)
    {
       try {
          return DatatypeConverter.parseDecimal(lexicalForm);

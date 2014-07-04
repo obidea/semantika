@@ -21,7 +21,6 @@ import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.DataTypeConstants;
 import com.obidea.semantika.datatype.IDatatype;
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
 
 public class RdfPlainLiteral extends AbstractXmlType<String>
 {
@@ -51,7 +50,7 @@ public class RdfPlainLiteral extends AbstractXmlType<String>
    }
 
    @Override
-   public String getValue(String lexicalForm) throws InvalidLexicalFormException
+   public String getValue(String lexicalForm)
    {
       /*
        * This call checks that the input is a literal and the data type name
