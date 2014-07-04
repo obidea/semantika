@@ -27,7 +27,7 @@ public class InvalidLexicalFormException extends DataTypeReasonerException
 
    public InvalidLexicalFormException(String datatype, String value)
    {
-      super(format("The string '%s' is not in the lexical space of datatype %s", value, datatype));
+      super(format("The string '%s' is not in the lexical space of \"%s\" type", value, datatype)); //$NON-NLS-1$
       mDatatype = datatype;
       mValue = value;
    }
