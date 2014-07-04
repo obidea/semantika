@@ -43,6 +43,9 @@ public class Literal implements ILiteral
       return mValue;
    }
 
+   /**
+    * Returns the XML datatype string.
+    */
    @Override
    public String getDatatype()
    {

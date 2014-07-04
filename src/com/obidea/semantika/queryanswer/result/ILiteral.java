@@ -17,7 +17,13 @@ package com.obidea.semantika.queryanswer.result;
 
 public interface ILiteral extends IValue
 {
+   /**
+    * Returns the data type of this literal.
+    */
    public String getDatatype();
 
+   /**
+    * Returns the language tag of this literal.
+    */
    public String getLanguage();
 }

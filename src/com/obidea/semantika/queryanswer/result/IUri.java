@@ -17,7 +17,13 @@ package com.obidea.semantika.queryanswer.result;
 
 public interface IUri extends IValue
 {
+   /**
+    * Returns the namespace used by the URI
+    */
    public String getNamespace();
 
+   /**
+    * Returns the local name used by the URI
+    */
    public String getLocalName();
 }

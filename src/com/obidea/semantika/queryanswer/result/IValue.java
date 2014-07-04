@@ -19,7 +19,13 @@ import java.io.Serializable;
 
 public interface IValue extends Serializable
 {
+   /**
+    * Returns the string representation of this value.
+    */
    public String stringValue();
 
+   /**
+    * Returns the Java object representation of this value.
+    */
    public Object getObject();
 }
