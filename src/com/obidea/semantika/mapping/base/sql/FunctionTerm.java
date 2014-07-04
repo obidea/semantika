@@ -31,18 +31,18 @@ import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.mapping.base.IMappingTerm;
 import com.obidea.semantika.mapping.base.TermType;
 
-public abstract class FunctionMediator extends AbstractFunction implements IMappingTerm
+public abstract class FunctionTerm extends AbstractFunction implements IMappingTerm
 {
    private static final long serialVersionUID = 629451L;
 
    private int mTermType = TermType.LITERAL_TYPE; // by default
 
-   public FunctionMediator(String name, String returnType, ISqlExpression... expressions)
+   public FunctionTerm(String name, String returnType, ISqlExpression... expressions)
    {
       this(name, returnType, Arrays.asList(expressions));
    }
 
-   public FunctionMediator(String name, String returnType, List<ISqlExpression> parameters)
+   public FunctionTerm(String name, String returnType, List<ISqlExpression> parameters)
    {
       super(name, returnType, getFunctionTerms(parameters));
    }

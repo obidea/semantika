@@ -22,7 +22,7 @@ import java.util.List;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.ISqlFunction;
 
-public abstract class SqlFunction extends FunctionMediator implements ISqlFunction
+public abstract class SqlFunction extends FunctionTerm implements ISqlFunction
 {
    private static final long serialVersionUID = 629451L;
 
