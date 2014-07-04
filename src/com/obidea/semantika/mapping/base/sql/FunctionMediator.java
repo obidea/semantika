@@ -37,14 +37,23 @@ public abstract class FunctionMediator extends AbstractFunction implements IMapp
 
    private int mTermType = TermType.LITERAL_TYPE; // by default
 
+   public FunctionMediator(String name, String returnType, ISqlExpression... expressions)
+   {
+      this(name, returnType, Arrays.asList(expressions));
+   }
+
    public FunctionMediator(String name, String returnType, List<ISqlExpression> parameters)
    {
       super(name, returnType, getFunctionTerms(parameters));
    }
 
-   public FunctionMediator(String name, String returnType, ISqlExpression... expressions)
+   private static List<? extends Term> getFunctionTerms(List<ISqlExpression> expressions)
    {
-      this(name, returnType, Arrays.asList(expressions));
+      List<Term> toReturn = new ArrayList<Term>();
+      for (ISqlExpression expression : expressions) {
+         toReturn.add((Term) expression);
+      }
+      return toReturn;
    }
 
    @Override
@@ -90,20 +99,5 @@ public abstract class FunctionMediator extends AbstractFunction implements IMapp
    public void accept(ITermVisitor visitor)
    {
       visitor.visit(this);
-   }
-
-   /*
-    * Private utility method
-    */
-
-   private static List<? extends Term> getFunctionTerms(List<ISqlExpression> expressions)
-   {
-      List<Term> toReturn = new ArrayList<Term>();
-      for (ISqlExpression expression : expressions) {
-         if (expression instanceof Term) {
-            toReturn.add((Term) expression);
-         }
-      }
-      return toReturn;
    }
 }

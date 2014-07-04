@@ -34,6 +34,16 @@ public abstract class VariableMediator extends AbstractVariable implements IMapp
       super(getColumnVariableName(column), getColumnVariableType(column));
    }
 
+   private static String getColumnVariableName(IColumn c)
+   {
+      return createName(c.getSchemaName(), c.getTableName(), c.getLocalName());
+   }
+
+   private static String getColumnVariableType(IColumn c)
+   {
+      return SqlTypeToXmlType.get(c.getSqlType());
+   }
+
    @Override
    public void setTermType(int type)
    {
@@ -64,16 +74,6 @@ public abstract class VariableMediator extends AbstractVariable implements IMapp
    protected void notifyVariableTypeChanged(String newDatatype)
    {
       super.setDatatype(newDatatype); // update the variable datatype.
-   }
-
-   private static String getColumnVariableName(IColumn c)
-   {
-      return createName(c.getSchemaName(), c.getTableName(), c.getLocalName());
-   }
-
-   private static String getColumnVariableType(IColumn c)
-   {
-      return SqlTypeToXmlType.get(c.getSqlType());
    }
 
    protected static String createName(String... nameFragments)
