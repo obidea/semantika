@@ -17,8 +17,6 @@ package com.obidea.semantika.database.datatype;
 
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlDouble extends AbstractNumericType<Double>
 {
    private static final SqlDouble mInstance;
@@ -38,14 +36,9 @@ public class SqlDouble extends AbstractNumericType<Double>
    }
 
    @Override
-   protected Double parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Double parseLexicalForm(String lexicalForm)
    {
-      try {
-         return Double.parseDouble(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return Double.parseDouble(lexicalForm);
    }
 
    @Override

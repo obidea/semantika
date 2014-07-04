@@ -20,8 +20,6 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlDate extends AbstractDateTimeType<Date>
 {
    private static final SqlDate mInstance;
@@ -41,7 +39,7 @@ public class SqlDate extends AbstractDateTimeType<Date>
    }
 
    @Override
-   protected Date parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Date parseLexicalForm(String lexicalForm)
    {
       final SimpleDateFormat df = new SimpleDateFormat();
       try {
@@ -50,7 +48,7 @@ public class SqlDate extends AbstractDateTimeType<Date>
          return new Date(time);
       }
       catch (ParseException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
+         throw new IllegalArgumentException("Invalid input as SQL Date type", e);
       }
    }
 

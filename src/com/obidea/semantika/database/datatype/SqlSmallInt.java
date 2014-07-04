@@ -17,8 +17,6 @@ package com.obidea.semantika.database.datatype;
 
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlSmallInt extends AbstractNumericType<Short>
 {
    private static final SqlSmallInt mInstance;
@@ -38,14 +36,9 @@ public class SqlSmallInt extends AbstractNumericType<Short>
    }
 
    @Override
-   protected Short parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Short parseLexicalForm(String lexicalForm)
    {
-      try {
-         return Short.parseShort(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return Short.parseShort(lexicalForm);
    }
 
    @Override

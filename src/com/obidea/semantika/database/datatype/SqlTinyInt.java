@@ -17,8 +17,6 @@ package com.obidea.semantika.database.datatype;
 
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlTinyInt extends AbstractNumericType<Byte>
 {
    private static final SqlTinyInt mInstance;
@@ -38,14 +36,9 @@ public class SqlTinyInt extends AbstractNumericType<Byte>
    }
 
    @Override
-   protected Byte parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Byte parseLexicalForm(String lexicalForm)
    {
-      try {
-         return Byte.parseByte(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return Byte.parseByte(lexicalForm);
    }
 
    @Override

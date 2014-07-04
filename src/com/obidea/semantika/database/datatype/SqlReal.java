@@ -17,8 +17,6 @@ package com.obidea.semantika.database.datatype;
 
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlReal extends AbstractNumericType<Float>
 {
    private static final SqlReal mInstance;
@@ -38,14 +36,9 @@ public class SqlReal extends AbstractNumericType<Float>
    }
 
    @Override
-   protected Float parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Float parseLexicalForm(String lexicalForm)
    {
-      try {
-         return Float.parseFloat(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return Float.parseFloat(lexicalForm);
    }
 
    @Override

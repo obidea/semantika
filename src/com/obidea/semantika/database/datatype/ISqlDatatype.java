@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
 
 public interface ISqlDatatype<T>
 {
@@ -33,7 +32,7 @@ public interface ISqlDatatype<T>
     *           a lexical form of a string.
     * @return the Java object representation of the given a lexical form of a string.
     */
-   public T getValue(String lexicalForm) throws InvalidLexicalFormException;
+   public T getValue(String lexicalForm);
 
    /**
     * Get the JDBC type constant (See {@link java.sql.Types})

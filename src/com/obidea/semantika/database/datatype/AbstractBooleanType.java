@@ -15,8 +15,6 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public abstract class AbstractBooleanType extends AbstractSqlType<Boolean>
 {
    protected AbstractBooleanType(String name)
@@ -25,7 +23,7 @@ public abstract class AbstractBooleanType extends AbstractSqlType<Boolean>
    }
 
    @Override
-   public Boolean getValue(String lexicalForm) throws InvalidLexicalFormException
+   public Boolean getValue(String lexicalForm)
    {
       return Boolean.parseBoolean(lexicalForm);
    }

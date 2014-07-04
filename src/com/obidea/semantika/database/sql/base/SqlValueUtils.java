@@ -17,8 +17,6 @@ package com.obidea.semantika.database.sql.base;
 
 import com.obidea.semantika.database.datatype.AbstractSqlType;
 import com.obidea.semantika.database.datatype.SqlDataTypeProfile;
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 
 public class SqlValueUtils
 {
@@ -29,9 +27,8 @@ public class SqlValueUtils
     *           the <code>literal</code> object.
     * @return the <code>Datatype</code> if the data type in the
     *         <code>literal</code> is recognized, or <code>null</code> otherwise
-    * @throws UnsupportedDataTypeException 
     */
-   public static AbstractSqlType<?> getDatatype(ISqlValue literal) throws UnsupportedDataTypeException
+   public static AbstractSqlType<?> getDatatype(ISqlValue literal)
    {
       String datatypeUri = literal.getDatatype();
       return SqlDataTypeProfile.getSqlDatatype(datatypeUri);
@@ -45,10 +42,8 @@ public class SqlValueUtils
     * @param literal
     *           the <code>literal</code> object.
     * @return Java object representation of <code>literal</code>
-    * @throws UnsupportedDataTypeException 
-    * @throws InvalidSqlLiteralException 
     */
-   public static Object getValue(ISqlValue literal) throws UnsupportedDataTypeException, InvalidLexicalFormException
+   public static Object getValue(ISqlValue literal)
    {
       AbstractSqlType<?> dt = getDatatype(literal);
       String lexicalForm = literal.getValue();

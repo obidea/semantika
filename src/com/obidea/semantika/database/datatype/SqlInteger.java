@@ -17,8 +17,6 @@ package com.obidea.semantika.database.datatype;
 
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlInteger extends AbstractNumericType<Integer>
 {
    private static final SqlInteger mInstance;
@@ -38,14 +36,9 @@ public class SqlInteger extends AbstractNumericType<Integer>
    }
 
    @Override
-   protected Integer parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Integer parseLexicalForm(String lexicalForm)
    {
-      try {
-         return Integer.parseInt(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return Integer.parseInt(lexicalForm);
    }
 
    @Override

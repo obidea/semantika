@@ -15,8 +15,6 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public abstract class AbstractCharacterType extends AbstractSqlType<String>
 {
    protected AbstractCharacterType(String name)
@@ -25,7 +23,7 @@ public abstract class AbstractCharacterType extends AbstractSqlType<String>
    }
 
    @Override
-   public String getValue(String lexicalForm) throws InvalidLexicalFormException
+   public String getValue(String lexicalForm)
    {
       return lexicalForm;
    }

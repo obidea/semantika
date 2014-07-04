@@ -18,8 +18,6 @@ package com.obidea.semantika.database.datatype;
 import java.math.BigDecimal;
 import java.sql.Types;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlDecimal extends AbstractNumericType<BigDecimal>
 {
    private static final SqlDecimal mInstance;
@@ -39,14 +37,9 @@ public class SqlDecimal extends AbstractNumericType<BigDecimal>
    }
 
    @Override
-   protected BigDecimal parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected BigDecimal parseLexicalForm(String lexicalForm)
    {
-      try {
-         return new BigDecimal(lexicalForm);
-      }
-      catch (NumberFormatException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
-      }
+      return new BigDecimal(lexicalForm);
    }
 
    @Override

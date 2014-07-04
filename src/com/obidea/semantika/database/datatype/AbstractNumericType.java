@@ -15,8 +15,6 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public abstract class AbstractNumericType<T> extends AbstractSqlType<T>
 {
    protected AbstractNumericType(String name)
@@ -25,7 +23,7 @@ public abstract class AbstractNumericType<T> extends AbstractSqlType<T>
    }
 
    @Override
-   public T getValue(String lexicalForm) throws InvalidLexicalFormException
+   public T getValue(String lexicalForm)
    {
       return parseLexicalForm(lexicalForm);
    }
@@ -36,8 +34,6 @@ public abstract class AbstractNumericType<T> extends AbstractSqlType<T>
     * @param lexicalForm
     *           the typing form of the literal.
     * @return An object representation of the literal value.
-    * @throws InvalidSqlLiteralException
-    *            if the literal form is invalid or the value is out of range
     */
-   protected abstract T parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException;
+   protected abstract T parseLexicalForm(String lexicalForm);
 }

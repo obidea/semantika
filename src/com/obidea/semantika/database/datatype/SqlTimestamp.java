@@ -20,8 +20,6 @@ import java.sql.Types;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import com.obidea.semantika.datatype.exception.InvalidLexicalFormException;
-
 public class SqlTimestamp extends AbstractDateTimeType<Timestamp>
 {
    private static final SqlTimestamp mInstance;
@@ -41,7 +39,7 @@ public class SqlTimestamp extends AbstractDateTimeType<Timestamp>
    }
 
    @Override
-   protected Timestamp parseLexicalForm(String lexicalForm) throws InvalidLexicalFormException
+   protected Timestamp parseLexicalForm(String lexicalForm)
    {
       final SimpleDateFormat df = new SimpleDateFormat();
       try {
@@ -50,7 +48,7 @@ public class SqlTimestamp extends AbstractDateTimeType<Timestamp>
          return new Timestamp(time);
       }
       catch (ParseException e) {
-         throw new InvalidLexicalFormException(getName(), lexicalForm, e);
+         throw new IllegalArgumentException("Invalid input for SQL Timestamp type", e);
       }
    }
 
