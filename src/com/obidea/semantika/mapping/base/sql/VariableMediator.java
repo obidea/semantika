@@ -46,6 +46,14 @@ public abstract class VariableMediator extends AbstractVariable implements IMapp
       return mTermType;
    }
 
+   /**
+    * Set this mapping variable term to a given <code>datatype</code> input to 
+    * replace the existing one. This method should implement a type checking
+    * before overriding the old type.
+    *
+    * @param datatype
+    *           The new datatype to override.
+    */
    public abstract void overrideDatatype(String datatype);
 
    protected void notifyVariableNameChanged(String newName)
