@@ -18,7 +18,6 @@ package com.obidea.semantika.expression.base;
 import java.util.List;
 
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.exception.UnknownTermObjectException;
 import com.obidea.semantika.util.Serializer;
 import com.obidea.semantika.util.StringUtils;
 
@@ -243,25 +242,6 @@ public final class TermUtils
    public static IFunction asFunction(ITerm term)
    {
       return (IFunction) term;
-   }
-
-   public static String getClass(ITerm term)
-   {
-      if (isVariable(term)) {
-         return "variable"; //$NON-NLS-1$
-      }
-      else if (isLiteral(term)) {
-         return "literal"; //$NON-NLS-1$
-      }
-      else if (isUriReference(term)) {
-         return "URI reference"; //$NON-NLS-1$
-      }
-      else if (isFunction(term)) {
-         return "function"; //$NON-NLS-1$
-      }
-      else {
-         throw new UnknownTermObjectException(term);
-      }
    }
 
    /**
