@@ -20,13 +20,13 @@ import com.obidea.semantika.expression.base.ITermVisitor;
 import com.obidea.semantika.mapping.base.IMappingTerm;
 import com.obidea.semantika.mapping.base.TermType;
 
-public abstract class ConstantMediator extends AbstractConstant implements IMappingTerm
+public abstract class ConstantTerm extends AbstractConstant implements IMappingTerm
 {
    private static final long serialVersionUID = 629451L;
 
    private int mTermType = TermType.LITERAL_TYPE; // by default
 
-   public ConstantMediator(String value, String datatype)
+   public ConstantTerm(String value, String datatype)
    {
       super(value, datatype);
    }

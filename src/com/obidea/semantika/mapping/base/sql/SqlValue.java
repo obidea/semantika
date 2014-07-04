@@ -18,7 +18,7 @@ package com.obidea.semantika.mapping.base.sql;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.database.sql.base.ISqlValue;
 
-public class SqlValue extends ConstantMediator implements ISqlValue
+public class SqlValue extends ConstantTerm implements ISqlValue
 {
    private static final long serialVersionUID = 629451L;
 

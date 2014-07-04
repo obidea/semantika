@@ -20,7 +20,7 @@ import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.mapping.base.TermType;
 
-public class SqlUriValue extends ConstantMediator implements ISqlValue
+public class SqlUriValue extends ConstantTerm implements ISqlValue
 {
    private static final long serialVersionUID = 629451L;
 
