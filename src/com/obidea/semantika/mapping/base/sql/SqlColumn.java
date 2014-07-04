@@ -31,7 +31,7 @@ import com.obidea.semantika.datatype.XmlTypeToSqlType;
 import com.obidea.semantika.util.CollectionUtils;
 import com.obidea.semantika.util.StringUtils;
 
-public class SqlColumn extends VariableMediator implements ISqlColumn, IContainDatabaseObject<IColumn>
+public class SqlColumn extends ColumnTerm implements ISqlColumn, IContainDatabaseObject<IColumn>
 {
    private static final long serialVersionUID = 629451L;
 

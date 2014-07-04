@@ -23,13 +23,13 @@ import com.obidea.semantika.expression.base.ITermVisitor;
 import com.obidea.semantika.mapping.base.IMappingTerm;
 import com.obidea.semantika.mapping.base.TermType;
 
-public abstract class VariableMediator extends AbstractVariable implements IMappingTerm
+public abstract class ColumnTerm extends AbstractVariable implements IMappingTerm
 {
    private static final long serialVersionUID = 629451L;
 
    private int mTermType = TermType.LITERAL_TYPE; // by default
 
-   public VariableMediator(IColumn column)
+   public ColumnTerm(IColumn column)
    {
       super(getColumnVariableName(column), getColumnVariableType(column));
    }
