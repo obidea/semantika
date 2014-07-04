@@ -31,6 +31,12 @@ public class Uri implements IUri
    }
 
    @Override
+   public int getType()
+   {
+      return IValue.URI;
+   }
+
+   @Override
    public String stringValue()
    {
       return mValue;
@@ -51,7 +57,7 @@ public class Uri implements IUri
    @Override
    public URI getObject()
    {
-      return URI.create(mValue);
+      return java.net.URI.create(mValue);
    }
 
    @Override

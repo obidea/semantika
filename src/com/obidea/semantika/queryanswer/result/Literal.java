@@ -43,6 +43,12 @@ public class Literal implements ILiteral
    }
 
    @Override
+   public int getType()
+   {
+      return IValue.LITERAL;
+   }
+
+   @Override
    public String stringValue()
    {
       return mValue;

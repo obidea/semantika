@@ -20,6 +20,21 @@ import java.io.Serializable;
 public interface IValue extends Serializable
 {
    /**
+    * A constant value to indicate the value is an object value.
+    */
+   public static final int URI = 0;
+
+   /**
+    * A constant value to indicate the value is a literal value.
+    */
+   public static final int LITERAL = 1;
+
+   /**
+    * Returns the value type.
+    */
+   public int getType();
+
+   /**
     * Returns the string representation of this value.
     */
    public String stringValue();
