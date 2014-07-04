@@ -167,14 +167,20 @@ public abstract class QueryResultLoader
 
    private static IValue getValue(ResultSet resultSet, QueryMetadata metadata, int position) throws SQLException
    {
+      String value = resultSet.getString(position);
+      /*
+       * If the JDBC ResultSet gives null, then this method returns null as well.
+       */
+      if (value == null) {
+         return null;
+      }
+      
       Column c = metadata.getColumn(position);
       if (c.isLiteral()) {
-         String value = resultSet.getString(position);
          return new Literal(value, URI.create(c.getDatatype()));
       }
       else {
-         String value = resultSet.getString(position);
-         if (value != null && !validUri(value)) {
+         if (!validUri(value)) {
             /*
              * We assume if the URI string is invalid it means the given value is a
              * URI template construction, i.e., <template> : <value1> <value2> etc. 
