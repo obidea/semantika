@@ -18,14 +18,11 @@ package com.obidea.semantika.io;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-
-import com.obidea.semantika.mapping.exception.MappingInputSourceException;
 
 public class FileDocumentSource implements IDocumentSource
 {
@@ -57,14 +54,9 @@ public class FileDocumentSource implements IDocumentSource
     * 
     * @return a new <code>Reader</code> which the input file can be read from.
     */
-   public Reader getReader()
+   public Reader getReader() throws IOException
    {
-      try {
-         return new InputStreamReader(getInputStream(), "UTF-8"); //$NON-NLS-1$
-      }
-      catch (UnsupportedEncodingException e) {
-         throw new MappingInputSourceException(e);
-      }
+      return new InputStreamReader(getInputStream(), "UTF-8"); //$NON-NLS-1$
    }
 
    @Override
@@ -79,13 +71,8 @@ public class FileDocumentSource implements IDocumentSource
     * @return a new <code>InputStream</code> which the input file can be read
     *         from.
     */
-   public InputStream getInputStream()
+   public InputStream getInputStream() throws IOException
    {
-      try {
-         return new BufferedInputStream(new FileInputStream(mFile));
-      }
-      catch (FileNotFoundException e) {
-         throw new MappingInputSourceException(e);
-      }
+      return new BufferedInputStream(new FileInputStream(mFile));
    }
 }

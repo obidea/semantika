@@ -15,6 +15,7 @@
  */
 package com.obidea.semantika.io;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
@@ -39,7 +40,7 @@ public interface IDocumentSource
     * @return A new <code>Reader</code> from which the document source can be
     *         read.
     */
-   Reader getReader();
+   Reader getReader() throws IOException;
 
    /**
     * Determines if an input stream is available from this document source.
@@ -57,7 +58,7 @@ public interface IDocumentSource
     * 
     * @return A new input stream from which this document source can be read.
     */
-   InputStream getInputStream();
+   InputStream getInputStream() throws IOException;
 
    /**
     * Gets the document URI.
