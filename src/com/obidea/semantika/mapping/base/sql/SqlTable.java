@@ -28,7 +28,7 @@ import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.util.CollectionUtils;
 import com.obidea.semantika.util.StringUtils;
 
-public class SqlTable extends AtomMediator implements ISqlTable, IContainDatabaseObject<ITable>
+public class SqlTable extends LogicalTable implements ISqlTable, IContainDatabaseObject<ITable>
 {
    private static final long serialVersionUID = 629451L;
 

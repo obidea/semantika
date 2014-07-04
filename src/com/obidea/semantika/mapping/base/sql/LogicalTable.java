@@ -27,11 +27,11 @@ import com.obidea.semantika.expression.base.IAtomVisitor;
 import com.obidea.semantika.expression.base.Predicate;
 import com.obidea.semantika.expression.base.Variable;
 
-public abstract class AtomMediator extends AbstractAtom
+public abstract class LogicalTable extends AbstractAtom
 {
    private static final long serialVersionUID = 629451L;
 
-   public AtomMediator(ITable table)
+   public LogicalTable(ITable table)
    {
       super(getPredicateFromTable(table), getVariablesFromTable(table));
    }
