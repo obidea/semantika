@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.datatype.exception;
 
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.exception.SemantikaRuntimeException;
 
-public class DataTypeException extends SemantikaException
+public class DataTypeException extends SemantikaRuntimeException
 {
    private static final long serialVersionUID = 629451L;
 
