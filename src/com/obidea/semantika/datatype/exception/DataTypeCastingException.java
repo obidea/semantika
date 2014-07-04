@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.datatype;
+package com.obidea.semantika.datatype.exception;
 
-import com.obidea.semantika.datatype.exception.DataTypeReasonerException;
 
 public class DataTypeCastingException extends DataTypeReasonerException
 {
