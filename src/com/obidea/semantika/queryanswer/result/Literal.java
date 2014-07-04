@@ -15,6 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 
 public class Literal implements ILiteral
@@ -62,5 +63,57 @@ public class Literal implements ILiteral
    public Object getObject()
    {
       return XmlDataTypeProfile.getXmlDatatype(mDatatype).getValue(mValue);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + stringValue().hashCode();
+      result = prime * result + getLanguage().hashCode();
+      result = prime * result + getDatatype().hashCode();
+      return result;
+   }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final Literal other = (Literal) obj;
+      
+      return stringValue().equals(other.stringValue()) && getLanguage().equals(other.getLanguage())
+            && getDatatype().equals(other.getDatatype());
+   }
+
+   /*
+    * Internal use only for debugging.
+    */
+
+   @Override
+   public String toString()
+   {
+      final StringBuilder sb = new StringBuilder();
+      if (mDatatype.equals(DataType.PLAIN_LITERAL)) {
+         sb.append("\""); //$NON-NLS-1$
+         sb.append(stringValue()).append("@").append(getLanguage()); //$NON-NLS-1$
+         sb.append("\""); //$NON-NLS-1$
+      }
+      else if (mDatatype.equals(DataType.STRING)) {
+         sb.append("\"").append(stringValue()).append("\""); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+      else {
+         sb.append("\"").append(stringValue()).append("\""); //$NON-NLS-1$ //$NON-NLS-2$
+         sb.append("^^").append(XmlDataTypeProfile.getXmlDatatype(mDatatype)); //$NON-NLS-1$
+      }
+      return sb.toString();
    }
 }

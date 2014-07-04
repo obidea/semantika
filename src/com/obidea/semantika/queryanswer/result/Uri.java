@@ -53,4 +53,40 @@ public class Uri implements IUri
    {
       return URI.create(mValue);
    }
+
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + stringValue().hashCode();
+      return result;
+   }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      if (this == obj) {
+         return true;
+      }
+      if (obj == null) {
+         return false;
+      }
+      if (getClass() != obj.getClass()) {
+         return false;
+      }
+      final Uri other = (Uri) obj;
+      
+      return stringValue().equals(other.stringValue());
+   }
+
+   /*
+    * Internal use only for debugging.
+    */
+
+   @Override
+   public String toString()
+   {
+      return "<" + stringValue() + ">"; //$NON-NLS-1$ //$NON-NLS-2$
+   }
 }
