@@ -18,7 +18,6 @@ package com.obidea.semantika.mapping.base.sql;
 import com.obidea.semantika.database.NamingUtils;
 import com.obidea.semantika.database.base.IColumn;
 import com.obidea.semantika.database.datatype.SqlTypeToXmlType;
-import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.expression.base.AbstractVariable;
 import com.obidea.semantika.expression.base.ITermVisitor;
 import com.obidea.semantika.mapping.base.IMappingTerm;
@@ -47,7 +46,7 @@ public abstract class VariableMediator extends AbstractVariable implements IMapp
       return mTermType;
    }
 
-   public abstract void overrideDatatype(String datatype) throws SemantikaException;
+   public abstract void overrideDatatype(String datatype);
 
    protected void notifyVariableNameChanged(String newName)
    {

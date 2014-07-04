@@ -106,7 +106,7 @@ public final class XmlDataTypeProfile
       }
    }
 
-   public static AbstractXmlType<?> getXmlDatatype(String xmlType) throws UnsupportedDataTypeException
+   public static AbstractXmlType<?> getXmlDatatype(String xmlType)
    {
       AbstractXmlType<?> dt = coreDatatypes.get(xmlType);
       if (dt == null) {

@@ -79,7 +79,7 @@ public final class SqlDataTypeProfile
       }
    }
 
-   public static AbstractSqlType<?> getSqlDatatype(String datatypeUri) throws UnsupportedDataTypeException
+   public static AbstractSqlType<?> getSqlDatatype(String datatypeUri)
    {
       AbstractSqlType<?> dt = coreDatatypes.get(datatypeUri);
       if (dt == null) {

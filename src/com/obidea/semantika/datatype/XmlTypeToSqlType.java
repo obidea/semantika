@@ -64,7 +64,7 @@ public final class XmlTypeToSqlType
     * @throws UnsupportedDataTypeException
     *            if the data type has no corresponding SQL type.
     */
-   public static int get(String xmlType) throws UnsupportedDataTypeException
+   public static int get(String xmlType)
    {
       Integer toReturn = mTypeMapping.get(xmlType);
       if (toReturn == null) {

@@ -23,7 +23,6 @@ import com.obidea.semantika.database.base.IContainDatabaseObject;
 import com.obidea.semantika.database.sql.base.ISqlColumn;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.datatype.XmlTypeToSqlType;
-import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.util.CollectionUtils;
 import com.obidea.semantika.util.StringUtils;
 
@@ -130,13 +129,13 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    }
 
    @Override
-   public void overrideDatatype(String datatype) throws UnsupportedDataTypeException
+   public void overrideDatatype(String datatype)
    {
       notifyVariableTypeChanged(datatype);
       notifyColumnTypeChanged(datatype);
    }
 
-   private void notifyColumnTypeChanged(String datatype) throws UnsupportedDataTypeException
+   private void notifyColumnTypeChanged(String datatype)
    {
       int oldSqlType = mColumnType;
       int newSqlType = XmlTypeToSqlType.get(datatype);
