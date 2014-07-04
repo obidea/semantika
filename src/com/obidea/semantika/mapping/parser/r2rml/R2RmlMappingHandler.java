@@ -33,10 +33,7 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
-import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.datatype.TypeConversion;
-import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.UriReference;
@@ -263,33 +260,15 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       return toReturn;
    }
 
-   private void overrideColumn(SqlColumn column, String datatype) throws IllegalR2RmlMappingException
+   private void overrideColumn(SqlColumn column, String datatype) throws R2RmlParserException
    {
-      checkTypeConversion(column.getDatatype(), datatype);
       try {
          column.overrideDatatype(datatype);
       }
       catch (UnsupportedDataTypeException e) {
-         throw new R2RmlParserException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$
+         throw new IllegalR2RmlMappingException(e.getMessage());
       }
-   }
-
-   private void checkTypeConversion(String oldDatatype, String newDatatype) throws IllegalR2RmlMappingException
-   {
-      AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
-      AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
-      boolean pass = TypeConversion.verify(sourceType, targetType);
-      if (!pass) {
-         throw new IllegalR2RmlMappingException(format("Type conversion error %s to %s", sourceType, targetType)); //$NON-NLS-1$
-      }
-   }
-
-   private AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws IllegalR2RmlMappingException
-   {
-      try {
-         return XmlDataTypeProfile.getXmlDatatype(datatypeUri);
-      }
-      catch (UnsupportedDataTypeException e) {
+      catch (IllegalArgumentException e) {
          throw new IllegalR2RmlMappingException(e.getMessage());
       }
    }

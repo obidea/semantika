@@ -139,12 +139,6 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected UnsupportedXmlDataTypeException unsupportedXmlDataTypeException(String value)
-   {
-      return new UnsupportedXmlDataTypeException("Unsupported XML type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
-            getLineNumber(), getColumnNumber());
-   }
-
    protected UnsupportedTermTypeException unsupportedTermTypeException(String value)
    {
       return new UnsupportedTermTypeException("Unsupported term type \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
@@ -181,6 +175,11 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
    {
       return new ColumnNotFoundException("Column name was not found in logical table \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
+   }
+
+   protected UnsupportedXmlDataTypeException unsupportedXmlDataTypeException(String message)
+   {
+      return new UnsupportedXmlDataTypeException(message, getLineNumber(), getColumnNumber());
    }
 
    protected DataTypeOverrideException datatypeOverrideException(String message)

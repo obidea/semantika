@@ -15,22 +15,16 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import static java.lang.String.format;
-
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.datatype.TypeConversion;
-import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
-import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 import com.obidea.semantika.util.StringUtils;
 
@@ -286,34 +280,16 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
       return toReturn;
    }
 
-   private void overrideColumn(SqlColumn column, String datatype) throws UnsupportedXmlDataTypeException, DataTypeOverrideException
+   private void overrideColumn(SqlColumn column, String datatype) throws MappingParserException
    {
-      checkTypeConversion(column.getDatatype(), datatype);
       try {
          column.overrideDatatype(datatype);
       }
       catch (UnsupportedDataTypeException e) {
-         throw datatypeOverrideException(format("Unsupported datatype-override: %s", datatype)); //$NON-NLS-1$
+         throw unsupportedXmlDataTypeException(e.getMessage());
       }
-   }
-
-   private void checkTypeConversion(String oldDatatype, String newDatatype) throws UnsupportedXmlDataTypeException, DataTypeOverrideException
-   {
-      AbstractXmlType<?> sourceType = getXmlDatatype(oldDatatype);
-      AbstractXmlType<?> targetType = getXmlDatatype(newDatatype);
-      boolean pass = TypeConversion.verify(sourceType, targetType);
-      if (!pass) {
-         throw datatypeOverrideException(format("Type conversion error \"%s\" to \"%s\"", sourceType, targetType)); //$NON-NLS-1$
-      }
-   }
-
-   private AbstractXmlType<?> getXmlDatatype(String datatypeUri) throws UnsupportedXmlDataTypeException
-   {
-      try {
-         return XmlDataTypeProfile.getXmlDatatype(datatypeUri);
-      }
-      catch (UnsupportedDataTypeException e) {
-         throw unsupportedXmlDataTypeException(datatypeUri);
+      catch (IllegalArgumentException e) {
+         throw datatypeOverrideException(e.getMessage());
       }
    }
 }

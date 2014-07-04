@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.mapping.base.sql;
 
+import static java.lang.String.format;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +24,9 @@ import com.obidea.semantika.database.base.IColumn;
 import com.obidea.semantika.database.base.IContainDatabaseObject;
 import com.obidea.semantika.database.sql.base.ISqlColumn;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
+import com.obidea.semantika.datatype.AbstractXmlType;
+import com.obidea.semantika.datatype.TypeConversion;
+import com.obidea.semantika.datatype.XmlDataTypeProfile;
 import com.obidea.semantika.datatype.XmlTypeToSqlType;
 import com.obidea.semantika.util.CollectionUtils;
 import com.obidea.semantika.util.StringUtils;
@@ -131,8 +136,20 @@ public class SqlColumn extends VariableMediator implements ISqlColumn, IContainD
    @Override
    public void overrideDatatype(String datatype)
    {
+      checkTypeConversion(getDatatype(), datatype);
       notifyVariableTypeChanged(datatype);
       notifyColumnTypeChanged(datatype);
+   }
+
+   private void checkTypeConversion(String oldDatatype, String newDatatype)
+   {
+      AbstractXmlType<?> source = XmlDataTypeProfile.getXmlDatatype(oldDatatype);
+      AbstractXmlType<?> target = XmlDataTypeProfile.getXmlDatatype(newDatatype);
+      boolean pass = TypeConversion.verify(source, target);
+      if (!pass) {
+         throw new IllegalArgumentException(
+               format("Type conversion error \"%s\" to \"%s\"", source, target)); //$NON-NLS-1$
+      }
    }
 
    private void notifyColumnTypeChanged(String datatype)
