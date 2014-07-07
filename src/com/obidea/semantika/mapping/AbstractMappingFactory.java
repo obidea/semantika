@@ -19,11 +19,6 @@ public abstract class AbstractMappingFactory implements IMappingFactory
 {
    private IMetaModel mMetaModel;
 
-   public AbstractMappingFactory()
-   {
-      // NO-OP
-   }
-
    @Override
    public void setMetaModel(IMetaModel metaModel)
    {
