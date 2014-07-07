@@ -22,6 +22,15 @@ import java.util.Set;
 public interface IPrefixManager
 {
    /**
+    * Gets all pairs of prefix/namespace from other manager and copies them to
+    * this prefix manager.
+    *
+    * @param otherPrefixManager
+    *          the other prefix manager.
+    */
+   void copy(IPrefixManager otherManager);
+
+   /**
     * Gets the default namespace. The default namespace is denoted by the prefix
     * name ":".
     * 

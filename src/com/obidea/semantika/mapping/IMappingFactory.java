@@ -15,6 +15,7 @@
  */
 package com.obidea.semantika.mapping;
 
+import com.obidea.semantika.app.IMappingLoader;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
@@ -37,6 +38,8 @@ public interface IMappingFactory
     * 
     * @param inputDocument
     *           The document source that contains the mapping assertions.
+    * @param mediator
+    *           A pointer to the loader to notify the creation of a mapping set.
     * @param configuration
     *           A configuration object which can be used to pass various options
     *           to the parser.
@@ -44,8 +47,8 @@ public interface IMappingFactory
     * @throws MappingCreationException
     *            if the mapping set could not be created
     */
-   IMappingSet loadMappingSet(IDocumentSource inputDocument, MappingParserConfiguration configuration)
-         throws MappingCreationException;
+   IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoader mediator,
+         MappingParserConfiguration configuration) throws MappingCreationException;
 
    /**
     * Determines if the factory can load the mappings from a specified input

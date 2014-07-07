@@ -24,6 +24,12 @@ import java.util.Set;
 public class EmptyPrefixManager implements IPrefixManager
 {
    @Override
+   public void copy(IPrefixManager otherManager)
+   {
+      // NO-OP
+   }
+
+   @Override
    public String getDefaultNamespace()
    {
       return ""; //$NON-NLS-1$

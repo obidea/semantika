@@ -29,35 +29,18 @@ import com.obidea.semantika.io.StreamDocumentSource;
 import com.obidea.semantika.io.UriDocumentSource;
 import com.obidea.semantika.mapping.IMappingFactory;
 import com.obidea.semantika.mapping.IMappingSet;
-import com.obidea.semantika.mapping.MappingSet;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.exception.MappingFactoryNotFoundException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 import com.obidea.semantika.ontology.IOntology;
 
-public class MappingLoader implements IMappingFactory.IMetaModel
+public class MappingLoader extends MappingLoaderBase
 {
-   private IDatabaseMetadata mDatabaseMetadata;
-   private IOntology mOntology;
-
-   private List<IMappingFactory> mMappingSetFactories = new ArrayList<IMappingFactory>();;
+   private List<IMappingFactory> mMappingSetFactories = new ArrayList<IMappingFactory>();
 
    public MappingLoader(IDatabaseMetadata databaseMetadata, IOntology ontology)
    {
-      mDatabaseMetadata = databaseMetadata;
-      mOntology = ontology;
-   }
-
-   @Override
-   public IDatabaseMetadata getDatabaseMetadata()
-   {
-      return mDatabaseMetadata;
-   }
-
-   @Override
-   public IOntology getOntology()
-   {
-      return mOntology;
+      super(databaseMetadata, ontology);
    }
 
    public void addMappingSetFactory(IMappingFactory factory)
@@ -69,11 +52,6 @@ public class MappingLoader implements IMappingFactory.IMetaModel
    public List<IMappingFactory> getMappingSetFactories()
    {
       return Collections.unmodifiableList(mMappingSetFactories);
-   }
-
-   public IMappingSet createEmptyMappingSet()
-   {
-      return new MappingSet();
    }
 
    public IMappingSet loadMappingFromDocument(File file) throws MappingCreationException
@@ -107,7 +85,7 @@ public class MappingLoader implements IMappingFactory.IMetaModel
    {
       for (IMappingFactory factory : mMappingSetFactories) {
          if (factory.canLoad(inputDocument)) {
-            return factory.loadMappingSet(inputDocument, configuration);
+            return factory.loadMappingSet(inputDocument, this, configuration);
          }
       }
       throw new MappingFactoryNotFoundException(inputDocument.getDocumentUri());

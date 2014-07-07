@@ -15,6 +15,7 @@
  */
 package com.obidea.semantika.mapping;
 
+import com.obidea.semantika.app.IMappingLoader;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
@@ -23,8 +24,8 @@ import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 public class EmptyMappingSetFactory extends AbstractMappingFactory
 {
    @Override
-   public IMappingSet loadMappingSet(IDocumentSource document, MappingParserConfiguration configuration)
-         throws MappingCreationException
+   public IMappingSet loadMappingSet(IDocumentSource document, IMappingLoader mediator,
+         MappingParserConfiguration configuration) throws MappingCreationException
    {
       throw new IllegalOperationException("Cannot load mapping file."); //$NON-NLS-1$
    }

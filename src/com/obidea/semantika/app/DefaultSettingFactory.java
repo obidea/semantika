@@ -30,11 +30,13 @@ import com.obidea.semantika.database.connection.ConnectionProviderFactory;
 import com.obidea.semantika.database.connection.IConnectionProvider;
 import com.obidea.semantika.database.sql.dialect.DialectFactory;
 import com.obidea.semantika.database.sql.dialect.IDialect;
-import com.obidea.semantika.exception.ConfigurationException;
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.io.StreamDocumentSource;
+import com.obidea.semantika.knowledgebase.DefaultPrefixManager;
+import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.IMappingSet;
+import com.obidea.semantika.mapping.MappingSet;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 import com.obidea.semantika.ontology.IOntology;
 import com.obidea.semantika.util.ConfigHelper;
@@ -87,23 +89,31 @@ public class DefaultSettingFactory extends SettingFactory
    @Override
    /* package */void loadMappingFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
+      IMappingSet mappingSet = new MappingSet();
+      IPrefixManager prefixManager = new DefaultPrefixManager();
+      
+      MappingLoader loader = buildLoader(settings);
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
       String[] isStrict = properties.getStringArray(Environment.STRICT_PARSING);
-      if (resource.length == 0) {
-         throw new ConfigurationException("Mapping resource is not specified in the configuration file."); //$NON-NLS-1$
-      }
-      MappingLoader loader = buildLoader(settings);
-      IMappingSet mappingSet = loader.createEmptyMappingSet();
       for (int i = 0; i < resource.length; i++) {
+         /*
+          * Prepare each mapping document resource before parsing
+          */
          InputStream in = ConfigHelper.getResourceStream(resource[i]);
          IDocumentSource documentSource = new StreamDocumentSource(in, URI.create(resource[i]));
-         
-         // Construct the parsing configuration for each mapping
+         /*
+          * Construct the parsing configuration for each mapping resource
+          */
          MappingParserConfiguration configuration = new MappingParserConfiguration();
          configuration.setStrictParsing(Boolean.parseBoolean(isStrict[i]));
+         /*
+          * Collect the return mapping set and prefixes to a master storage.
+          */
          mappingSet.copy(loader.loadMappingFromDocument(documentSource, configuration));
+         prefixManager.copy(loader.getPrefixManager());
       }
       settings.setMappingSet(mappingSet);
+      settings.setPrefixManager(prefixManager);
    }
 
    private static MappingLoader buildLoader(Settings settings)

@@ -62,13 +62,7 @@ public class DefaultPrefixManager implements IPrefixManager
     */
    public DefaultPrefixManager(IPrefixManager other)
    {
-      mPrefixMap = new HashMap<String, String>();
-      for (String prefixName : other.getPrefixNames()) {
-         String namespace = other.getNamespace(prefixName);
-         if (!StringUtils.isEmpty(namespace)) {
-            setPrefix(prefixName, namespace);
-         }
-      }
+      copy(other);
    }
 
    private void setupDefaultPrefixes()
@@ -77,6 +71,18 @@ public class DefaultPrefixManager implements IPrefixManager
       setPrefix("rdfs", Namespaces.RDFS.toString()); //$NON-NLS-1$
       setPrefix("rdf", Namespaces.RDF.toString()); //$NON-NLS-1$
       setPrefix("xsd", Namespaces.XSD.toString()); //$NON-NLS-1$
+   }
+
+   @Override
+   public void copy(IPrefixManager otherManager)
+   {
+      mPrefixMap = new HashMap<String, String>();
+      for (String prefixName : otherManager.getPrefixNames()) {
+         String namespace = otherManager.getNamespace(prefixName);
+         if (!StringUtils.isEmpty(namespace)) {
+            setPrefix(prefixName, namespace);
+         }
+      }
    }
 
    /**

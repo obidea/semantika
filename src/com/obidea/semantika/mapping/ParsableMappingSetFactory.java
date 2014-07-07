@@ -27,8 +27,10 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
+import com.obidea.semantika.app.IMappingLoader;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.io.IDocumentSource;
+import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.exception.MappingCreationIOException;
 import com.obidea.semantika.mapping.exception.MappingParserException;
@@ -70,18 +72,16 @@ public class ParsableMappingSetFactory extends AbstractMappingFactory
    }
 
    @Override
-   public IMappingSet loadMappingSet(IDocumentSource inputDocument, MappingParserConfiguration configuration)
-         throws MappingCreationException
+   public IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoader mediator,
+         MappingParserConfiguration configuration) throws MappingCreationException
    {
       Map<IMappingParser, MappingParserException> exceptions = new LinkedHashMap<IMappingParser, MappingParserException>();
       
       MutableMappingSet mappingSet = super.createEmptyMappingSet();
       for (final IMappingParser parser : getParsers()) {
          try {
-            parser.parse(inputDocument, mappingSet, configuration);
-            LOG.debug("Parsing '{}' document (found: {} mappings)", inputDocument.getDocumentUri(), mappingSet.size()); //$NON-NLS-1$
-            LOG.debug("* Class mapping count = {}", mappingSet.getClassMappings().size()); //$NON-NLS-1$
-            LOG.debug("* Property mapping count = {}", mappingSet.getPropertyMappings().size()); //$NON-NLS-1$
+            IPrefixManager pm = parser.parse(inputDocument, mappingSet, configuration);
+            mediator.mappingLoaded(mappingSet, pm);
             return mappingSet;
          }
          catch (IOException e) {
