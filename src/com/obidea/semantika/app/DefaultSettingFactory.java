@@ -80,6 +80,7 @@ public class DefaultSettingFactory extends SettingFactory
          settings.setOntology(ontology);
       }
       else {
+         LOG.debug("Parsing ontology at {}", resource); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource);
          IOntology ontology = loader.loadOntologyFromDocument(in);
          settings.setOntology(ontology);
@@ -108,6 +109,7 @@ public class DefaultSettingFactory extends SettingFactory
          /*
           * Prepare each mapping document resource before parsing
           */
+         LOG.debug("Parsing mapping at {}", resource[i]); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource[i]);
          IDocumentSource documentSource = new StreamDocumentSource(in, URI.create(resource[i]));
          /*
