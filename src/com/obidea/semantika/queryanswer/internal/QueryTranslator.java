@@ -71,10 +71,10 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
              */
             renderSql(unfoldedQuery);
             
-//            collectReturnLabels(unfoldedQuery.get(0));
-//            collectReturnTypes(unfoldedQuery.get(0));
-            
-            buildQueryMetadata(unfoldedQuery.get(0)); // get from one sample query
+            /*
+             * Construct the query meta-information from taking one query sample
+             */
+            buildQueryMetadata(unfoldedQuery.get(0));
          }
          else {
             throw new QueryTranslatorException("No SQL was produced for input query:\n" + queryString); //$NON-NLS-1$
