@@ -104,19 +104,17 @@ public class DefaultSettingFactory extends SettingFactory
        * The iteration will check and parse each mapping resource and collect the results.
        */
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
-      String[] isStrict = properties.getStringArray(Environment.STRICT_PARSING);
       for (int i = 0; i < resource.length; i++) {
          /*
-          * Prepare each mapping document resource before parsing
+          * Construct the parsing configuration for each mapping resource
+          */
+         MappingParserConfiguration configuration = createParserConfiguration(properties, i);
+         /*
+          * Start parsing the mapping resource.
           */
          LOG.debug("Parsing mapping at {}", resource[i]); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource[i]);
          IDocumentSource documentSource = new StreamDocumentSource(in, URI.create(resource[i]));
-         /*
-          * Construct the parsing configuration for each mapping resource
-          */
-         MappingParserConfiguration configuration = new MappingParserConfiguration();
-         configuration.setStrictParsing(Boolean.parseBoolean(isStrict[i]));
          /*
           * Gather the return mapping set and prefixes to the parent collector.
           */
@@ -130,6 +128,13 @@ public class DefaultSettingFactory extends SettingFactory
    private static MappingLoader buildMappingLoader(Settings settings)
    {
       return MappingLoaderFactory.createMappingLoader(settings.getDatabase(), settings.getOntology());
+   }
+
+   private static MappingParserConfiguration createParserConfiguration(PropertiesConfiguration properties, int order)
+   {
+      MappingParserConfiguration configuration = new MappingParserConfiguration();
+      configuration.setStrictParsing(Boolean.parseBoolean(properties.getStringArray(Environment.STRICT_PARSING)[order]));
+      return configuration;
    }
 
    private static Integer determineTransactionTimeout(PropertiesConfiguration properties)
