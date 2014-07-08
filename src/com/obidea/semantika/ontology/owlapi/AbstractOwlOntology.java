@@ -17,14 +17,12 @@ package com.obidea.semantika.ontology.owlapi;
 
 import java.net.URI;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
-import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
@@ -32,12 +30,8 @@ import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubDataPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubPropertyAxiom;
-import org.semanticweb.owlapi.util.DLExpressivityChecker;
-import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
-import org.slf4j.Logger;
 
 import com.obidea.semantika.ontology.IOntology;
-import com.obidea.semantika.util.LogUtils;
 
 public abstract class AbstractOwlOntology implements IOntology
 {
@@ -47,8 +41,6 @@ public abstract class AbstractOwlOntology implements IOntology
 
    private OwlClassStructureHandler mClassStructureHandler;
    private OwlPropertyStructureHandler mPropertyStructureHandler;
-
-   private static final Logger LOG = LogUtils.createLogger("semantika.ontology"); //$NON-NLS-1$
 
    public AbstractOwlOntology(OWLOntology rootOntology)
    {
@@ -61,8 +53,6 @@ public abstract class AbstractOwlOntology implements IOntology
        */
       mPropertyStructureHandler = new OwlPropertyStructureHandler(this);
       mClassStructureHandler = new OwlClassStructureHandler(this);
-      
-      printOntologyMetrics();
    }
 
    /**
@@ -327,43 +317,5 @@ public abstract class AbstractOwlOntology implements IOntology
    protected static IRI toIri(URI uri)
    {
       return IRI.create(uri);
-   }
-
-   /**
-    * Returns DL expressivity contained in this OWL ontology.
-    */
-   public String getDlExpresivity()
-   {
-      String expressivity = "N/A"; //$NON-NLS-1$
-      try {
-         expressivity = printExpressivity(new DLExpressivityChecker(mOwlOntology.getImportsClosure()).getConstructs());
-      }
-      catch (OWLException e) {
-         LOG.error("Error while determining DL expressivity."); //$NON-NLS-1$
-         LOG.error("Detailed cause: {}", e.getMessage()); //$NON-NLS-1$
-      }
-      return expressivity;
-   }
-
-   private static String printExpressivity(List<Construct> constructs)
-   {
-      String toReturn = ""; //$NON-NLS-1$
-      for (Construct c : constructs) {
-         toReturn += c.toString();
-      }
-      return toReturn;
-   }
-
-   private void printOntologyMetrics()
-   {
-      if (!mOwlOntology.isEmpty()) {
-         LOG.debug("Parsing OWL ontology (found: {} axioms)", getAxiomCount()); //$NON-NLS-1$
-         LOG.debug("* Logical axiom count = {}", mOwlOntology.getLogicalAxiomCount()); //$NON-NLS-1$
-         LOG.debug("* Class axiom count = {}", mOwlOntology.getClassesInSignature().size()); //$NON-NLS-1$
-         LOG.debug("* Object property axiom count = {}", mOwlOntology.getObjectPropertiesInSignature().size()); //$NON-NLS-1$
-         LOG.debug("* Data property axiom count = {}", mOwlOntology.getDataPropertiesInSignature().size()); //$NON-NLS-1$
-         LOG.debug("* Individual count = {}", mOwlOntology.getIndividualsInSignature().size()); //$NON-NLS-1$
-         LOG.debug("* DL Expressivity = {}", getDlExpresivity()); //$NON-NLS-1$
-      }
    }
 }

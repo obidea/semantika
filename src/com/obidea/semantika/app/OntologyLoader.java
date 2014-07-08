@@ -18,6 +18,7 @@ package com.obidea.semantika.app;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 import org.coode.owlapi.functionalparser.OWLFunctionalSyntaxParserFactory;
 import org.coode.owlapi.functionalrenderer.OWLFunctionalSyntaxOntologyStorer;
@@ -25,10 +26,14 @@ import org.coode.owlapi.owlxml.renderer.OWLXMLOntologyStorer;
 import org.coode.owlapi.owlxmlparser.OWLXMLParserFactory;
 import org.semanticweb.owlapi.io.OWLParserFactoryRegistry;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.util.DLExpressivityChecker;
+import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
 import org.semanticweb.owlapi.util.NonMappingOntologyIRIMapper;
+import org.slf4j.Logger;
 
 import uk.ac.manchester.cs.owl.owlapi.EmptyInMemOWLOntologyFactory;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
@@ -38,10 +43,13 @@ import uk.ac.manchester.cs.owl.owlapi.ParsableOWLOntologyFactory;
 import com.obidea.semantika.ontology.IOntology;
 import com.obidea.semantika.ontology.OwlOntology;
 import com.obidea.semantika.ontology.exception.OntologyCreationException;
+import com.obidea.semantika.util.LogUtils;
 
 public class OntologyLoader 
 {
    private OWLOntologyManager mOwlManager;
+
+   private static final Logger LOG = LogUtils.createLogger("semantika.application"); //$NON-NLS-1$
 
    static {
       OWLParserFactoryRegistry registry = OWLParserFactoryRegistry.getInstance();
@@ -79,7 +87,7 @@ public class OntologyLoader
    {
       try {
          OWLOntology owlOntology = mOwlManager.loadOntologyFromOntologyDocument(file);
-         return new OwlOntology(owlOntology);
+         return createOwlOntology(owlOntology);
       }
       catch (OWLOntologyCreationException e) {
          throw new OntologyCreationException("Failed load ontology from file.", e); //$NON-NLS-1$
@@ -90,7 +98,7 @@ public class OntologyLoader
    {
       try {
          OWLOntology owlOntology = mOwlManager.loadOntologyFromOntologyDocument(inputStream);
-         return new OwlOntology(owlOntology);
+         return createOwlOntology(owlOntology);
       }
       catch (OWLOntologyCreationException e) {
          throw new OntologyCreationException("Failed load ontology from input stream.", e); //$NON-NLS-1$
@@ -102,10 +110,54 @@ public class OntologyLoader
       try {
          IRI documentIri = IRI.create(documentUri);
          OWLOntology owlOntology = mOwlManager.loadOntologyFromOntologyDocument(documentIri);
-         return new OwlOntology(owlOntology);
+         return createOwlOntology(owlOntology);
       }
       catch (OWLOntologyCreationException e) {
          throw new OntologyCreationException("Failed load ontology from URI.", e); //$NON-NLS-1$
       }
+   }
+
+   private OwlOntology createOwlOntology(OWLOntology ontology)
+   {
+      printOntologyMetrics(ontology);
+      return new OwlOntology(ontology);
+   }
+
+   private void printOntologyMetrics(OWLOntology ontology)
+   {
+      if (!ontology.isEmpty()) {
+         LOG.debug("Parsing OWL ontology (found: {} axioms)", ontology.getAxiomCount()); //$NON-NLS-1$
+         LOG.debug("* Logical axiom count = {}", ontology.getLogicalAxiomCount()); //$NON-NLS-1$
+         LOG.debug("* Class axiom count = {}", ontology.getClassesInSignature().size()); //$NON-NLS-1$
+         LOG.debug("* Object property axiom count = {}", ontology.getObjectPropertiesInSignature().size()); //$NON-NLS-1$
+         LOG.debug("* Data property axiom count = {}", ontology.getDataPropertiesInSignature().size()); //$NON-NLS-1$
+         LOG.debug("* Individual count = {}", ontology.getIndividualsInSignature().size()); //$NON-NLS-1$
+         LOG.debug("* DL Expressivity = {}", getDlExpresivity(ontology)); //$NON-NLS-1$
+      }
+   }
+
+   /**
+    * Returns DL expressivity contained in this OWL ontology.
+    */
+   private String getDlExpresivity(OWLOntology ontology)
+   {
+      String expressivity = "N/A"; //$NON-NLS-1$
+      try {
+         expressivity = printExpressivity(new DLExpressivityChecker(ontology.getImportsClosure()).getConstructs());
+      }
+      catch (OWLException e) {
+         LOG.error("Error while determining DL expressivity."); //$NON-NLS-1$
+         LOG.error("Detailed cause: {}", e.getMessage()); //$NON-NLS-1$
+      }
+      return expressivity;
+   }
+
+   private static String printExpressivity(List<Construct> constructs)
+   {
+      String toReturn = ""; //$NON-NLS-1$
+      for (Construct c : constructs) {
+         toReturn += c.toString();
+      }
+      return toReturn;
    }
 }
