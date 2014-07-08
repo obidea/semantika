@@ -99,6 +99,10 @@ public class DefaultSettingFactory extends SettingFactory
       IPrefixManager prefixManager = new DefaultPrefixManager();
       
       MappingLoader loader = buildMappingLoader(settings);
+      /*
+       * feature/multiple-mappings: Support multiple mapping entries in the configuration file.
+       * The iteration will check and parse each mapping resource and collect the results.
+       */
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
       String[] isStrict = properties.getStringArray(Environment.STRICT_PARSING);
       for (int i = 0; i < resource.length; i++) {
