@@ -27,14 +27,13 @@ import com.obidea.semantika.util.XmlUtils;
 
 public class DefaultPrefixManager implements IPrefixManager
 {
-   private Map<String, String> mPrefixMap;
+   private Map<String, String> mPrefixMap = new HashMap<String, String>();
 
    /**
     * Creates an empty prefix manager without the default namespace.
     */
    public DefaultPrefixManager()
    {
-      mPrefixMap = new HashMap<String, String>();
       setupDefaultPrefixes();
    }
 
@@ -47,7 +46,6 @@ public class DefaultPrefixManager implements IPrefixManager
     */
    public DefaultPrefixManager(String defaultNamespace)
    {
-      mPrefixMap = new HashMap<String, String>();
       if (!StringUtils.isEmpty(defaultNamespace)) {
          setDefaultPrefix(defaultNamespace);
       }
@@ -76,7 +74,6 @@ public class DefaultPrefixManager implements IPrefixManager
    @Override
    public void copy(IPrefixManager otherManager)
    {
-      mPrefixMap = new HashMap<String, String>();
       for (String prefixName : otherManager.getPrefixNames()) {
          String namespace = otherManager.getNamespace(prefixName);
          if (!StringUtils.isEmpty(namespace)) {
