@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.mapping.parser;
+package com.obidea.semantika.mapping;
 
-import com.obidea.semantika.mapping.IMetaModel;
+import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.ontology.IOntology;
 
-public interface IMappingParserFactory
+public interface IMetaModel
 {
    /**
-    * Creates a parser.
-    * 
-    * @return The parser created by this parser factory.
+    * Returns a database metadata as the data model.
     */
-   IMappingParser createParser(IMetaModel metaModel);
+   IDatabaseMetadata getDatabaseMetadata();
+
+   /**
+    * Returns an ontology as the domain model.
+    */
+   IOntology getOntology();
 }

@@ -27,7 +27,7 @@ import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;

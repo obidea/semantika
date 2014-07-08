@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.mapping.parser;
 
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMetaModel;
 
 public abstract class AbstractMappingParser implements IMappingParser
 {

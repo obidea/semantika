@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.parser.IMappingParser;
 import com.obidea.semantika.mapping.parser.IMappingParserFactory;
 

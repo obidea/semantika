@@ -20,8 +20,8 @@ import java.util.List;
 import io.github.johardi.r2rmlparser.document.PredicateObjectMap;
 import io.github.johardi.r2rmlparser.document.TriplesMap;
 
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.IMappingSet;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 

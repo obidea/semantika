@@ -37,7 +37,7 @@ import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.UriReference;
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;

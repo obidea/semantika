@@ -16,11 +16,9 @@
 package com.obidea.semantika.mapping;
 
 import com.obidea.semantika.app.IMappingLoader;
-import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
-import com.obidea.semantika.ontology.IOntology;
 
 public interface IMappingFactory
 {
@@ -60,17 +58,4 @@ public interface IMappingFactory
     *         specified input source.
     */
    boolean canLoad(IDocumentSource inputDocument);
-
-   public interface IMetaModel
-   {
-      /**
-       * Returns a database metadata as the data model.
-       */
-      IDatabaseMetadata getDatabaseMetadata();
-
-      /**
-       * Returns an ontology as the domain model.
-       */
-      IOntology getOntology();
-   }
 }

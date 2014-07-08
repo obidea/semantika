@@ -35,8 +35,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
 import com.obidea.semantika.mapping.IMappingSet;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.MappingParserException;

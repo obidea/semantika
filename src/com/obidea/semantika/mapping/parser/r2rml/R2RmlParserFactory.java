@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.mapping.parser.r2rml;
 
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.parser.IMappingParser;
 import com.obidea.semantika.mapping.parser.IMappingParserFactory;
 
