@@ -45,7 +45,7 @@ import com.obidea.semantika.ontology.OwlOntology;
 import com.obidea.semantika.ontology.exception.OntologyCreationException;
 import com.obidea.semantika.util.LogUtils;
 
-public class OntologyLoader 
+public class OntologyLoader
 {
    private OWLOntologyManager mOwlManager;
 
@@ -126,7 +126,7 @@ public class OntologyLoader
    private void printOntologyMetrics(OWLOntology ontology)
    {
       if (!ontology.isEmpty()) {
-         LOG.debug("Parsing OWL ontology (found: {} axioms)", ontology.getAxiomCount()); //$NON-NLS-1$
+         LOG.debug("* Axiom count = {}", ontology.getAxiomCount()); //$NON-NLS-1$
          LOG.debug("* Logical axiom count = {}", ontology.getLogicalAxiomCount()); //$NON-NLS-1$
          LOG.debug("* Class axiom count = {}", ontology.getClassesInSignature().size()); //$NON-NLS-1$
          LOG.debug("* Object property axiom count = {}", ontology.getObjectPropertiesInSignature().size()); //$NON-NLS-1$
