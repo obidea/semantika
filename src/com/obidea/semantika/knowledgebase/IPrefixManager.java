@@ -22,13 +22,12 @@ import java.util.Set;
 public interface IPrefixManager
 {
    /**
-    * Gets all pairs of prefix/namespace from other manager and copies them to
-    * this prefix manager.
+    * Copies all pairs of prefix-namespace to this prefix manager.
     *
-    * @param otherPrefixManager
-    *          the other prefix manager.
+    * @param mapper
+    *          the prefix mapper.
     */
-   void copy(IPrefixManager otherManager);
+   void copy(Map<String, String> mapper);
 
    /**
     * Gets the default namespace. The default namespace is denoted by the prefix

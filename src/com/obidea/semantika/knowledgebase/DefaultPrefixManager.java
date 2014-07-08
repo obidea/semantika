@@ -60,7 +60,12 @@ public class DefaultPrefixManager implements IPrefixManager
     */
    public DefaultPrefixManager(IPrefixManager other)
    {
-      copy(other);
+      for (String prefixName : other.getPrefixNames()) {
+         String namespace = other.getNamespace(prefixName);
+         if (!StringUtils.isEmpty(namespace)) {
+            setPrefix(prefixName, namespace);
+         }
+      }
    }
 
    private void setupDefaultPrefixes()
@@ -72,13 +77,10 @@ public class DefaultPrefixManager implements IPrefixManager
    }
 
    @Override
-   public void copy(IPrefixManager otherManager)
+   public void copy(Map<String, String> mapper)
    {
-      for (String prefixName : otherManager.getPrefixNames()) {
-         String namespace = otherManager.getNamespace(prefixName);
-         if (!StringUtils.isEmpty(namespace)) {
-            setPrefix(prefixName, namespace);
-         }
+      for (String prefix : mapper.keySet()) {
+         setPrefix(prefix, mapper.get(prefix));
       }
    }
 

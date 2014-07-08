@@ -24,7 +24,7 @@ import java.util.Set;
 public class EmptyPrefixManager implements IPrefixManager
 {
    @Override
-   public void copy(IPrefixManager otherManager)
+   public void copy(Map<String, String> mapper)
    {
       // NO-OP
    }

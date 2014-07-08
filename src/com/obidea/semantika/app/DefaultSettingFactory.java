@@ -166,6 +166,6 @@ public class DefaultSettingFactory extends SettingFactory
 
    private static void collectPrefixEntries(IPrefixManager parent, IPrefixManager child)
    {
-      parent.copy(child);
+      parent.copy(child.getPrefixMapper());
    }
 }
