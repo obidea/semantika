@@ -18,7 +18,6 @@ package com.obidea.semantika.app;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URI;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -81,8 +80,8 @@ public class DefaultSettingFactory extends SettingFactory
          settings.setOntology(ontology);
       }
       else {
-         URL url = ConfigHelper.locateResource(resource);
-         IOntology ontology = loader.loadOntologyFromDocument(url);
+         InputStream in = ConfigHelper.getResourceStream(resource);
+         IOntology ontology = loader.loadOntologyFromDocument(in);
          settings.setOntology(ontology);
       }
    }
