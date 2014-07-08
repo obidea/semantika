@@ -73,8 +73,8 @@ public class DefaultSettingFactory extends SettingFactory
    @Override
    /* package */void loadOntologyFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
+      OntologyLoader loader = buildOntologyLoader(settings);
       String resource = properties.getString(Environment.ONTOLOGY_SOURCE);
-      OntologyLoader loader = new OntologyLoader();
       if (StringUtils.isEmpty(resource)) {
          LOG.debug("Ontology source is not specified. An empty ontology is created."); //$NON-NLS-1$
          IOntology ontology = loader.createEmptyOntology();
@@ -87,13 +87,18 @@ public class DefaultSettingFactory extends SettingFactory
       }
    }
 
+   private static OntologyLoader buildOntologyLoader(Settings settings)
+   {
+      return new OntologyLoader();
+   }
+
    @Override
    /* package */void loadMappingFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
       IMappingSet mappingSet = new MappingSet();
       IPrefixManager prefixManager = new DefaultPrefixManager();
       
-      MappingLoader loader = buildLoader(settings);
+      MappingLoader loader = buildMappingLoader(settings);
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
       String[] isStrict = properties.getStringArray(Environment.STRICT_PARSING);
       for (int i = 0; i < resource.length; i++) {
@@ -108,16 +113,16 @@ public class DefaultSettingFactory extends SettingFactory
          MappingParserConfiguration configuration = new MappingParserConfiguration();
          configuration.setStrictParsing(Boolean.parseBoolean(isStrict[i]));
          /*
-          * Collect the return mapping set and prefixes to a master storage.
+          * Gather the return mapping set and prefixes to the parent collector.
           */
-         mappingSet.copy(loader.loadMappingFromDocument(documentSource, configuration));
-         prefixManager.copy(loader.getPrefixManager());
+         collectMappingEntries(mappingSet, loader.loadMappingFromDocument(documentSource, configuration));
+         collectPrefixEntries(prefixManager, loader.getPrefixManager());
       }
       settings.setMappingSet(mappingSet);
       settings.setPrefixManager(prefixManager);
    }
 
-   private static MappingLoader buildLoader(Settings settings)
+   private static MappingLoader buildMappingLoader(Settings settings)
    {
       return MappingLoaderFactory.createMappingLoader(settings.getDatabase(), settings.getOntology());
    }
@@ -155,5 +160,15 @@ public class DefaultSettingFactory extends SettingFactory
       IDialect dialect = DialectFactory.buildDialect(dialectName, conn);
       LOG.debug("* dialect = " + dialect.getClass().toString()); //$NON-NLS-1$
       return dialect;
+   }
+
+   private static void collectMappingEntries(IMappingSet parent, IMappingSet child)
+   {
+      parent.copy(child);
+   }
+
+   private static void collectPrefixEntries(IPrefixManager parent, IPrefixManager child)
+   {
+      parent.copy(child);
    }
 }
