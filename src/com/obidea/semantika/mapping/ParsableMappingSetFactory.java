@@ -27,7 +27,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 
-import com.obidea.semantika.app.IMappingLoader;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
@@ -72,7 +71,7 @@ public class ParsableMappingSetFactory extends AbstractMappingFactory
    }
 
    @Override
-   public IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoader mediator,
+   public IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoadHandler mediator,
          MappingParserConfiguration configuration) throws MappingCreationException
    {
       Map<IMappingParser, MappingParserException> exceptions = new LinkedHashMap<IMappingParser, MappingParserException>();

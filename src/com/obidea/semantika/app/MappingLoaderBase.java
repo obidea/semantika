@@ -17,39 +17,19 @@ package com.obidea.semantika.app;
 
 import org.slf4j.Logger;
 
-import com.obidea.semantika.database.IDatabaseMetadata;
+import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
-import com.obidea.semantika.mapping.IMappingFactory.IMetaModel;
+import com.obidea.semantika.mapping.IMappingFactory.IMappingLoadHandler;
 import com.obidea.semantika.mapping.IMappingSet;
-import com.obidea.semantika.ontology.IOntology;
+import com.obidea.semantika.mapping.exception.MappingCreationException;
+import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 import com.obidea.semantika.util.LogUtils;
 
-public abstract class MappingLoaderBase implements IMetaModel, IMappingLoader
+public abstract class MappingLoaderBase implements IMappingLoadHandler
 {
-   private IDatabaseMetadata mDatabaseMetadata;
-   private IOntology mOntology;
-
    private IPrefixManager mPrefixManager;
 
    private static final Logger LOG = LogUtils.createLogger("semantika.application"); //$NON-NLS-1$
-
-   public MappingLoaderBase(IDatabaseMetadata databaseMetadata, IOntology ontology)
-   {
-      mDatabaseMetadata = databaseMetadata;
-      mOntology = ontology;
-   }
-
-   @Override
-   public IDatabaseMetadata getDatabaseMetadata()
-   {
-      return mDatabaseMetadata;
-   }
-
-   @Override
-   public IOntology getOntology()
-   {
-      return mOntology;
-   }
 
    @Override
    public void mappingLoaded(IMappingSet mappingSet, IPrefixManager prefixManager)
@@ -64,8 +44,14 @@ public abstract class MappingLoaderBase implements IMetaModel, IMappingLoader
       }
    }
 
+   /**
+    * Gets the prefix manager associated to the recent mapping loading.
+    */
    public IPrefixManager getPrefixManager()
    {
       return mPrefixManager;
    }
+
+   protected abstract IMappingSet loadMapping(IDocumentSource document, MappingParserConfiguration configuration)
+         throws MappingCreationException;
 }

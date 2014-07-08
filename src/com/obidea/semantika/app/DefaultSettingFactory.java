@@ -17,7 +17,6 @@ package com.obidea.semantika.app;
 
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
-import java.net.URI;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -31,8 +30,6 @@ import com.obidea.semantika.database.connection.IConnectionProvider;
 import com.obidea.semantika.database.sql.dialect.DialectFactory;
 import com.obidea.semantika.database.sql.dialect.IDialect;
 import com.obidea.semantika.exception.SemantikaException;
-import com.obidea.semantika.io.IDocumentSource;
-import com.obidea.semantika.io.StreamDocumentSource;
 import com.obidea.semantika.knowledgebase.DefaultPrefixManager;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.IMappingSet;
@@ -105,20 +102,9 @@ public class DefaultSettingFactory extends SettingFactory
        */
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
       for (int i = 0; i < resource.length; i++) {
-         /*
-          * Construct the parsing configuration for each mapping resource
-          */
-         MappingParserConfiguration configuration = createParserConfiguration(properties, i);
-         /*
-          * Start parsing the mapping resource.
-          */
          LOG.debug("Parsing mapping at {}", resource[i]); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource[i]);
-         IDocumentSource documentSource = new StreamDocumentSource(in, URI.create(resource[i]));
-         /*
-          * Gather the return mapping set and prefixes to the parent collector.
-          */
-         collectMappingEntries(mappingSet, loader.loadMappingFromDocument(documentSource, configuration));
+         collectMappingEntries(mappingSet, loader.loadMappingFromDocument(in, createParserConfiguration(properties, i)));
          collectPrefixEntries(prefixManager, loader.getPrefixManager());
       }
       settings.setMappingSet(mappingSet);
@@ -127,7 +113,8 @@ public class DefaultSettingFactory extends SettingFactory
 
    private static MappingLoader buildMappingLoader(Settings settings)
    {
-      return MappingLoaderFactory.createMappingLoader(settings.getDatabase(), settings.getOntology());
+      MetaModel mm = new MetaModel(settings.getDatabase().getMetadata(), settings.getOntology());
+      return MappingLoaderFactory.createMappingLoader(mm);
    }
 
    private static MappingParserConfiguration createParserConfiguration(PropertiesConfiguration properties, int order)

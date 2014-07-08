@@ -22,31 +22,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.io.FileDocumentSource;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.io.StreamDocumentSource;
 import com.obidea.semantika.io.UriDocumentSource;
 import com.obidea.semantika.mapping.IMappingFactory;
 import com.obidea.semantika.mapping.IMappingSet;
+import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.exception.MappingFactoryNotFoundException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
-import com.obidea.semantika.ontology.IOntology;
 
 public class MappingLoader extends MappingLoaderBase
 {
+   private IMetaModel mMetaModel;
+
    private List<IMappingFactory> mMappingSetFactories = new ArrayList<IMappingFactory>();
 
-   public MappingLoader(IDatabaseMetadata databaseMetadata, IOntology ontology)
+   public MappingLoader(IMetaModel metaModel)
    {
-      super(databaseMetadata, ontology);
+      mMetaModel = metaModel;
    }
 
    public void addMappingSetFactory(IMappingFactory factory)
    {
       mMappingSetFactories.add(0, factory);
-      factory.setMetaModel(this);
+      factory.setMetaModel(mMetaModel);
    }
 
    public List<IMappingFactory> getMappingSetFactories()
@@ -69,18 +70,31 @@ public class MappingLoader extends MappingLoaderBase
       return loadMappingFromDocument(new UriDocumentSource(documentUri));
    }
 
-   public IMappingSet loadMappingFromDocument(IDocumentSource inputDocument) throws MappingCreationException
+   private IMappingSet loadMappingFromDocument(IDocumentSource inputDocument) throws MappingCreationException
    {
       return loadMapping(inputDocument, new MappingParserConfiguration());
    }
 
-   public IMappingSet loadMappingFromDocument(IDocumentSource inputDocument, MappingParserConfiguration configuration)
+   public IMappingSet loadMappingFromDocument(File file, MappingParserConfiguration configuration)
          throws MappingCreationException
    {
-      return loadMapping(inputDocument, configuration);
+      return loadMapping(new FileDocumentSource(file), configuration);
    }
 
-   public IMappingSet loadMapping(IDocumentSource inputDocument, MappingParserConfiguration configuration)
+   public IMappingSet loadMappingFromDocument(InputStream inputStream, MappingParserConfiguration configuration)
+         throws MappingCreationException
+   {
+      return loadMapping(new StreamDocumentSource(inputStream), configuration);
+   }
+
+   public IMappingSet loadMappingFromDocument(URI documentUri, MappingParserConfiguration configuration)
+         throws MappingCreationException
+   {
+      return loadMapping(new UriDocumentSource(documentUri), configuration);
+   }
+
+   @Override
+   protected IMappingSet loadMapping(IDocumentSource inputDocument, MappingParserConfiguration configuration)
          throws MappingCreationException
    {
       for (IMappingFactory factory : mMappingSetFactories) {

@@ -15,8 +15,8 @@
  */
 package com.obidea.semantika.mapping;
 
-import com.obidea.semantika.app.IMappingLoader;
 import com.obidea.semantika.io.IDocumentSource;
+import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 
@@ -45,7 +45,7 @@ public interface IMappingFactory
     * @throws MappingCreationException
     *            if the mapping set could not be created
     */
-   IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoader mediator,
+   IMappingSet loadMappingSet(IDocumentSource inputDocument, IMappingLoadHandler mediator,
          MappingParserConfiguration configuration) throws MappingCreationException;
 
    /**
@@ -58,4 +58,9 @@ public interface IMappingFactory
     *         specified input source.
     */
    boolean canLoad(IDocumentSource inputDocument);
+
+   public interface IMappingLoadHandler
+   {
+      void mappingLoaded(IMappingSet mappingSet, IPrefixManager prefixManager);
+   }
 }
