@@ -76,9 +76,9 @@ public class DefaultSettingFactory extends SettingFactory
       String resource = properties.getString(Environment.ONTOLOGY_SOURCE);
       OntologyLoader loader = new OntologyLoader();
       if (StringUtils.isEmpty(resource)) {
+         LOG.debug("Ontology source is not specified. An empty ontology is created."); //$NON-NLS-1$
          IOntology ontology = loader.createEmptyOntology();
          settings.setOntology(ontology);
-         LOG.debug("Ontology source is not specified. An empty ontology is created."); //$NON-NLS-1$
       }
       else {
          URL url = ConfigHelper.locateResource(resource);
