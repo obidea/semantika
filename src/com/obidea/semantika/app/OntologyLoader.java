@@ -16,8 +16,10 @@
 package com.obidea.semantika.app;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.List;
 
 import org.coode.owlapi.functionalparser.OWLFunctionalSyntaxParserFactory;
@@ -94,14 +96,18 @@ public class OntologyLoader
       }
    }
 
-   public IOntology loadOntologyFromDocument(InputStream inputStream) throws OntologyCreationException
+   public IOntology loadOntologyFromDocument(URL url) throws OntologyCreationException
    {
       try {
-         OWLOntology owlOntology = mOwlManager.loadOntologyFromOntologyDocument(inputStream);
+         InputStream in = url.openStream();
+         OWLOntology owlOntology = mOwlManager.loadOntologyFromOntologyDocument(in);
          return createOwlOntology(owlOntology);
       }
+      catch (IOException e) {
+         throw new OntologyCreationException("Failed load ontology from URL resource.", e); //$NON-NLS-1$
+      }
       catch (OWLOntologyCreationException e) {
-         throw new OntologyCreationException("Failed load ontology from input stream.", e); //$NON-NLS-1$
+         throw new OntologyCreationException("Failed load ontology from URL resource.", e); //$NON-NLS-1$
       }
    }
 
@@ -113,7 +119,7 @@ public class OntologyLoader
          return createOwlOntology(owlOntology);
       }
       catch (OWLOntologyCreationException e) {
-         throw new OntologyCreationException("Failed load ontology from URI.", e); //$NON-NLS-1$
+         throw new OntologyCreationException("Failed load ontology from URI resource.", e); //$NON-NLS-1$
       }
    }
 

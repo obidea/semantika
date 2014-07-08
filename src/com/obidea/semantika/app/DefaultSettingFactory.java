@@ -18,6 +18,7 @@ package com.obidea.semantika.app;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.URI;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -80,8 +81,8 @@ public class DefaultSettingFactory extends SettingFactory
          LOG.debug("Ontology source is not specified. An empty ontology is created."); //$NON-NLS-1$
       }
       else {
-         InputStream in = ConfigHelper.getResourceStream(resource);
-         IOntology ontology = loader.loadOntologyFromDocument(in);
+         URL url = ConfigHelper.locateResource(resource);
+         IOntology ontology = loader.loadOntologyFromDocument(url);
          settings.setOntology(ontology);
       }
    }
