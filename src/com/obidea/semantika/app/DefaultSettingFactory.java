@@ -77,7 +77,7 @@ public class DefaultSettingFactory extends SettingFactory
          settings.setOntology(ontology);
       }
       else {
-         LOG.debug("Parsing ontology at {}", resource); //$NON-NLS-1$
+         LOG.debug("Parsing ontology {}", resource); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource);
          IOntology ontology = loader.loadOntologyFromDocument(in);
          settings.setOntology(ontology);
@@ -102,7 +102,7 @@ public class DefaultSettingFactory extends SettingFactory
        */
       String[] resource = properties.getStringArray(Environment.MAPPING_SOURCE);
       for (int i = 0; i < resource.length; i++) {
-         LOG.debug("Parsing mapping at {}", resource[i]); //$NON-NLS-1$
+         LOG.debug("Parsing mapping {}", resource[i]); //$NON-NLS-1$
          InputStream in = ConfigHelper.getResourceStream(resource[i]);
          collectMappingEntries(mappingSet, loader.loadMappingFromDocument(in, createParserConfiguration(properties, i)));
          collectPrefixEntries(prefixManager, loader.getPrefixManager());
