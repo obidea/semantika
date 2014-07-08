@@ -28,7 +28,7 @@ ApplicationManager manager = new ApplicationFactory()
 
 ### SPARQL Query Answer
 
-The `com.obidea.semantika.app.ApplicationManager` then creates `com.obidea.semantika.queryanswer.SparqlQueryEngine` which is a thread-safe object that is initiated once to serve SPARQL query answering.
+The `ApplicationManager` then creates `SparqlQueryEngine` which is a thread-safe object that is initiated once to serve SPARQL query answering.
 ```java
 SparqlQueryEngine queryEngine = manager.createQueryEngine(); 
 queryEngine.start();
@@ -41,8 +41,6 @@ queryEngine.stop();
 In addition, the query engine allows you to manage result fetching for efficient data retrieval. The example below shows you how to create a simple paging where each page contains 100 items.
 
 ```java
-SparqlQueryEngine queryEngine = manager.createQueryEngine();
-queryEngine.start();
 int offset = 0;
 int limit = 100;
 int maxPage = 10;
@@ -56,12 +54,11 @@ while (pageNum <= maxPage) {
    offset += limit;
    pageNum++;
 }
-queryEngine.stop();
 ```
 
 ### RDB2RDF Export
 
-The `com.obidea.semantika.app.ApplicationManager` can also create `com.obidea.semantika.materializer.RdfMaterializerEngine` which is a thread-safe object that is initiated once to serve RDB2RDF data exporting.
+The `ApplicationManager` can also create `RdfMaterializerEngine` which is a thread-safe object that is initiated once to serve RDB2RDF data exporting.
 
 ```java
 RdfMaterializerEngine exporter = manager.createMaterializerEngine().useNTriples();
