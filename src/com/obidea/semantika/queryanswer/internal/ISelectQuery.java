@@ -43,7 +43,7 @@ public interface ISelectQuery
 
    IQueryResult evaluate() throws SemantikaException;
 
-   List<Object> list() throws SemantikaException;
+   List<? extends Object> list() throws SemantikaException;
 
    void evaluate(IQueryResultHandler handler) throws SemantikaException;
 }
