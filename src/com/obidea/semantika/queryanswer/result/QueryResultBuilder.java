@@ -21,7 +21,7 @@ import java.util.List;
 public class QueryResultBuilder implements IQueryResultHandler
 {
    private List<String> mSelectNames;
-   private List<IValueArray> mValueLists = new ArrayList<IValueArray>();
+   private List<IValueArray> mValueArrays = new ArrayList<IValueArray>();
 
    @Override
    public void start(List<String> selectNames)
@@ -30,9 +30,9 @@ public class QueryResultBuilder implements IQueryResultHandler
    }
 
    @Override
-   public void handleResultFragment(IValueArray valueList)
+   public void handleResultFragment(IValueArray valueArray)
    {
-      mValueLists.add(valueList);
+      mValueArrays.add(valueArray);
    }
 
    @Override
@@ -43,6 +43,6 @@ public class QueryResultBuilder implements IQueryResultHandler
 
    public QueryResult getQueryResult()
    {
-      return new QueryResult(mSelectNames, mValueLists);
+      return new QueryResult(mSelectNames, mValueArrays);
    }
 }

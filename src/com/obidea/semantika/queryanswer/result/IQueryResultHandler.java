@@ -21,7 +21,7 @@ public interface IQueryResultHandler
 {
    void start(List<String> selectNames) throws QueryResultHandlerException;
    
-   void handleResultFragment(IValueArray valueList) throws QueryResultHandlerException;
+   void handleResultFragment(IValueArray valueArray) throws QueryResultHandlerException;
 
    void stop() throws QueryResultHandlerException;
 }

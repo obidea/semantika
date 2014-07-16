@@ -20,19 +20,19 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class ValueList implements IValueArray
+public class ValueArray implements IValueArray
 {
    private static final long serialVersionUID = 629451L;
 
    private List<String> mSelectNames;
    private List<IValue> mValues;
 
-   public ValueList(List<String> selectNames, IValue... values)
+   public ValueArray(List<String> selectNames, IValue... values)
    {
       this(selectNames, Arrays.asList(values));
    }
 
-   public ValueList(List<String> selectNames, List<IValue> values)
+   public ValueArray(List<String> selectNames, List<IValue> values)
    {
       assert selectNames.size() == values.size() : "Number of select names and values are not equal"; //$NON-NLS-1$
       mSelectNames = selectNames;
@@ -101,7 +101,7 @@ public class ValueList implements IValueArray
       if (getClass() != obj.getClass()) {
          return false;
       }
-      final ValueList other = (ValueList) obj;
+      final ValueArray other = (ValueArray) obj;
       return mSelectNames.equals(other.mSelectNames) && mValues == other.mValues;
    }
 

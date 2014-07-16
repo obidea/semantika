@@ -34,7 +34,7 @@ import com.obidea.semantika.queryanswer.result.Literal;
 import com.obidea.semantika.queryanswer.result.QueryResult;
 import com.obidea.semantika.queryanswer.result.QueryResultBuilder;
 import com.obidea.semantika.queryanswer.result.Uri;
-import com.obidea.semantika.queryanswer.result.ValueList;
+import com.obidea.semantika.queryanswer.result.ValueArray;
 import com.obidea.semantika.util.TemplateStringHelper;
 
 public abstract class QueryResultLoader
@@ -135,17 +135,17 @@ public abstract class QueryResultLoader
       QueryResultBuilder builder = new QueryResultBuilder();
       builder.start(metadata.getSelectNames());
       while (rs.next()) {
-         ValueList valueList = getValueListFromResultSet(rs, metadata);
-         builder.handleResultFragment(valueList);
+         ValueArray valueArray = getValueArrayFromResultSet(rs, metadata);
+         builder.handleResultFragment(valueArray);
       }
       return builder.getQueryResult();
    }
 
-   private static ValueList getValueListFromResultSet(ResultSet rs, QueryMetadata metadata) throws SQLException
+   private static ValueArray getValueArrayFromResultSet(ResultSet rs, QueryMetadata metadata) throws SQLException
    {
       List<String> selectLabels = new ArrayList<String>();
       List<IValue> values = getSelectValues(rs, metadata, selectLabels);
-      return new ValueList(selectLabels, values);
+      return new ValueArray(selectLabels, values);
    }
 
    private static List<IValue> getSelectValues(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException

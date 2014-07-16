@@ -159,7 +159,7 @@ public class SelectQuery implements ISelectQuery
          IQueryResult result = evaluate();
          handler.start(result.getSelectNames());
          while (result.next()) {
-            handler.handleResultFragment(result.getValueList());
+            handler.handleResultFragment(result.getValueArray());
          }
          handler.stop();
       }

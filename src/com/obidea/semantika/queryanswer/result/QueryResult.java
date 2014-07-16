@@ -24,19 +24,19 @@ public class QueryResult implements IQueryResult
    private static final long serialVersionUID = 629451L;
 
    private List<String> mSelectNames;
-   private Iterator<? extends IValueArray> mValueListsIter;
+   private Iterator<? extends IValueArray> mValueArraysIter;
 
-   private IValueArray mValueList;
+   private IValueArray mValueArray;
 
-   public QueryResult(List<String> selectNames, Iterable<? extends IValueArray> valueLists)
+   public QueryResult(List<String> selectNames, Iterable<? extends IValueArray> valueArrays)
    {
-      this(selectNames, valueLists.iterator());
+      this(selectNames, valueArrays.iterator());
    }
    
-   public QueryResult(List<String> selectNames, Iterator<? extends IValueArray> valueListsIter)
+   public QueryResult(List<String> selectNames, Iterator<? extends IValueArray> valueArraysIter)
    {
       mSelectNames = selectNames;
-      mValueListsIter = valueListsIter;
+      mValueArraysIter = valueArraysIter;
    }
 
    @Override
@@ -46,17 +46,17 @@ public class QueryResult implements IQueryResult
    }
 
    @Override
-   public IValueArray getValueList()
+   public IValueArray getValueArray()
    {
-      return mValueList;
+      return mValueArray;
    }
 
    @Override
    public boolean next()
    {
-      boolean hasNext = mValueListsIter.hasNext();
+      boolean hasNext = mValueArraysIter.hasNext();
       if (hasNext) {
-         mValueList = mValueListsIter.next();
+         mValueArray = mValueArraysIter.next();
       }
       return hasNext;
    }

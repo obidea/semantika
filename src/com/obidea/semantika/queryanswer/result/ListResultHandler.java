@@ -29,16 +29,16 @@ public class ListResultHandler implements IQueryResultHandler
    }
 
    @Override
-   public void handleResultFragment(IValueArray valueList)
+   public void handleResultFragment(IValueArray valueArray)
    {
-      mObjectList.add(getRow(valueList, valueList.size()));
+      mObjectList.add(row(valueArray, valueArray.size()));
    }
 
-   private Object[] getRow(IValueArray valueList, int cols)
+   private static Object[] row(IValueArray valueArray, int cols)
    {
       int i = 0;
       final Object[] rowResults = new Object[cols];
-      for (IValue value : valueList) {
+      for (IValue value : valueArray) {
          rowResults[i++] = value.getObject();
       }
       return rowResults;
