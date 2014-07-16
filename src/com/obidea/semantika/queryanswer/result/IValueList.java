@@ -22,6 +22,8 @@ public interface IValueList extends Serializable
 {
    List<String> getSelectNames();
 
+   IValue get(int position);
+
    IValue get(String selectName);
 
    boolean contains(String selectName);

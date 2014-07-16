@@ -45,6 +45,12 @@ public class ValueList implements IValueList
    }
 
    @Override
+   public IValue get(int position)
+   {
+      return mValues.get(position);
+   }
+
+   @Override
    public IValue get(String selectName)
    {
       int idx = mSelectNames.indexOf(selectName);
