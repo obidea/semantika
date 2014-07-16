@@ -31,17 +31,15 @@ public class ListResultHandler implements IQueryResultHandler
    @Override
    public void handleResultFragment(IValueList valueList)
    {
-      Object[] row = getRow(valueList, valueList.size());
-      mObjectList.add(row);
+      mObjectList.add(getRow(valueList, valueList.size()));
    }
 
    private Object[] getRow(IValueList valueList, int cols)
    {
+      int i = 0;
       final Object[] rowResults = new Object[cols];
-      List<String> selectNames = valueList.getSelectNames();
-      for (int i = 0; i < cols; i++) {
-         String selectName = selectNames.get(i);
-         rowResults[i] = valueList.get(selectName).getObject();
+      for (IValue value : valueList) {
+         rowResults[i++] = value.getObject();
       }
       return rowResults;
    }
