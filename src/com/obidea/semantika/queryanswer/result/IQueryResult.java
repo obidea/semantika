@@ -22,7 +22,7 @@ public interface IQueryResult extends Serializable
 {
    List<String> getSelectNames();
 
-   IValueList getValueList();
+   IValueArray getValueList();
 
    boolean next();
 }

@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class ValueList implements IValueList
+public class ValueList implements IValueArray
 {
    private static final long serialVersionUID = 629451L;
 

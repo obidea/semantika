@@ -24,16 +24,16 @@ public class QueryResult implements IQueryResult
    private static final long serialVersionUID = 629451L;
 
    private List<String> mSelectNames;
-   private Iterator<? extends IValueList> mValueListsIter;
+   private Iterator<? extends IValueArray> mValueListsIter;
 
-   private IValueList mValueList;
+   private IValueArray mValueList;
 
-   public QueryResult(List<String> selectNames, Iterable<? extends IValueList> valueLists)
+   public QueryResult(List<String> selectNames, Iterable<? extends IValueArray> valueLists)
    {
       this(selectNames, valueLists.iterator());
    }
    
-   public QueryResult(List<String> selectNames, Iterator<? extends IValueList> valueListsIter)
+   public QueryResult(List<String> selectNames, Iterator<? extends IValueArray> valueListsIter)
    {
       mSelectNames = selectNames;
       mValueListsIter = valueListsIter;
@@ -46,7 +46,7 @@ public class QueryResult implements IQueryResult
    }
 
    @Override
-   public IValueList getValueList()
+   public IValueArray getValueList()
    {
       return mValueList;
    }
