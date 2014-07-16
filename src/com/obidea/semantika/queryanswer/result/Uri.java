@@ -15,11 +15,12 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import com.obidea.semantika.util.XmlUtils;
 
-public class Uri implements IUri
+public class Uri implements IUri, Serializable
 {
    private static final long serialVersionUID = 629451L;
 

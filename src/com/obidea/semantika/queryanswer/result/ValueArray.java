@@ -15,12 +15,13 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class ValueArray implements IValueArray
+public class ValueArray implements IValueArray, Serializable
 {
    private static final long serialVersionUID = 629451L;
 

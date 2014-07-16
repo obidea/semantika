@@ -15,10 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface IValueArray extends Iterable<IValue>, Serializable
+public interface IValueArray extends Iterable<IValue>
 {
    List<String> getSelectNames();
 

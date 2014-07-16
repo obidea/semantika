@@ -15,11 +15,12 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class QueryResult implements IQueryResult
+public class QueryResult implements IQueryResult, Serializable
 {
    private static final long serialVersionUID = 629451L;
 

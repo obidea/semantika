@@ -15,12 +15,13 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
+import java.io.Serializable;
 import java.net.URI;
 
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
 
-public class Literal implements ILiteral
+public class Literal implements ILiteral, Serializable
 {
    private static final long serialVersionUID = 629451L;
 

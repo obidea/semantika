@@ -15,10 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
-import java.io.Serializable;
 import java.util.List;
 
-public interface IQueryResult extends Serializable
+public interface IQueryResult
 {
    List<String> getSelectNames();
 

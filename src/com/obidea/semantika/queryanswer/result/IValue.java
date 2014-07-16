@@ -15,9 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.result;
 
-import java.io.Serializable;
-
-public interface IValue extends Serializable
+public interface IValue
 {
    /**
     * A constant value to indicate the value is an object value.
