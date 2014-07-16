@@ -17,6 +17,7 @@ package com.obidea.semantika.queryanswer.result;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 public class ValueList implements IValueList
@@ -70,6 +71,12 @@ public class ValueList implements IValueList
    public int size()
    {
       return mValues.size();
+   }
+
+   @Override
+   public Iterator<IValue> iterator()
+   {
+      return mValues.iterator();
    }
 
    @Override
