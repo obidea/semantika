@@ -169,7 +169,7 @@ public class SelectQuery implements ISelectQuery
    }
 
    @Override
-   public List<Object> list() throws SemantikaException
+   public List<Object[]> list() throws SemantikaException
    {
       ListResultHandler handler = new ListResultHandler();
       evaluate(handler);

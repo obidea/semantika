@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ListResultHandler implements IQueryResultHandler
 {
-   private List<Object> mObjectList = new ArrayList<Object>();
+   private List<Object[]> mObjectList = new ArrayList<Object[]>();
 
    @Override
    public void start(List<String> selectNames)
@@ -52,7 +52,7 @@ public class ListResultHandler implements IQueryResultHandler
       // NO-OP
    }
 
-   public List<Object> getListResult()
+   public List<Object[]> getListResult()
    {
       return mObjectList;
    }
