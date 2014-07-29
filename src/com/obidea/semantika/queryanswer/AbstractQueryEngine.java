@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 
 import com.obidea.semantika.app.IApplicationManager;
 import com.obidea.semantika.app.Settings;
+import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.IQueryEvaluator;
@@ -48,6 +49,11 @@ public abstract class AbstractQueryEngine implements IQueryEngineExt
    public IKnowledgeBase getKnowledgeBase()
    {
       return mKnowledgeBase;
+   }
+
+   public IDatabase getTargetDatabase()
+   {
+      return getKnowledgeBase().getDatabase();
    }
 
    public Settings getSettings()

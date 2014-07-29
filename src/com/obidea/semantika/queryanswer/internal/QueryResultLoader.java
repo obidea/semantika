@@ -204,6 +204,6 @@ public abstract class QueryResultLoader
 
    private SqlPaging getPaging()
    {
-      return SqlPagingStrategy.buildPaging(mQueryEngine.getSettings().getDatabase().getDatabaseProduct());
+      return SqlPagingStrategy.buildPaging(mQueryEngine.getTargetDatabase().getDatabaseProduct());
    }
 }
