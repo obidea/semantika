@@ -115,8 +115,6 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       mSqlString = deparser.deparse(inputQuery);
    }
 
-
-
    private void buildQueryMetadata(SqlQuery sqlQuery)
    {
       List<SqlSelectItem> selectItems = sqlQuery.getSelectItems();

@@ -120,7 +120,7 @@ public class QueryEvaluator implements IQueryEvaluator
          if (ps.getMaxRows() != 0) {
             ps.setMaxRows(0);
          }
-         if ( ps.getQueryTimeout()!=0 ) ps.setQueryTimeout(0);
+         if ( ps.getQueryTimeout() != 0 ) ps.setQueryTimeout(0);
       }
       catch (Exception e) {
          LOG.warn("Exception occurred when clearing max rows or query timeout", e); //$NON-NLS-1$
