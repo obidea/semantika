@@ -45,12 +45,6 @@ public abstract class AbstractQueryEngine implements IQueryEngineExt
    }
 
    @Override
-   public String getName()
-   {
-      return mSettings.getApplicationFactoryName();
-   }
-
-   @Override
    public IKnowledgeBase getKnowledgeBase()
    {
       return mKnowledgeBase;

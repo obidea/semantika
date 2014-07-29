@@ -21,8 +21,6 @@ import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 public interface IQueryEngine
 {
-   String getName();
-
    IKnowledgeBase getKnowledgeBase();
 
    void start() throws QueryEngineException;
