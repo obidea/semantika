@@ -140,7 +140,7 @@ public class QueryUnfolder extends AtomVisitorAdapter implements IUnfolder
          /*
           * Catch any runtime exceptions and pass them as QueryUnfoldingException
           */
-         throw new QueryUnfoldingException(e);
+         throw new QueryUnfoldingException(e.getMessage());
       }
       
       QuerySet<SqlQuery> sqlQueries = new QuerySet<SqlQuery>();
