@@ -19,14 +19,14 @@ import org.slf4j.Logger;
 
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.QuerySet;
-import com.obidea.semantika.knowledgebase.model.KnowledgeBase;
+import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.util.LogUtils;
 
 public class EmptyRewriter implements IReformulator
 {
    private static final Logger LOG = LogUtils.createLogger("semantika.queryanswer"); //$NON-NLS-1$
 
-   public EmptyRewriter(KnowledgeBase kb)
+   public EmptyRewriter(IKnowledgeBase kb)
    {
       // NO-OP
    }

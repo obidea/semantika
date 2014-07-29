@@ -46,7 +46,7 @@ import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.knowledgebase.UnificationException;
 import com.obidea.semantika.knowledgebase.Unifier;
-import com.obidea.semantika.knowledgebase.model.KnowledgeBase;
+import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.mapping.ImmutableMappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
@@ -98,9 +98,9 @@ public class QueryUnfolder extends AtomVisitorAdapter implements IUnfolder
     * @param kb
     *           The <code>KnowledgeBase</code> object required for performing query unfolding.
     */
-   public QueryUnfolder(KnowledgeBase kb)
+   public QueryUnfolder(IKnowledgeBase kb)
    {
-      mMappingSet = kb.getMappingSet();
+      mMappingSet = (ImmutableMappingSet) kb.getMappingSet();
    }
 
    @Override

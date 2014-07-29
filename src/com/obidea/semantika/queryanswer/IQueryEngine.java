@@ -16,10 +16,15 @@
 package com.obidea.semantika.queryanswer;
 
 import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 public interface IQueryEngine
 {
+   String getName();
+
+   IKnowledgeBase getKnowledgeBase();
+
    void start() throws QueryEngineException;
 
    void stop() throws QueryEngineException;
