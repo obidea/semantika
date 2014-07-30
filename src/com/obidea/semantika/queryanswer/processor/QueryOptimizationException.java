@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.processor;
 
-import com.obidea.semantika.queryanswer.exception.QueryException;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 
-public class QueryOptimizationException extends QueryException
+public class QueryOptimizationException extends QueryAnswerException
 {
    private static final long serialVersionUID = 629451L;
 

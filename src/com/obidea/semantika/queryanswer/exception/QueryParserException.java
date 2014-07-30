@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.exception;
 
-public class QueryParserException extends QueryException
+public class QueryParserException extends QueryAnswerException
 {
    private static final long serialVersionUID = 629451L;
 

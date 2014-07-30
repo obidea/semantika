@@ -17,26 +17,26 @@ package com.obidea.semantika.queryanswer.exception;
 
 import com.obidea.semantika.exception.SemantikaException;
 
-public class QueryException extends SemantikaException
+public class QueryAnswerException extends SemantikaException
 {
    private static final long serialVersionUID = 629451L;
 
-   public QueryException()
+   public QueryAnswerException()
    {
       super();
    }
 
-   public QueryException(String message)
+   public QueryAnswerException(String message)
    {
       super(message);
    }
 
-   public QueryException(String message, Throwable cause)
+   public QueryAnswerException(String message, Throwable cause)
    {
       super(message, cause);
    }
 
-   public QueryException(Throwable cause)
+   public QueryAnswerException(Throwable cause)
    {
       super(cause);
    }
