@@ -15,9 +15,7 @@
  */
 package com.obidea.semantika.materializer;
 
-import com.obidea.semantika.exception.SemantikaException;
-
-public class MaterializerEngineException extends SemantikaException
+public class MaterializerEngineException extends MaterializationException
 {
    private static final long serialVersionUID = 629451L;
 

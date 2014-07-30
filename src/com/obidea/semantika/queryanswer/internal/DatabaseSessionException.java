@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 
-public class DatabaseSessionException extends SemantikaException
+public class DatabaseSessionException extends QueryAnswerException
 {
    private static final long serialVersionUID = 629451L;
 

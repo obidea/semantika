@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.knowledgebase;
 
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.exception.KnowledgeBaseException;
 
-public class UnificationException extends SemantikaException
+public class UnificationException extends KnowledgeBaseException
 {
    private static final long serialVersionUID = 629451L;
 
