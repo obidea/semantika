@@ -41,7 +41,7 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
 
    private QueryMetadata mQueryMetadata;
 
-   public QueryTranslator(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslatorException
+   public QueryTranslator(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslationException
    {
       super(queryEngine);
       try {
@@ -77,20 +77,20 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
             buildQueryMetadata(unfoldedQuery.get(0));
          }
          else {
-            throw new QueryTranslatorException("No SQL was produced for input query:\n" + queryString); //$NON-NLS-1$
+            throw new QueryTranslationException("No SQL was produced for input query:\n" + queryString); //$NON-NLS-1$
          }
       }
       catch (SparqlParserException e) {
-         throw new QueryTranslatorException("Exception while parsing input query:\n" + queryString, e); //$NON-NLS-1$
+         throw new QueryTranslationException("Exception while parsing input query:\n" + queryString, e); //$NON-NLS-1$
       }
       catch (QueryReformulationException e) {
-         throw new QueryTranslatorException("Exception while performing query reformulation:\n" + queryString, e); //$NON-NLS-1$
+         throw new QueryTranslationException("Exception while performing query reformulation:\n" + queryString, e); //$NON-NLS-1$
       }
       catch (QueryUnfoldingException e) {
-         throw new QueryTranslatorException("Exception while performing query unfolding:\n" + queryString, e); //$NON-NLS-1$
+         throw new QueryTranslationException("Exception while performing query unfolding:\n" + queryString, e); //$NON-NLS-1$
       }
       catch (QueryOptimizationException e) {
-         throw new QueryTranslatorException("Exception while performing query optimization:\n" + queryString, e); //$NON-NLS-1$
+         throw new QueryTranslationException("Exception while performing query optimization:\n" + queryString, e); //$NON-NLS-1$
       }
    }
 
@@ -164,22 +164,22 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       return mSqlString;
    }
 
-   public IQueryResult evaluate() throws QueryTranslatorException
+   public IQueryResult evaluate() throws QueryTranslationException
    {
       return evaluate(new QueryModifiers(), new UserStatementSettings());
    }
 
    public IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws QueryTranslatorException
+         throws QueryTranslationException
    {
       try {
          return super.evaluate(modifiers, userSettings);
       }
       catch (SQLException e) {
-         throw new QueryTranslatorException(e);
+         throw new QueryTranslationException(e);
       }
       catch (SemantikaException e) {
-         throw new QueryTranslatorException(e);
+         throw new QueryTranslationException(e);
       }
    }
 }
