@@ -38,7 +38,7 @@ public class SelectQuery implements ISelectQuery
    private static QueryParser sQueryValidator = QueryParserUtil.createParser(QueryLanguage.SPARQL);
 
    private QueryModifiers mQueryModifiers = new QueryModifiers();
-   private StatementSettings mStatementSettings = new StatementSettings();
+   private UserStatementSettings mStatementSettings = new UserStatementSettings();
 
    private String mSparqlString;
    private SparqlQueryEngine mQueryEngine;

@@ -99,7 +99,7 @@ public abstract class QueryResultLoader
       return sql;
    }
 
-   private PreparedStatement preparedStatement(String sql, StatementSettings settings) throws SQLException, SemantikaException
+   private PreparedStatement preparedStatement(String sql, UserStatementSettings settings) throws SQLException, SemantikaException
    {
       PreparedStatement ps = null;
       try {

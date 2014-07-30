@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-public final class StatementSettings
+public final class UserStatementSettings
 {
    private Integer mQueryTimeout = null;
    private Integer mFetchSize = null;

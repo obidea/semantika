@@ -18,14 +18,14 @@ package com.obidea.semantika.queryanswer.internal;
 public final class QueryParameters
 {
    private QueryModifiers mQueryModifiers;
-   private StatementSettings mStatementSettings;
+   private UserStatementSettings mStatementSettings;
 
    public QueryParameters()
    {
-      this(new QueryModifiers(), new StatementSettings());
+      this(new QueryModifiers(), new UserStatementSettings());
    }
 
-   public QueryParameters(QueryModifiers modifiers, StatementSettings settings)
+   public QueryParameters(QueryModifiers modifiers, UserStatementSettings settings)
    {
       mQueryModifiers = modifiers;
       mStatementSettings = settings;
@@ -36,7 +36,7 @@ public final class QueryParameters
       return mQueryModifiers;
    }
 
-   public StatementSettings getStatementSettings()
+   public UserStatementSettings getStatementSettings()
    {
       return mStatementSettings;
    }
