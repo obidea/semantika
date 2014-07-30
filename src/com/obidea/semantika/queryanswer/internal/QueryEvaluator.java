@@ -60,12 +60,12 @@ public class QueryEvaluator implements IQueryEvaluator
       return ps;
    }
 
-   private void setTimeout(PreparedStatement stmt) throws SQLException, QueryEvaluatorException
+   private void setTimeout(PreparedStatement stmt) throws SQLException, QueryEvaluationException
    {
       if (mIsTransactionTimeoutSet) {
          int timeout = (int) (mTransactionTimeout - (System.currentTimeMillis() / 1000));
          if (timeout <= 0) {
-            throw new QueryEvaluatorException("Transaction timeout expired"); //$NON-NLS-1$
+            throw new QueryEvaluationException("Transaction timeout expired"); //$NON-NLS-1$
          }
          else {
             stmt.setQueryTimeout(timeout);
@@ -73,11 +73,11 @@ public class QueryEvaluator implements IQueryEvaluator
       }
    }
 
-   private void setFetchSize(PreparedStatement stmt) throws SQLException, QueryEvaluatorException
+   private void setFetchSize(PreparedStatement stmt) throws SQLException, QueryEvaluationException
    {
       if (mIsTransactionFetchSizeSet) {
          if (mTransactionFetchSize <= 0) {
-            throw new QueryEvaluatorException("Invalid fetch size: " + mTransactionFetchSize); //$NON-NLS-1$
+            throw new QueryEvaluationException("Invalid fetch size: " + mTransactionFetchSize); //$NON-NLS-1$
          }
          else {
             stmt.setFetchSize(mTransactionFetchSize);
@@ -85,11 +85,11 @@ public class QueryEvaluator implements IQueryEvaluator
       }
    }
 
-   private void setMaxRows(PreparedStatement stmt) throws SQLException, QueryEvaluatorException
+   private void setMaxRows(PreparedStatement stmt) throws SQLException, QueryEvaluationException
    {
       if (mIsTransactionMaxRowsSet) {
          if (mTransactionMaxRows <= 0) {
-            throw new QueryEvaluatorException("Invalid max rows size: " + mTransactionMaxRows); //$NON-NLS-1$
+            throw new QueryEvaluationException("Invalid max rows size: " + mTransactionMaxRows); //$NON-NLS-1$
          }
          else {
             stmt.setMaxRows(mTransactionMaxRows);

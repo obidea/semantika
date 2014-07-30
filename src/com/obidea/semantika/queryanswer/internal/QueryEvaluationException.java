@@ -15,26 +15,26 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-public class QueryEvaluatorException extends DatabaseSessionException
+public class QueryEvaluationException extends DatabaseSessionException
 {
    private static final long serialVersionUID = 629451L;
 
-   public QueryEvaluatorException()
+   public QueryEvaluationException()
    {
       super();
    }
 
-   public QueryEvaluatorException(String message)
+   public QueryEvaluationException(String message)
    {
       super(message);
    }
 
-   public QueryEvaluatorException(String message, Throwable cause)
+   public QueryEvaluationException(String message, Throwable cause)
    {
       super(message, cause);
    }
 
-   public QueryEvaluatorException(Throwable cause)
+   public QueryEvaluationException(Throwable cause)
    {
       super(cause);
    }
