@@ -82,10 +82,13 @@ public abstract class QueryResultLoader
    protected abstract String getSqlString();
 
    /**
-    * Returns the produced SQL query metadata which is a list of returned columns
-    * containing information about each label and data type.
+    * Returns the query metadata to rebuild the result header (i.e., column names).
     */
    protected abstract QueryMetadata getQueryMetadata();
+
+   /*
+    * Private utility methods
+    */
 
    private String preprocessSql(String sql, QueryModifiers modifiers)
    {
