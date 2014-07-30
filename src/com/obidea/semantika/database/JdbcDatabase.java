@@ -27,6 +27,7 @@ import com.obidea.semantika.database.base.IPrimaryKey;
 import com.obidea.semantika.database.base.ITable;
 import com.obidea.semantika.database.exception.DataSourceException;
 import com.obidea.semantika.database.internal.InternalDatabase;
+import com.obidea.semantika.database.sql.dialect.IDialect;
 import com.obidea.semantika.util.LogUtils;
 
 /**
@@ -34,11 +35,13 @@ import com.obidea.semantika.util.LogUtils;
  */
 public class JdbcDatabase implements IDatabase
 {
-   private InternalDatabase mInternal;
-
    private String mDatabaseProduct;
    private int mDatabaseMajorVersion;
    private int mDatabaseMinorVersion;
+
+   private IDialect mDialect;
+
+   private InternalDatabase mInternal;
 
    private static final Logger LOG = LogUtils.createLogger("semantika.database"); //$NON-NLS-1$
 
@@ -82,6 +85,17 @@ public class JdbcDatabase implements IDatabase
    public int getDatabaseMinorVersion()
    {
       return mDatabaseMinorVersion;
+   }
+
+   public void setDialect(IDialect dialect)
+   {
+      mDialect = dialect;
+   }
+
+   @Override
+   public IDialect getDialect()
+   {
+      return mDialect;
    }
 
    @Override

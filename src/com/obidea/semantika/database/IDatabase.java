@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.database;
 
+import com.obidea.semantika.database.sql.dialect.IDialect;
+
 public interface IDatabase
 {
    String getDatabaseProduct();
@@ -23,5 +25,7 @@ public interface IDatabase
 
    int getDatabaseMinorVersion();
 
-   public IDatabaseMetadata getMetadata();
+   IDialect getDialect();
+
+   IDatabaseMetadata getMetadata();
 }
