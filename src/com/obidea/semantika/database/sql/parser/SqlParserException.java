@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.database.sql.parser;
 
-import com.obidea.semantika.exception.QueryParserException;
+import com.obidea.semantika.database.exception.DataSourceException;
 
-public class SqlParserException extends QueryParserException
+public class SqlParserException extends DataSourceException
 {
    private static final long serialVersionUID = 629451L;
 
