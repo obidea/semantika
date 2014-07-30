@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-
 public class QueryEvaluatorException extends DatabaseSessionException
 {
    private static final long serialVersionUID = 629451L;
