@@ -15,14 +15,9 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import com.obidea.semantika.queryanswer.result.IQueryResult;
-
 public interface IQueryTranslator
 {
    String getQueryString();
 
    String getSqlString();
-
-   IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings settings)
-         throws QueryTranslatorException;
 }

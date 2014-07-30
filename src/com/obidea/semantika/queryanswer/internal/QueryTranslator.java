@@ -164,7 +164,11 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       return mSqlString;
    }
 
-   @Override
+   public IQueryResult evaluate() throws QueryTranslatorException
+   {
+      return evaluate(new QueryModifiers(), new UserStatementSettings());
+   }
+
    public IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
          throws QueryTranslatorException
    {
