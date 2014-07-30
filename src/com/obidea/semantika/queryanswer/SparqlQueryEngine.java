@@ -80,7 +80,6 @@ public class SparqlQueryEngine extends AbstractQueryEngine
       return mConnectionManager;
    }
 
-   @Override
    public ISelectQuery createQuery(String sparql) throws QueryAnswerException
    {
       return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
