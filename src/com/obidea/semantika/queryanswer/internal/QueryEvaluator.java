@@ -172,8 +172,10 @@ public class QueryEvaluator implements IQueryEvaluator
    @Override
    public void setTransactionTimeout(int seconds)
    {
-      mIsTransactionTimeoutSet = true;
-      mTransactionTimeout = System.currentTimeMillis() / 1000 + seconds;
+      if (seconds > 0) {
+         mIsTransactionTimeoutSet = true;
+         mTransactionTimeout = System.currentTimeMillis() / 1000 + seconds;
+      }
    }
 
    @Override
@@ -185,8 +187,10 @@ public class QueryEvaluator implements IQueryEvaluator
    @Override
    public void setTransactionFetchSize(int fetchSize)
    {
-      mIsTransactionFetchSizeSet = true;
-      mTransactionFetchSize = fetchSize;
+      if (fetchSize > 0) {
+         mIsTransactionFetchSizeSet = true;
+         mTransactionFetchSize = fetchSize;
+      }
    }
 
    @Override
@@ -198,8 +202,10 @@ public class QueryEvaluator implements IQueryEvaluator
    @Override
    public void setTransactionMaxRows(int maxRows)
    {
-      mIsTransactionMaxRowsSet = true;
-      mTransactionMaxRows = maxRows;
+      if (maxRows > 0) {
+         mIsTransactionMaxRowsSet = true;
+         mTransactionMaxRows = maxRows;
+      }
    }
 
    @Override
