@@ -16,16 +16,34 @@
 package com.obidea.semantika.queryanswer;
 
 import com.obidea.semantika.exception.SemantikaException;
-import com.obidea.semantika.queryanswer.internal.IQueryEvaluator;
 import com.obidea.semantika.queryanswer.internal.ISelectQuery;
 import com.obidea.semantika.queryanswer.internal.QueryParameters;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
+/**
+ * This class gives some method extensions for the simple query engine that enable input query
+ * manipulation (i.e., by assigning query modifiers and query transaction settings)
+ */
 public interface IQueryEngineExt extends IQueryEngine
 {
-   IQueryEvaluator getQueryEvaluator();
-
+   /**
+    * Returns select query object for input query manipulation.
+    * 
+    * @param sparql
+    *           The input query in SPARQL language.
+    * @return Returns select query object.
+    */
    ISelectQuery createQuery(String sparql) throws SemantikaException;
 
-   IQueryResult evaluate(String queryString, QueryParameters queryParameters) throws SemantikaException;
+   /**
+    * Evaluates the given input SPARQL query and returns the answer result. In addition, users can
+    * insert some query modifiers or transaction settings.
+    * 
+    * @param sparql
+    *           The input query in SPARQL language.
+    * @param queryParameters
+    *           The query parameters.
+    * @return Returns the answer result.
+    */
+   IQueryResult evaluate(String sparql, QueryParameters queryParameters) throws SemantikaException;
 }
