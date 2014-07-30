@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.processor;
 
-import com.obidea.semantika.exception.QueryException;
+import com.obidea.semantika.queryanswer.exception.QueryException;
 
 public class QueryOptimizationException extends QueryException
 {

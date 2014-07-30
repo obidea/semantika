@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.exception;
+package com.obidea.semantika.queryanswer.exception;
 
 public class QueryParserException extends QueryException
 {

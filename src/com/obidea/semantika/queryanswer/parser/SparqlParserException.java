@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer.parser;
 
-import com.obidea.semantika.exception.QueryParserException;
+import com.obidea.semantika.queryanswer.exception.QueryParserException;
 
 public class SparqlParserException extends QueryParserException
 {
