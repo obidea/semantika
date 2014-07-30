@@ -164,22 +164,22 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       return mSqlString;
    }
 
-   public IQueryResult evaluate() throws QueryTranslationException
+   public IQueryResult evaluate() throws QueryEvaluationException
    {
       return evaluate(new QueryModifiers(), new UserStatementSettings());
    }
 
    public IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws QueryTranslationException
+         throws QueryEvaluationException
    {
       try {
          return super.evaluate(modifiers, userSettings);
       }
       catch (SQLException e) {
-         throw new QueryTranslationException(e);
+         throw new QueryEvaluationException(e);
       }
       catch (SemantikaException e) {
-         throw new QueryTranslationException(e);
+         throw new QueryEvaluationException(e);
       }
    }
 }

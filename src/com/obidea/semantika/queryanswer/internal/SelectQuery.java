@@ -25,9 +25,9 @@ import org.openrdf.query.parser.ParsedQuery;
 import org.openrdf.query.parser.QueryParser;
 import org.openrdf.query.parser.QueryParserUtil;
 
-import com.obidea.semantika.exception.SemantikaException;
-import com.obidea.semantika.queryanswer.QueryEngineException;
 import com.obidea.semantika.queryanswer.SparqlQueryEngine;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
+import com.obidea.semantika.queryanswer.exception.QueryParserException;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 import com.obidea.semantika.queryanswer.result.IQueryResultHandler;
 import com.obidea.semantika.queryanswer.result.ListResultHandler;
@@ -44,7 +44,8 @@ public class SelectQuery implements ISelectQuery
    private SparqlQueryEngine mQueryEngine;
    private QueryMetadata mQueryMetadata;
 
-   public SelectQuery(String sparql, final SparqlQueryEngine engine, final QueryMetadata metadata) throws SemantikaException
+   public SelectQuery(String sparql, final SparqlQueryEngine engine, final QueryMetadata metadata)
+         throws QueryParserException
    {
       validateQuery(sparql);
       mSparqlString = sparql;
@@ -52,7 +53,7 @@ public class SelectQuery implements ISelectQuery
       mQueryMetadata = metadata;
    }
 
-   private void validateQuery(String sparqlString) throws SemantikaException
+   private void validateQuery(String sparqlString) throws QueryParserException
    {
       try {
          ParsedQuery query = sQueryValidator.parseQuery(sparqlString, null); // base URI is null
@@ -64,7 +65,7 @@ public class SelectQuery implements ISelectQuery
          addModifiersIfExist(query);
       }
       catch (MalformedQueryException e) {
-         throw new SemantikaException(e.getMessage());
+         throw new QueryParserException(e.getMessage());
       }
    }
 
@@ -147,13 +148,13 @@ public class SelectQuery implements ISelectQuery
    }
 
    @Override
-   public IQueryResult evaluate() throws SemantikaException
+   public IQueryResult evaluate() throws QueryAnswerException
    {
       return mQueryEngine.evaluate(getQueryString(), getModifiers(), getTransactionSettings());
    }
 
    @Override
-   public void evaluate(IQueryResultHandler handler) throws SemantikaException
+   public void evaluate(IQueryResultHandler handler) throws QueryAnswerException
    {
       try {
          IQueryResult result = evaluate();
@@ -164,12 +165,12 @@ public class SelectQuery implements ISelectQuery
          handler.stop();
       }
       catch (QueryResultHandlerException e) {
-         throw new QueryEngineException("Exception occured when handling query results", e); //$NON-NLS-1$
+         throw new QueryEvaluationException("Exception occured when handling query results", e); //$NON-NLS-1$
       }
    }
 
    @Override
-   public List<Object[]> list() throws SemantikaException
+   public List<Object[]> list() throws QueryAnswerException
    {
       ListResultHandler handler = new ListResultHandler();
       evaluate(handler);

@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
@@ -25,7 +24,7 @@ public class QueryPlan
 
    private QueryTranslator mTranslator;
 
-   public QueryPlan(String queryString, AbstractQueryEngine queryEngine) throws SemantikaException
+   public QueryPlan(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslationException
    {
       mQueryString = queryString;
       mTranslator = new QueryTranslator(queryString, queryEngine);
@@ -47,7 +46,7 @@ public class QueryPlan
    }
 
    public IQueryResult evaluateQuery(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws SemantikaException
+         throws QueryEvaluationException
    {
       return mTranslator.evaluate(modifiers, userSettings);
    }

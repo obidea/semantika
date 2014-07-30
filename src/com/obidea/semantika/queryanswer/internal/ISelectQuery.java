@@ -17,7 +17,7 @@ package com.obidea.semantika.queryanswer.internal;
 
 import java.util.List;
 
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 import com.obidea.semantika.queryanswer.result.IQueryResultHandler;
 
@@ -41,9 +41,9 @@ public interface ISelectQuery
 
    void setMaxRows(int maxRows);
 
-   IQueryResult evaluate() throws SemantikaException;
+   IQueryResult evaluate() throws QueryAnswerException;
 
-   List<? extends Object> list() throws SemantikaException;
+   List<? extends Object> list() throws QueryAnswerException;
 
-   void evaluate(IQueryResultHandler handler) throws SemantikaException;
+   void evaluate(IQueryResultHandler handler) throws QueryAnswerException;
 }

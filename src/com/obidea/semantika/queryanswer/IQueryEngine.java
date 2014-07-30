@@ -15,8 +15,8 @@
  */
 package com.obidea.semantika.queryanswer;
 
-import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 public interface IQueryEngine
@@ -50,7 +50,7 @@ public interface IQueryEngine
     *           The input query in SPARQL language.
     * @return Returns the answer result.
     */
-   IQueryResult evaluate(String sparql) throws SemantikaException;
+   IQueryResult evaluate(String sparql) throws QueryAnswerException;
 
    /**
     * Returns the corresponding SQL query from the given input SPARQL query with respect to the
@@ -60,5 +60,5 @@ public interface IQueryEngine
     *           The input query in SPARQL language.
     * @return Returns SQL string.
     */
-   String translate(String sparql) throws SemantikaException;
+   String translate(String sparql) throws QueryAnswerException;
 }

@@ -17,12 +17,14 @@ package com.obidea.semantika.queryanswer;
 
 import com.obidea.semantika.app.ApplicationManager;
 import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.ConnectionManagerException;
 import com.obidea.semantika.queryanswer.internal.DatabaseSession;
 import com.obidea.semantika.queryanswer.internal.ISelectQuery;
 import com.obidea.semantika.queryanswer.internal.QueryModifiers;
 import com.obidea.semantika.queryanswer.internal.QueryPlan;
+import com.obidea.semantika.queryanswer.internal.QueryTranslationException;
 import com.obidea.semantika.queryanswer.internal.SelectQuery;
 import com.obidea.semantika.queryanswer.internal.UserStatementSettings;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
@@ -79,20 +81,20 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    }
 
    @Override
-   public ISelectQuery createQuery(String sparql) throws SemantikaException
+   public ISelectQuery createQuery(String sparql) throws QueryAnswerException
    {
       return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
    }
 
    @Override
-   public IQueryResult evaluate(String sparql) throws SemantikaException
+   public IQueryResult evaluate(String sparql) throws QueryAnswerException
    {
       return createQuery(sparql).evaluate();
    }
 
    @Override
    public IQueryResult evaluate(String sparql, QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws SemantikaException
+         throws QueryAnswerException
    {
       QueryPlan plan = getQueryPlan(sparql);
       IQueryResult results = plan.evaluateQuery(modifiers, userSettings);
@@ -100,7 +102,7 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    }
 
    @Override
-   public String translate(String sparql) throws SemantikaException
+   public String translate(String sparql) throws QueryAnswerException
    {
       QueryPlan plan = getQueryPlan(sparql);
       return plan.getSqlString();
@@ -110,15 +112,15 @@ public class SparqlQueryEngine extends AbstractQueryEngine
     * Private utility methods
     */
 
-   private QueryPlan getQueryPlan(String queryString) throws SemantikaException
+   private QueryPlan getQueryPlan(String queryString) throws QueryTranslationException
    {
       return mSession.getQueryPlanCache().getQueryPlan(queryString);
    }
 
-   private void throwExceptionIfNull() throws SemantikaException
+   private void throwExceptionIfNull() throws QueryEngineException
    {
       if (mConnectionManager == null) {
-         throw new SemantikaException("Call start() first to initialize query engine"); //$NON-NLS-1$
+         throw new QueryEngineException("Call start() first to initialize query engine"); //$NON-NLS-1$
       }
    }
 }

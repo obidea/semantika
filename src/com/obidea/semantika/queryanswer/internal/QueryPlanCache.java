@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.SparqlQueryEngine;
 import com.obidea.semantika.util.SoftMruCache;
 
@@ -30,7 +29,7 @@ public class QueryPlanCache
       mQueryEngine = queryEngine;
    }
 
-   public QueryPlan getQueryPlan(String queryString) throws SemantikaException
+   public QueryPlan getQueryPlan(String queryString) throws QueryTranslationException
    {
       QueryPlan plan = (QueryPlan) mQueryPlanCache.get(queryString);
       if (plan == null) {

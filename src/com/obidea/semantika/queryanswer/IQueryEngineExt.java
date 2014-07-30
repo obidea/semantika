@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer;
 
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.internal.ISelectQuery;
 import com.obidea.semantika.queryanswer.internal.QueryModifiers;
 import com.obidea.semantika.queryanswer.internal.UserStatementSettings;
@@ -34,7 +34,7 @@ public interface IQueryEngineExt extends IQueryEngine
     *           The input query in SPARQL language.
     * @return Returns select query object.
     */
-   ISelectQuery createQuery(String sparql) throws SemantikaException;
+   ISelectQuery createQuery(String sparql) throws QueryAnswerException;
 
    /**
     * Evaluates the given input SPARQL query and returns the answer result. In addition, users can
@@ -49,5 +49,5 @@ public interface IQueryEngineExt extends IQueryEngine
     * @return Returns the answer result.
     */
    IQueryResult evaluate(String sparql, QueryModifiers modifiers, UserStatementSettings settings)
-         throws SemantikaException;
+         throws QueryAnswerException;
 }
