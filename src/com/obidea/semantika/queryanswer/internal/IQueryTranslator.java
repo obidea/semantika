@@ -23,5 +23,6 @@ public interface IQueryTranslator
 
    String getSqlString();
 
-   IQueryResult evaluate(QueryParameters queryParameters) throws QueryTranslatorException;
+   IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings settings)
+         throws QueryTranslatorException;
 }

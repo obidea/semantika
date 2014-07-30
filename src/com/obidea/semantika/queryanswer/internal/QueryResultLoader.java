@@ -46,10 +46,11 @@ public abstract class QueryResultLoader
       mQueryEngine = queryEngine;
    }
 
-   protected IQueryResult evaluate(QueryParameters queryParameters) throws SQLException, SemantikaException
+   protected IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
+         throws SQLException, SemantikaException
    {
-      String sql = preprocessSql(getSqlString(), queryParameters.getQueryModifiers());
-      final PreparedStatement ps =  preparedStatement(sql, queryParameters.getStatementSettings());
+      String sql = preprocessSql(getSqlString(), modifiers);
+      final PreparedStatement ps =  preparedStatement(sql, userSettings);
       final ResultSet rs = doQuery(ps);
       
       IQueryResult result = null;

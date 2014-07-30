@@ -165,10 +165,11 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
    }
 
    @Override
-   public IQueryResult evaluate(QueryParameters queryParameters) throws QueryTranslatorException
+   public IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
+         throws QueryTranslatorException
    {
       try {
-         return super.evaluate(queryParameters);
+         return super.evaluate(modifiers, userSettings);
       }
       catch (SQLException e) {
          throw new QueryTranslatorException(e);

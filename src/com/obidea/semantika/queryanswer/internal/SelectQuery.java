@@ -38,7 +38,7 @@ public class SelectQuery implements ISelectQuery
    private static QueryParser sQueryValidator = QueryParserUtil.createParser(QueryLanguage.SPARQL);
 
    private QueryModifiers mQueryModifiers = new QueryModifiers();
-   private UserStatementSettings mStatementSettings = new UserStatementSettings();
+   private UserStatementSettings mUserStatementSettings = new UserStatementSettings();
 
    private String mSparqlString;
    private SparqlQueryEngine mQueryEngine;
@@ -95,6 +95,11 @@ public class SelectQuery implements ISelectQuery
       return mQueryModifiers;
    }
 
+   public UserStatementSettings getTransactionSettings()
+   {
+      return mUserStatementSettings;
+   }
+
    @Override
    public SelectQuery setMaxResults(int limit)
    {
@@ -126,30 +131,25 @@ public class SelectQuery implements ISelectQuery
    @Override
    public void setFetchSize(int fetchSize)
    {
-      mStatementSettings.setFetchSize(fetchSize);
+      mUserStatementSettings.setFetchSize(fetchSize);
    }
 
    @Override
    public void setTimeout(int timeout)
    {
-      mStatementSettings.setQueryTimeout(timeout);
+      mUserStatementSettings.setQueryTimeout(timeout);
    }
 
    @Override
    public void setMaxRows(int maxRows)
    {
-      mStatementSettings.setMaxRows(maxRows);
+      mUserStatementSettings.setMaxRows(maxRows);
    }
 
    @Override
    public IQueryResult evaluate() throws SemantikaException
    {
-      return mQueryEngine.evaluate(getQueryString(), getQueryParameters());
-   }
-
-   private QueryParameters getQueryParameters()
-   {
-      return new QueryParameters(getModifiers(), mStatementSettings);
+      return mQueryEngine.evaluate(getQueryString(), getModifiers(), getTransactionSettings());
    }
 
    @Override

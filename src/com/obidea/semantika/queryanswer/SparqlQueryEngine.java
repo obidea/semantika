@@ -21,9 +21,10 @@ import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.ConnectionManagerException;
 import com.obidea.semantika.queryanswer.internal.DatabaseSession;
 import com.obidea.semantika.queryanswer.internal.ISelectQuery;
-import com.obidea.semantika.queryanswer.internal.QueryParameters;
+import com.obidea.semantika.queryanswer.internal.QueryModifiers;
 import com.obidea.semantika.queryanswer.internal.QueryPlan;
 import com.obidea.semantika.queryanswer.internal.SelectQuery;
+import com.obidea.semantika.queryanswer.internal.UserStatementSettings;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 public class SparqlQueryEngine extends AbstractQueryEngine
@@ -90,10 +91,11 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    }
 
    @Override
-   public IQueryResult evaluate(String sparql, QueryParameters queryParameters) throws SemantikaException
+   public IQueryResult evaluate(String sparql, QueryModifiers modifiers, UserStatementSettings userSettings)
+         throws SemantikaException
    {
       QueryPlan plan = getQueryPlan(sparql);
-      IQueryResult results = plan.evaluateQuery(queryParameters);
+      IQueryResult results = plan.evaluateQuery(modifiers, userSettings);
       return results;
    }
 

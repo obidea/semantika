@@ -17,7 +17,8 @@ package com.obidea.semantika.queryanswer;
 
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.internal.ISelectQuery;
-import com.obidea.semantika.queryanswer.internal.QueryParameters;
+import com.obidea.semantika.queryanswer.internal.QueryModifiers;
+import com.obidea.semantika.queryanswer.internal.UserStatementSettings;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
 /**
@@ -41,9 +42,12 @@ public interface IQueryEngineExt extends IQueryEngine
     * 
     * @param sparql
     *           The input query in SPARQL language.
-    * @param queryParameters
-    *           The query parameters.
+    * @param modifiers
+    *           The query modifiers (e.g., limit, offset).
+    * @param settings
+    *           User settings for query transaction behavior (e.g., timeout, fetch size).
     * @return Returns the answer result.
     */
-   IQueryResult evaluate(String sparql, QueryParameters queryParameters) throws SemantikaException;
+   IQueryResult evaluate(String sparql, QueryModifiers modifiers, UserStatementSettings settings)
+         throws SemantikaException;
 }

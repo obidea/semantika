@@ -46,8 +46,9 @@ public class QueryPlan
       return mTranslator.getSqlString();
    }
 
-   public IQueryResult evaluateQuery(QueryParameters queryParameters) throws SemantikaException
+   public IQueryResult evaluateQuery(QueryModifiers modifiers, UserStatementSettings userSettings)
+         throws SemantikaException
    {
-      return mTranslator.evaluate(queryParameters);
+      return mTranslator.evaluate(modifiers, userSettings);
    }
 }
