@@ -111,7 +111,7 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
 
    private void renderSql(QuerySet<SqlQuery> inputQuery)
    {
-      SqlDeparser deparser = new SqlDeparser(mQueryEngine.getSettings().getDialect());
+      SqlDeparser deparser = new SqlDeparser(mQueryEngine.getTargetDatabase().getDialect());
       mSqlString = deparser.deparse(inputQuery);
    }
 

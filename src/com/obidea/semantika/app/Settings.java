@@ -17,7 +17,6 @@ package com.obidea.semantika.app;
 
 import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.database.connection.IConnectionProvider;
-import com.obidea.semantika.database.sql.dialect.IDialect;
 import com.obidea.semantika.database.sql.parser.JSqlParser;
 import com.obidea.semantika.database.sql.parser.SqlParserRegistry;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
@@ -31,10 +30,9 @@ import com.obidea.semantika.mapping.parser.r2rml.R2RmlParserFactory;
 import com.obidea.semantika.mapping.parser.termalxml.TermalXmlParserFactory;
 import com.obidea.semantika.ontology.IOntology;
 
-public final class Settings
+/* package */
+final class Settings
 {
-   private String mApplicationFactoryName;
-
    private IPrefixManager mPrefixManager;
 
    private IDatabase mDatabase;
@@ -42,11 +40,8 @@ public final class Settings
    private IMappingSet mMappingSet;
 
    private IConnectionProvider mConnectionProvider;
-   private IDialect mDialect;
 
-   private Integer mTransactionTimeout;
-   private Integer mTransactionFetchSize;
-   private Integer mTransactionMaxRows;
+   private SystemProperties mSystemProperties = new SystemProperties();
 
    static {
       MappingParserFactoryRegistry registry = MappingParserFactoryRegistry.getInstance();
@@ -64,19 +59,6 @@ public final class Settings
       registry.register(0, new TMappingProcessor()); // top priority
       registry.register(1, new DisjunctionProcessor());
       registry.register(2, new ReferentialIntegrityProcessor());
-   }
-
-   void setApplicationFactoryName(String name)
-   {
-      mApplicationFactoryName = name;
-   }
-
-   public String getApplicationFactoryName()
-   {
-      if (mApplicationFactoryName == null) {
-         return "semantika/application_factory"; //$NON-NLS-1$
-      }
-      return mApplicationFactoryName;
    }
 
    void setPrefixManager(IPrefixManager manager)
@@ -129,47 +111,18 @@ public final class Settings
       return mConnectionProvider;
    }
 
-   void setDialect(IDialect dialect)
+   public void addSystemProperties(String key, String value)
    {
-      mDialect = dialect;
+      mSystemProperties.put(key, value);
    }
 
-   public IDialect getDialect()
+   public SystemProperties getSystemProperties()
    {
-      return mDialect;
+      return mSystemProperties;
    }
 
-   public void setTransactionTimeout(Integer timeout)
-   {
-      mTransactionTimeout = timeout;
-   }
-
-   public Integer getTransactionTimeout()
-   {
-      return mTransactionTimeout;
-   }
-
-   public void setTransactionFetchSize(Integer fetchSize)
-   {
-      mTransactionFetchSize = fetchSize;
-   }
-
-   public Integer getTransactionFetchSize()
-   {
-      return mTransactionFetchSize;
-   }
-
-   public void setTransactionMaxRows(Integer maxRows)
-   {
-      mTransactionMaxRows = maxRows;
-   }
-
-   public Integer getTransactionMaxRows()
-   {
-      return mTransactionMaxRows;
-   }
-
-   /* package */Settings()
+   /* package */
+   Settings()
    {
       // NO-OP: Limited instantiation
    }

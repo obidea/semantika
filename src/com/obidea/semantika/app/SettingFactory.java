@@ -29,8 +29,7 @@ public abstract class SettingFactory
    {
       Settings settings = new Settings();
 
-      String applicationFactoryName = properties.getString(Environment.APPLICATION_FACTORY_NAME);
-      settings.setApplicationFactoryName(applicationFactoryName);
+      loadSystemProperties(properties, settings);
 
       LOG.info("Loading [DATABASE] object..."); //$NON-NLS-1$
       loadDatabaseFromProperties(properties, settings);
@@ -43,6 +42,8 @@ public abstract class SettingFactory
 
       return settings;
    }
+
+   abstract void loadSystemProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException;
 
    abstract void loadDatabaseFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException;
 

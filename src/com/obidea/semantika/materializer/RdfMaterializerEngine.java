@@ -25,7 +25,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 
 import com.obidea.semantika.app.ApplicationManager;
-import com.obidea.semantika.app.Settings;
+import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.deparser.SqlDeparser;
@@ -34,7 +34,6 @@ import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.io.FileDocumentTarget;
 import com.obidea.semantika.io.IDocumentTarget;
-import com.obidea.semantika.knowledgebase.model.KnowledgeBase;
 import com.obidea.semantika.mapping.IUriTemplate;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
@@ -53,28 +52,20 @@ public class RdfMaterializerEngine implements IMaterializerEngine
 
    private Connection mConnection;
 
-   private SqlDeparser mSqlDeparser;
-
    private IRdfMaterializer mMaterializer = new NTriplesMaterializer(); // by default
 
    private TermToSqlConverter mConverter = new TermToSqlConverter();
 
    private static final Logger LOG = LogUtils.createLogger("semantika.materializer"); //$NON-NLS-1$
 
-   public RdfMaterializerEngine(ApplicationManager appManager)
+   public RdfMaterializerEngine(final ApplicationManager appManager)
    {
       mAppManager = appManager;
-      mSqlDeparser = new SqlDeparser(appManager.getSettings().getDialect());
    }
 
-   private KnowledgeBase getKnowledgeBase()
+   public IDatabase getTargetDatabase()
    {
-      return mAppManager.getKnowledgeBase();
-   }
-
-   private Settings getSettings()
-   {
-      return mAppManager.getSettings();
+      return mAppManager.getTargetDatabase();
    }
 
    @Override
@@ -82,7 +73,7 @@ public class RdfMaterializerEngine implements IMaterializerEngine
    {
       try {
          LOG.debug("Starting materializer engine."); //$NON-NLS-1$
-         mConnection = getSettings().getConnectionProvider().getConnection();
+         mConnection = mAppManager.getConnectionProvider().getConnection();
       }
       catch (SQLException e) {
          throw new MaterializerEngineException(e);
@@ -94,7 +85,7 @@ public class RdfMaterializerEngine implements IMaterializerEngine
    {
       try {
          LOG.debug("Stopping materializer engine."); //$NON-NLS-1$
-         getSettings().getConnectionProvider().closeConnection(mConnection);
+         mAppManager.getConnectionProvider().closeConnection(mConnection);
       }
       catch (SQLException e) {
          throw new MaterializerEngineException(e);
@@ -170,18 +161,19 @@ public class RdfMaterializerEngine implements IMaterializerEngine
       try {
          checkConnection();
          int returnSize = 0;
-         int mappingSize = getKnowledgeBase().getMappingSet().size();
+         int mappingSize = mAppManager.getKnowledgeBase().getMappingSet().size();
          
-         LOG.info(""); //$NON-NLS-1$
+         SqlDeparser deparser = new SqlDeparser(mAppManager.getTargetDatabase().getDialect());
+         
          LOG.info("Materialization in progress."); //$NON-NLS-1$
          progressMonitor.start(mappingSize);
-         for (IMapping mapping : getKnowledgeBase().getMappingSet().getAll()) {
+         for (IMapping mapping : mAppManager.getKnowledgeBase().getMappingSet().getAll()) {
             ResultSet resultSet = null;
             progressMonitor.advanced(returnSize);
             try {
                SqlQuery query = prepareQueryForMaterialization(mapping);
                TriplesProjection projection = new TriplesProjection(query);
-               String sql = mSqlDeparser.deparse(query);
+               String sql = deparser.deparse(query);
                Statement stmt = createSqlStatement();
                resultSet = stmt.executeQuery(sql);
                returnSize = mMaterializer.materializeTuples(resultSet, projection, output);
@@ -223,7 +215,7 @@ public class RdfMaterializerEngine implements IMaterializerEngine
 
    protected void adjustFetchSize(Statement stmt) throws SQLException
    {
-      final String databaseName = getSettings().getDatabase().getDatabaseProduct();
+      final String databaseName = mAppManager.getTargetDatabase().getDatabaseProduct();
       if (databaseName.equals("MySQL")) { //$NON-NLS-1$
          stmt.setFetchSize(Integer.MIN_VALUE); // allow data streaming thus avoid heap memory error.
       }

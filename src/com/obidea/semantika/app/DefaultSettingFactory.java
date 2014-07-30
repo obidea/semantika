@@ -15,20 +15,21 @@
  */
 package com.obidea.semantika.app;
 
+import static com.obidea.semantika.database.connection.ConnectionProviderFactory.getConnectionProperties;
+
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Properties;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.database.JdbcDatabase;
 import com.obidea.semantika.database.connection.ConnectionProviderFactory;
 import com.obidea.semantika.database.connection.IConnectionProvider;
 import com.obidea.semantika.database.sql.dialect.DialectFactory;
 import com.obidea.semantika.database.sql.dialect.IDialect;
+import com.obidea.semantika.exception.ConfigurationException;
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.knowledgebase.DefaultPrefixManager;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
@@ -42,32 +43,45 @@ import com.obidea.semantika.util.StringUtils;
 public class DefaultSettingFactory extends SettingFactory
 {
    @Override
-   /* package */void loadDatabaseFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
+   /* package */
+   void loadSystemProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
-      Properties connectionProperties = ConnectionProviderFactory.getConnectionProperties(properties);
-      IConnectionProvider provider = ConnectionProviderFactory.createConnectionProvider(connectionProperties);
-      settings.setConnectionProvider(provider);
-      settings.setTransactionTimeout(determineTransactionTimeout(properties));
-      settings.setTransactionFetchSize(determineTransactionFetchSize(properties));
-      settings.setTransactionMaxRows(determineTransactionMaxRows(properties));
-      try {
-         /*
-          * Register the Connection object as a weak reference to ease garbage collection.
-          * This connection is used to fetch database metadata on-demand when parsing the
-          * mappings. Ad hoc connection closing is not feasible.
-          */
-         WeakReference<Connection> weakConnection = new WeakReference<Connection>(provider.getConnection());
-         IDatabase database = new JdbcDatabase(weakConnection.get());
-         settings.setDatabase(database);
-         settings.setDialect(determineDialect(properties, weakConnection.get()));
-      }
-      catch (SQLException e) {
-         throw new SemantikaException("Exception occurred when initializing database object", e);
-      }
+      settings.addSystemProperties(Environment.APPLICATION_FACTORY_NAME, properties.getString(Environment.APPLICATION_FACTORY_NAME));
+      settings.addSystemProperties(Environment.TRANSACTION_TIMEOUT, properties.getString(Environment.TRANSACTION_TIMEOUT, "-1"));
+      settings.addSystemProperties(Environment.TRANSACTION_FETCH_SIZE, properties.getString(Environment.TRANSACTION_FETCH_SIZE, "-1"));
+      settings.addSystemProperties(Environment.TRANSACTION_MAX_ROWS, properties.getString(Environment.TRANSACTION_MAX_ROWS, "-1"));
    }
 
    @Override
-   /* package */void loadOntologyFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
+   /* package */
+   void loadDatabaseFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
+   {
+      try {
+         /*
+          * Register the Connection object as a weak reference to ease garbage collection. This
+          * connection is used to fetch database metadata on-demand when parsing the mappings. Manual
+          * connection closing is not feasible.
+          */
+         IConnectionProvider provider = createConnectionProvider(properties);
+         WeakReference<Connection> weakConnection = new WeakReference<Connection>(provider.getConnection());
+         JdbcDatabase database = new JdbcDatabase(weakConnection.get());
+         database.setDialect(determineDialect(properties, weakConnection.get()));
+         settings.setDatabase(database);
+         settings.setConnectionProvider(provider);
+      }
+      catch (SQLException e) {
+         throw new SemantikaException("Exception occurred when initializing database object", e); //$NON-NLS-1$
+      }
+   }
+
+   private static IConnectionProvider createConnectionProvider(PropertiesConfiguration properties) throws ConfigurationException
+   {
+      return ConnectionProviderFactory.createConnectionProvider(getConnectionProperties(properties));
+   }
+
+   @Override
+   /* package */
+   void loadOntologyFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
       OntologyLoader loader = buildOntologyLoader(settings);
       String resource = properties.getString(Environment.ONTOLOGY_SOURCE);
@@ -84,13 +98,9 @@ public class DefaultSettingFactory extends SettingFactory
       }
    }
 
-   private static OntologyLoader buildOntologyLoader(Settings settings)
-   {
-      return new OntologyLoader();
-   }
-
    @Override
-   /* package */void loadMappingFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
+   /* package */
+   void loadMappingFromProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
       IMappingSet mappingSet = new MappingSet();
       IPrefixManager prefixManager = new DefaultPrefixManager();
@@ -111,6 +121,15 @@ public class DefaultSettingFactory extends SettingFactory
       settings.setPrefixManager(prefixManager);
    }
 
+   /*
+    * Private utility methods
+    */
+
+   private static OntologyLoader buildOntologyLoader(Settings settings)
+   {
+      return new OntologyLoader();
+   }
+
    private static MappingLoader buildMappingLoader(Settings settings)
    {
       MetaModel mm = new MetaModel(settings.getDatabase().getMetadata(), settings.getOntology());
@@ -122,33 +141,6 @@ public class DefaultSettingFactory extends SettingFactory
       MappingParserConfiguration configuration = new MappingParserConfiguration();
       configuration.setStrictParsing(Boolean.parseBoolean(properties.getStringArray(Environment.STRICT_PARSING)[order]));
       return configuration;
-   }
-
-   private static Integer determineTransactionTimeout(PropertiesConfiguration properties)
-   {
-      Integer timeout = properties.getInteger(Environment.TRANSACTION_TIMEOUT, null);
-      if (timeout != null) {
-         LOG.debug("* transaction.timeout = " + timeout + "s"); //$NON-NLS-1$ //$NON-NLS-2$
-      }
-      return timeout;
-   }
-
-   private static Integer determineTransactionFetchSize(PropertiesConfiguration properties)
-   {
-      Integer fetchSize = properties.getInteger(Environment.TRANSACTION_FETCH_SIZE, null);
-      if (fetchSize != null) {
-         LOG.debug("* transaction.fetch_size = " + fetchSize); //$NON-NLS-1$
-      }
-      return fetchSize;
-   }
-
-   private static Integer determineTransactionMaxRows(PropertiesConfiguration properties)
-   {
-      Integer maxRows = properties.getInteger(Environment.TRANSACTION_MAX_ROWS, null);
-      if (maxRows != null) {
-         LOG.debug("* transaction.max_rows = " + maxRows); //$NON-NLS-1$
-      }
-      return maxRows;
    }
 
    private static IDialect determineDialect(PropertiesConfiguration properties, Connection conn)

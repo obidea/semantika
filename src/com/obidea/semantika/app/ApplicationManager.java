@@ -20,6 +20,8 @@ import java.util.List;
 import org.slf4j.Logger;
 
 import com.obidea.semantika.database.IDatabase;
+import com.obidea.semantika.database.connection.IConnectionProvider;
+import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.knowledgebase.model.KnowledgeBase;
 import com.obidea.semantika.knowledgebase.processor.IKnowledgeBaseProcessor;
@@ -71,15 +73,33 @@ public class ApplicationManager implements IApplicationManager, IQueryEngineFact
    }
 
    @Override
-   public Settings getSettings()
+   public IKnowledgeBase getKnowledgeBase()
    {
-      return mSettings;
+      return mKnowledgeBase;
    }
 
    @Override
-   public KnowledgeBase getKnowledgeBase()
+   public String getApplicationName()
    {
-      return mKnowledgeBase;
+      return mSettings.getSystemProperties().getApplicationName();
+   }
+
+   @Override
+   public IPrefixManager getPrefixManager()
+   {
+      return mSettings.getPrefixManager();
+   }
+
+   @Override
+   public IConnectionProvider getConnectionProvider()
+   {
+      return mSettings.getConnectionProvider();
+   }
+
+   @Override
+   public SystemProperties getSystemProperties()
+   {
+      return mSettings.getSystemProperties();
    }
 
    @Override
@@ -102,6 +122,11 @@ public class ApplicationManager implements IApplicationManager, IQueryEngineFact
       LOG.debug(""); //$NON-NLS-1$
       LOG.debug("Obtaining MaterializerEngine from ApplicationManager."); //$NON-NLS-1$
       return new RdfMaterializerEngine(this);
+   }
+
+   public IDatabase getTargetDatabase()
+   {
+      return mSettings.getDatabase();
    }
 
    /*

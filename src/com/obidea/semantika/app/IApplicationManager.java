@@ -16,7 +16,10 @@
 package com.obidea.semantika.app;
 
 import java.util.List;
+import java.util.Properties;
 
+import com.obidea.semantika.database.connection.IConnectionProvider;
+import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.knowledgebase.processor.IKnowledgeBaseProcessor;
 
@@ -28,9 +31,15 @@ import com.obidea.semantika.knowledgebase.processor.IKnowledgeBaseProcessor;
  */
 public interface IApplicationManager
 {
-   Settings getSettings();
+   String getApplicationName();
+
+   Properties getSystemProperties();
 
    IKnowledgeBase getKnowledgeBase();
+
+   IPrefixManager getPrefixManager();
+
+   IConnectionProvider getConnectionProvider();
 
    List<IKnowledgeBaseProcessor> getKnowledgeBaseProcessors();
 }

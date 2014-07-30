@@ -15,20 +15,19 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import com.obidea.semantika.app.Settings;
 import com.obidea.semantika.database.connection.IConnectionProvider;
 import com.obidea.semantika.queryanswer.SparqlQueryEngine;
 
 public class DatabaseSession implements IDatabaseSession
 {
-   private Settings mSettings;
+   private IConnectionProvider mConnectionProvider;
 
    private QueryPlanCache mQueryPlanCache;
 
    public DatabaseSession(SparqlQueryEngine queryEngine)
    {
-      mSettings = queryEngine.getSettings();
       mQueryPlanCache = new QueryPlanCache(queryEngine);
+      mConnectionProvider = queryEngine.getConnectionProvider();
    }
 
    @Override
@@ -40,6 +39,6 @@ public class DatabaseSession implements IDatabaseSession
    @Override
    public IConnectionProvider getConnectionProvider()
    {
-      return mSettings.getConnectionProvider();
+      return mConnectionProvider;
    }
 }

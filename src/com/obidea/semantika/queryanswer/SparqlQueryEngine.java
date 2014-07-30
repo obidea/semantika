@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.queryanswer;
 
-import com.obidea.semantika.app.IApplicationManager;
+import com.obidea.semantika.app.ApplicationManager;
 import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.ConnectionManagerException;
@@ -31,7 +31,7 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    private ConnectionManager mConnectionManager;
    private DatabaseSession mSession = new DatabaseSession(this);
 
-   public SparqlQueryEngine(final IApplicationManager manager)
+   public SparqlQueryEngine(final ApplicationManager manager)
    {
       super(manager);
    }
@@ -78,10 +78,9 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    }
 
    @Override
-   public String translate(String sparql) throws SemantikaException
+   public ISelectQuery createQuery(String sparql) throws SemantikaException
    {
-      QueryPlan plan = getQueryPlan(sparql);
-      return plan.getSqlString();
+      return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
    }
 
    @Override
@@ -91,17 +90,18 @@ public class SparqlQueryEngine extends AbstractQueryEngine
    }
 
    @Override
-   public ISelectQuery createQuery(String sparql) throws SemantikaException
-   {
-      return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
-   }
-
-   @Override
    public IQueryResult evaluate(String sparql, QueryParameters queryParameters) throws SemantikaException
    {
       QueryPlan plan = getQueryPlan(sparql);
       IQueryResult results = plan.evaluateQuery(queryParameters);
       return results;
+   }
+
+   @Override
+   public String translate(String sparql) throws SemantikaException
+   {
+      QueryPlan plan = getQueryPlan(sparql);
+      return plan.getSqlString();
    }
 
    /*

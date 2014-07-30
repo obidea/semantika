@@ -17,9 +17,10 @@ package com.obidea.semantika.queryanswer;
 
 import org.slf4j.Logger;
 
-import com.obidea.semantika.app.IApplicationManager;
-import com.obidea.semantika.app.Settings;
+import com.obidea.semantika.app.ApplicationManager;
 import com.obidea.semantika.database.IDatabase;
+import com.obidea.semantika.database.connection.IConnectionProvider;
+import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.IQueryEvaluator;
@@ -34,78 +35,106 @@ import com.obidea.semantika.util.LogUtils;
 
 public abstract class AbstractQueryEngine implements IQueryEngineExt
 {
-   protected Settings mSettings;
-   protected IKnowledgeBase mKnowledgeBase;
+   private ApplicationManager mAppManager;
+
+   private IQueryEvaluator mQueryEvaluator;
 
    protected static final Logger LOG = LogUtils.createLogger("semantika.queryanswer"); //$NON-NLS-1$
 
-   public AbstractQueryEngine(final IApplicationManager manager)
+   public AbstractQueryEngine(final ApplicationManager manager)
    {
-      mSettings = manager.getSettings();
-      mKnowledgeBase = manager.getKnowledgeBase();
+      mAppManager = manager;
    }
 
    @Override
    public IKnowledgeBase getKnowledgeBase()
    {
-      return mKnowledgeBase;
+      return mAppManager.getKnowledgeBase();
    }
 
    public IDatabase getTargetDatabase()
    {
-      return getKnowledgeBase().getDatabase();
+      return mAppManager.getTargetDatabase();
    }
 
-   public Settings getSettings()
+   public IConnectionProvider getConnectionProvider()
    {
-      return mSettings;
+      return mAppManager.getConnectionProvider();
    }
 
+   /**
+    * Returns a query reformulator object to expand the initial input query. This method will create
+    * a new object in its call.
+    */
    public IReformulator getQueryReformulator()
    {
-      IReformulator reformulator = new EmptyRewriter(getKnowledgeBase());
-      LOG.debug("Registered reformulator class {}", reformulator.getClass().toString()); //$NON-NLS-1$
-      return reformulator;
+      return createReformulator();
    }
 
+   /**
+    * Returns a query unfolder object to transform input query to database SQL query. This method
+    * will create a new object in its call.
+    */
    public IUnfolder getQueryUnfolder()
    {
-      IUnfolder unfolder = new QueryUnfolder(getKnowledgeBase());
-      LOG.debug("Registered unfolder class {}", unfolder.getClass().toString()); //$NON-NLS-1$
-      return unfolder;
+      return createUnfolder();
    }
 
+   /**
+    * Returns a query optimizer object to optimize the database SQL query. This method will create
+    * a new object in its call.
+    */
    public IOptimizer getQueryOptimizers()
    {
-      IOptimizer optimizer = new QueryReducer();
-      LOG.debug("Registered optimizer class {}", optimizer.getClass().toString()); //$NON-NLS-1$
-      return optimizer;
+      return createOptimizer();
    }
 
+   /**
+    * Returns a query evaluator that manages and executes each given SQL query.
+    */
    public IQueryEvaluator getQueryEvaluator()
    {
-      /*
-       * For every query service request, the QueryEngine will create a QueryEvaluator to evaluate
-       * the query. Therefore, a QueryEngine can produce many QueryEvaluators, as many as user
-       * service requests.
-       */
-      return createEvaluator(mSettings);
-   }
-
-   private IQueryEvaluator createEvaluator(Settings settings)
-   {
-      IQueryEvaluator evaluator = new QueryEvaluator(getConnectionManager());
-      if (settings.getTransactionTimeout() != null) {
-         evaluator.setTransactionTimeout(settings.getTransactionTimeout().intValue());
-      }
-      if (settings.getTransactionFetchSize() != null) {
-         evaluator.setTransactionFetchSize(settings.getTransactionFetchSize().intValue());
-      }
-      if (settings.getTransactionMaxRows() != null) {
-         evaluator.setTransactionMaxRows(settings.getTransactionMaxRows().intValue());
+      IQueryEvaluator evaluator = mQueryEvaluator;
+      if (evaluator == null) {
+         if (getConnectionManager() != null) {
+            evaluator = createQueryEvaluator(getConnectionManager());
+            evaluator.setTransactionTimeout(mAppManager.getSystemProperties().getTransactionTimeout());
+            evaluator.setTransactionFetchSize(mAppManager.getSystemProperties().getTransactionFetchSize());
+            evaluator.setTransactionMaxRows(mAppManager.getSystemProperties().getTransactionMaxRows());
+         }
+         else {
+            throw new SemantikaRuntimeException("Failed to create query evaluator. Start the query engine first."); //$NON-NLS-1$
+         }
       }
       return evaluator;
    }
 
+   /**
+    * Returns the connection manager used by this query engine.
+    */
    protected abstract ConnectionManager getConnectionManager();
+
+   /*
+    * Private utility methods
+    */
+
+   private IReformulator createReformulator()
+   {
+      return new EmptyRewriter(getKnowledgeBase());
+   }
+
+   private IUnfolder createUnfolder()
+   {
+      return new QueryUnfolder(getKnowledgeBase());
+   }
+
+   private IOptimizer createOptimizer()
+   {
+      return new QueryReducer();
+   }
+
+   private IQueryEvaluator createQueryEvaluator(ConnectionManager connectionManager)
+   {
+      return new QueryEvaluator(connectionManager);
+   }
 }
