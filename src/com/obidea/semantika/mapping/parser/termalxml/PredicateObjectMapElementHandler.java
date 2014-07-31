@@ -123,7 +123,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
 
    private void setPredicateUri(URI propertyUri) throws PrefixNotFoundException, PropertyNotFoundException
    {
-      checkProperty(propertyUri);
+      checkPropertySignature(propertyUri);
       mPredicateUri = propertyUri;
    }
 
@@ -146,7 +146,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
     * Private utility methods
     */
 
-   private void checkProperty(URI uri) throws PropertyNotFoundException
+   private void checkPropertySignature(URI uri) throws PropertyNotFoundException
    {
       if (isStrictParsing()) {
          if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
