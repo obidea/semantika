@@ -15,9 +15,7 @@
  */
 package com.obidea.semantika.database.datatype;
 
-import com.obidea.semantika.database.sql.parser.SqlException;
-
-public class UnsupportedSqlDataTypeException extends SqlException
+public class UnsupportedSqlDataTypeException extends SqlDataTypeException
 {
    private static final long serialVersionUID = 629451L;
 
