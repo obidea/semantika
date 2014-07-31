@@ -19,14 +19,9 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.obidea.semantika.database.IDatabaseMetadata;
-import com.obidea.semantika.exception.SemantikaRuntimeException;
-import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.IMetaModel;
-import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.ontology.IOntology;
@@ -34,13 +29,13 @@ import com.obidea.semantika.ontology.IOntology;
 public abstract class AbstractMappingHandler
 {
    private String mBaseIri;
-   private boolean mUseStrictParsing;
    private IOntology mOntology;
    private IDatabaseMetadata mDatabaseMetadata;
 
    private SqlQuery mSqlQuery;
 
    private URI mSubjectUri;
+   private URI mPredicateUri;
 
    private ITerm mSubjectMapValue;
    private ITerm mPredicateMapValue;
@@ -84,16 +79,6 @@ public abstract class AbstractMappingHandler
       return mBaseIri;
    }
 
-   public void setStrictParsing(boolean useStrictParsing)
-   {
-      mUseStrictParsing = useStrictParsing;
-   }
-
-   public boolean isStrictParsing()
-   {
-      return mUseStrictParsing;
-   }
-
    public void setSqlQuery(SqlQuery sqlQuery)
    {
       mSqlQuery = sqlQuery;
@@ -104,18 +89,24 @@ public abstract class AbstractMappingHandler
       return mSqlQuery;
    }
 
-   public void setSubjectUri(String uri)
+   public void setSubjectUri(URI classUri)
    {
-      if (!StringUtils.isEmpty(uri)) {
-         URI classUri = createUri(uri);
-         checkClassSignature(classUri);
-         mSubjectUri = classUri;
-      }
+      mSubjectUri = classUri;
    }
 
    public URI getSubjectUri()
    {
       return mSubjectUri;
+   }
+
+   public void setPredicateUri(URI propertyUri)
+   {
+      mPredicateUri = propertyUri;
+   }
+
+   public URI getPredicateUri()
+   {
+      return mPredicateUri;
    }
 
    public void setSubjectMapValue(ITerm subjectTerm)
@@ -146,44 +137,5 @@ public abstract class AbstractMappingHandler
    public ITerm getObjectMapValue()
    {
       return mObjectMapValue;
-   }
-
-   /*
-    * Protected utility methods
-    */
-
-   protected ExpressionObjectFactory getExpressionObjectFactory()
-   {
-      return ExpressionObjectFactory.getInstance();
-   }
-
-   protected MappingObjectFactory getMappingObjectFactory()
-   {
-      return MappingObjectFactory.getInstance();
-   }
-
-   protected void checkClassSignature(URI uri)
-   {
-      if (isStrictParsing()) {
-         if (getOntology().containClass(uri)) {
-            return;
-         }
-         throw new SemantikaRuntimeException("Class URI not found in ontology \"" + uri + "\"");
-      }
-   }
-
-   protected void checkPropertySignature(URI uri)
-   {
-      if (isStrictParsing()) {
-         if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
-            return;
-         }
-         throw new SemantikaRuntimeException("Property URI not found in ontology \"" + uri + "\"");
-      }
-   }
-
-   protected URI createUri(String uriString)
-   {
-      return URI.create(uriString);
    }
 }

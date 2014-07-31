@@ -36,9 +36,12 @@ import io.github.johardi.r2rmlparser.document.TermMap;
 import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
+import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMetaModel;
+import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
@@ -51,9 +54,38 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
 {
    private SqlFactory mSqlFactory = new SqlFactory(getDatabaseMetadata());
 
+   private boolean mUseStrictParsing = false;
+
+   private static ExpressionObjectFactory sExpressionObjectFactory = ExpressionObjectFactory.getInstance();
+   private static MappingObjectFactory sMappingObjectFactory = MappingObjectFactory.getInstance();
+
    public R2RmlMappingHandler(IMetaModel metaModel)
    {
       super(metaModel);
+   }
+
+   public void setStrictParsing(boolean useStrictParsing)
+   {
+      mUseStrictParsing = useStrictParsing;
+   }
+
+   public boolean isStrictParsing()
+   {
+      return mUseStrictParsing;
+   }
+
+   @Override
+   public void setSubjectUri(URI classUri)
+   {
+      checkClassSignature(classUri);
+      super.setSubjectUri(classUri);
+   }
+
+   @Override
+   public void setPredicateUri(URI propertyUri)
+   {
+      checkPropertySignature(propertyUri);
+      super.setPredicateUri(propertyUri);
    }
 
    @Override
@@ -72,7 +104,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    public void visit(SubjectMap arg)
    {
       validateSubjectMap(arg);
-      setSubjectUri(arg.getClassIri());
+      setSubjectUri(createUri(arg.getClassIri()));
       
       int termMap = arg.getType();
       String value = arg.getValue();
@@ -91,7 +123,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
       // Create the class mapping if a class URI specified in the mapping
       if (getSubjectUri() != null) {
-         ClassMapping cm = getMappingObjectFactory().createClassMapping(getSubjectUri(), getSqlQuery());
+         ClassMapping cm = sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery());
          cm.setSubjectMapValue(getSubjectMapValue()); // subject template
          addMapping(cm);
       }
@@ -114,7 +146,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       arg.getPredicateMap().accept(this);
       arg.getObjectMap().accept(this);
       
-      PropertyMapping pm = getMappingObjectFactory().createPropertyMapping(getPropertyUri(), getSqlQuery());
+      PropertyMapping pm = sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery());
       pm.setSubjectMapValue(getSubjectMapValue());
       pm.setObjectMapValue(getObjectMapValue());
       addMapping(pm);
@@ -132,7 +164,9 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          case TermMap.COLUMN_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
-            setPredicateMapValue(getLiteralTerm(value, termType, datatype));
+            ITerm predicateTerm = getLiteralTerm(value, termType, datatype);
+            setPredicateUri(createUri(predicateTerm));
+            setPredicateMapValue(predicateTerm);
             break;
          case TermMap.TEMPLATE_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use template-valued term map"); //$NON-NLS-1$
@@ -183,9 +217,30 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
     * Private utility methods
     */
 
-   private URI getPropertyUri()
+   private void checkClassSignature(URI uri)
    {
-      return ((UriReference) getPredicateMapValue()).toUri();
+      if (uri == null) {
+         return; // if input is null then nothing to check
+      }
+      if (isStrictParsing()) {
+         if (getOntology().containClass(uri)) {
+            return;
+         }
+         throw new SemantikaRuntimeException("Class URI not found in ontology \"" + uri + "\"");
+      }
+   }
+
+   private void checkPropertySignature(URI uri)
+   {
+      if (uri == null) {
+         return; // if input is null then nothing to check
+      }
+      if (isStrictParsing()) {
+         if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
+            return;
+         }
+         throw new SemantikaRuntimeException("Property URI not found in ontology \"" + uri + "\"");
+      }
    }
 
    private ITerm getColumnTerm(String columnName, String termType, String datatype)
@@ -218,12 +273,12 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          if (!StringUtils.isEmpty(datatype)) {
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
-         return getExpressionObjectFactory().getUriReference(createUri(value));
+         return sExpressionObjectFactory.getUriReference(createUri(value));
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
          return (StringUtils.isEmpty(datatype)) ?
-            getExpressionObjectFactory().getLiteral(value, DataType.STRING) : // by default
-            getExpressionObjectFactory().getLiteral(value, datatype);
+               sExpressionObjectFactory.getLiteral(value, DataType.STRING) : // by default
+               sExpressionObjectFactory.getLiteral(value, datatype);
       }
       else if (termType.equals(R2RmlVocabulary.BLANK_NODE)) {
          throw new UnsupportedR2RmlFeatureException("rr:BlankNode as term type"); //$NON-NLS-1$
@@ -240,7 +295,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          R2RmlTemplate template = new R2RmlTemplate(value);
          String templateString = template.getTemplateString();
          List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-         UriTemplate uriTemplate = getMappingObjectFactory().createUriTemplate(templateString, parameters);
+         UriTemplate uriTemplate = sMappingObjectFactory.createUriTemplate(templateString, parameters);
          return uriTemplate;
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
@@ -281,5 +336,21 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       catch (IllegalArgumentException e) {
          throw new IllegalR2RmlMappingException(e.getMessage());
       }
+   }
+
+   private URI createUri(String uriString)
+   {
+      if (!StringUtils.isEmpty(uriString)) {
+         return URI.create(uriString);
+      }
+      return null;
+   }
+
+   private URI createUri(ITerm term)
+   {
+      if (term instanceof UriReference) {
+         return ((UriReference) term).toUri();
+      }
+      return null;
    }
 }
