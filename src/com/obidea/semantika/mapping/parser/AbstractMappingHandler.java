@@ -22,7 +22,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
-import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
@@ -39,7 +38,6 @@ public abstract class AbstractMappingHandler
    private IOntology mOntology;
    private IDatabaseMetadata mDatabaseMetadata;
 
-   private SqlFactory mSqlFactory;
    private SqlQuery mSqlQuery;
 
    private URI mClassUri;
@@ -54,7 +52,6 @@ public abstract class AbstractMappingHandler
    {
       mOntology = metaModel.getOntology();
       mDatabaseMetadata = metaModel.getDatabaseMetadata();
-      mSqlFactory = new SqlFactory(mDatabaseMetadata);
    }
 
    public IOntology getOntology()
@@ -97,9 +94,9 @@ public abstract class AbstractMappingHandler
       return mUseStrictParsing;
    }
 
-   public void setSqlQuery(String sqlString)
+   public void setSqlQuery(SqlQuery sqlQuery)
    {
-      mSqlQuery = mSqlFactory.create(sqlString);
+      mSqlQuery = sqlQuery;
    }
 
    public SqlQuery getSqlQuery()

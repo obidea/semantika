@@ -33,6 +33,7 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
+import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
@@ -43,10 +44,13 @@ import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.parser.AbstractMappingHandler;
 
 public class R2RmlMappingHandler extends AbstractMappingHandler implements IMappingVisitor
 {
+   private SqlFactory mSqlFactory = new SqlFactory(getDatabaseMetadata());
+
    public R2RmlMappingHandler(IMetaModel metaModel)
    {
       super(metaModel);
@@ -55,7 +59,13 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    @Override
    public void visit(LogicalTable arg)
    {
-      setSqlQuery(arg.getTableView().getSqlQuery());
+      String sqlString = arg.getTableView().getSqlQuery();
+      setSqlQuery(createQuery(sqlString));
+   }
+
+   private SqlQuery createQuery(String sqlString)
+   {
+      return mSqlFactory.create(sqlString);
    }
 
    @Override
