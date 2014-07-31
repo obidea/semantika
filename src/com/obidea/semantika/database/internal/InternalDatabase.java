@@ -35,7 +35,7 @@ import com.obidea.semantika.database.base.ITable;
 import com.obidea.semantika.database.base.PrimaryKey;
 import com.obidea.semantika.database.base.Schema;
 import com.obidea.semantika.database.base.Table;
-import com.obidea.semantika.database.exception.AmbiguousNameFoundException;
+import com.obidea.semantika.database.exception.AmbiguousNamesException;
 import com.obidea.semantika.database.exception.TableNotFoundException;
 import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.util.StringUtils;
@@ -57,7 +57,7 @@ public class InternalDatabase extends AbstractInternalDatabase
          throw new TableNotFoundException(anyTableName);
       }
       if (possibleTables.size() > 1) {
-         throw new AmbiguousNameFoundException(anyTableName, possibleTables);
+         throw new AmbiguousNamesException(anyTableName, possibleTables);
       }
       return possibleTables.get(0);
    }

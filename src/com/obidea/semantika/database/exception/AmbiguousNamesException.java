@@ -19,13 +19,13 @@ import java.util.List;
 
 import com.obidea.semantika.database.base.IDatabaseObject;
 
-public class AmbiguousNameFoundException extends InternalDatabaseException
+public class AmbiguousNamesException extends InternalDatabaseException
 {
    private static final long serialVersionUID = 629451L;
 
    private List<? extends IDatabaseObject> mMultipleObjectsFound;
 
-   public AmbiguousNameFoundException(String inputName, List<? extends IDatabaseObject> multipleObjectsFound)
+   public AmbiguousNamesException(String inputName, List<? extends IDatabaseObject> multipleObjectsFound)
    {
       super("Found other similar names for \"" + inputName + "\"");
       mMultipleObjectsFound = multipleObjectsFound;
