@@ -33,7 +33,7 @@ import com.obidea.semantika.queryanswer.result.IQueryResultHandler;
 import com.obidea.semantika.queryanswer.result.ListResultHandler;
 import com.obidea.semantika.queryanswer.result.QueryResultHandlerException;
 
-public class SelectQuery implements ISelectQuery
+public class SelectQuery
 {
    private static QueryParser sQueryValidator = QueryParserUtil.createParser(QueryLanguage.SPARQL);
 
@@ -84,13 +84,11 @@ public class SelectQuery implements ISelectQuery
       return mQueryMetadata;
    }
 
-   @Override
    public String getQueryString()
    {
       return mSparqlString;
    }
 
-   @Override
    public QueryModifiers getModifiers()
    {
       return mQueryModifiers;
@@ -101,59 +99,50 @@ public class SelectQuery implements ISelectQuery
       return mUserStatementSettings;
    }
 
-   @Override
    public SelectQuery setMaxResults(int limit)
    {
       mQueryModifiers.setLimit(limit);
       return this;
    }
 
-   @Override
    public SelectQuery setFirstResult(int offset)
    {
       mQueryModifiers.setOffset(offset);
       return this;
    }
 
-   @Override
    public SelectQuery setAscendingOrder(String column)
    {
       mQueryModifiers.setAscendingOrder(column);
       return this;
    }
 
-   @Override
    public SelectQuery setDescendingOrder(String column)
    {
       mQueryModifiers.setDescendingOrder(column);
       return this;
    }
 
-   @Override
    public void setFetchSize(int fetchSize)
    {
       mUserStatementSettings.setFetchSize(fetchSize);
    }
 
-   @Override
    public void setTimeout(int timeout)
    {
       mUserStatementSettings.setQueryTimeout(timeout);
    }
 
-   @Override
    public void setMaxRows(int maxRows)
    {
       mUserStatementSettings.setMaxRows(maxRows);
    }
 
-   @Override
    public IQueryResult evaluate() throws QueryAnswerException
    {
       return mQueryEngine.evaluate(getQueryString(), getModifiers(), getTransactionSettings());
    }
 
-   @Override
    public void evaluate(IQueryResultHandler handler) throws QueryAnswerException
    {
       try {
@@ -169,7 +158,6 @@ public class SelectQuery implements ISelectQuery
       }
    }
 
-   @Override
    public List<Object[]> list() throws QueryAnswerException
    {
       ListResultHandler handler = new ListResultHandler();

@@ -21,7 +21,6 @@ import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.ConnectionManagerException;
 import com.obidea.semantika.queryanswer.internal.DatabaseSession;
-import com.obidea.semantika.queryanswer.internal.ISelectQuery;
 import com.obidea.semantika.queryanswer.internal.QueryModifiers;
 import com.obidea.semantika.queryanswer.internal.QueryPlan;
 import com.obidea.semantika.queryanswer.internal.QueryTranslationException;
@@ -80,7 +79,7 @@ public class SparqlQueryEngine extends AbstractQueryEngine
       return mConnectionManager;
    }
 
-   public ISelectQuery createQuery(String sparql) throws QueryAnswerException
+   public SelectQuery createQuery(String sparql) throws QueryAnswerException
    {
       return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
    }
