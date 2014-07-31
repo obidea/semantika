@@ -40,7 +40,7 @@ public abstract class AbstractMappingHandler
 
    private SqlQuery mSqlQuery;
 
-   private URI mClassUri;
+   private URI mSubjectUri;
 
    private ITerm mSubjectMapValue;
    private ITerm mPredicateMapValue;
@@ -104,18 +104,18 @@ public abstract class AbstractMappingHandler
       return mSqlQuery;
    }
 
-   public void setClassUri(String uri)
+   public void setSubjectUri(String uri)
    {
       if (!StringUtils.isEmpty(uri)) {
          URI classUri = createUri(uri);
          checkClassSignature(classUri);
-         mClassUri = classUri;
+         mSubjectUri = classUri;
       }
    }
 
-   public URI getClassUri()
+   public URI getSubjectUri()
    {
-      return mClassUri;
+      return mSubjectUri;
    }
 
    public void setSubjectMapValue(ITerm subjectTerm)

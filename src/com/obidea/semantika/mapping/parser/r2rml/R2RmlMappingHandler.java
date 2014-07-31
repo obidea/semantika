@@ -72,7 +72,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    public void visit(SubjectMap arg)
    {
       validateSubjectMap(arg);
-      setClassUri(arg.getClassIri());
+      setSubjectUri(arg.getClassIri());
       
       int termMap = arg.getType();
       String value = arg.getValue();
@@ -90,8 +90,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             break;
       }
       // Create the class mapping if a class URI specified in the mapping
-      if (getClassUri() != null) {
-         ClassMapping cm = getMappingObjectFactory().createClassMapping(getClassUri(), getSqlQuery());
+      if (getSubjectUri() != null) {
+         ClassMapping cm = getMappingObjectFactory().createClassMapping(getSubjectUri(), getSqlQuery());
          cm.setSubjectMapValue(getSubjectMapValue()); // subject template
          addMapping(cm);
       }
