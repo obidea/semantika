@@ -59,9 +59,6 @@ public class JSqlParser implements ISqlParser
       catch (ParseException e) {
          throw new SqlParserException("SQL syntax error", e); //$NON-NLS-1$
       }
-      catch (SqlException e) {
-         throw new SqlParserException("Invalid SQL", e); //$NON-NLS-1$
-      }
       catch (InternalDatabaseException e) {
          throw new SqlParserException("Database metadata access error", e); //$NON-NLS-1$
       }

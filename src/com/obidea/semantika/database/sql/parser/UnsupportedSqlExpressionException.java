@@ -15,7 +15,7 @@
  */
 package com.obidea.semantika.database.sql.parser;
 
-public class UnsupportedSqlExpressionException extends SqlException
+public class UnsupportedSqlExpressionException extends SqlParserException
 {
    private static final long serialVersionUID = 629451L;
 

@@ -59,7 +59,7 @@ public class UserQueryHandler implements SelectItemVisitor
          }
       }
       catch (ParseException e) {
-         throw new SqlException("SQL syntax error", e); //$NON-NLS-1$
+         throw new SqlParserException("SQL syntax error", e); //$NON-NLS-1$
       }
    }
 
@@ -87,13 +87,13 @@ public class UserQueryHandler implements SelectItemVisitor
    @Override
    public void visit(AllColumns allColumns)
    {
-      throw new SqlException("User query needs explicit select column statement"); //$NON-NLS-1$
+      throw new SqlParserException("User query needs explicit select column statement"); //$NON-NLS-1$
    }
 
    @Override
    public void visit(AllTableColumns allTableColumns)
    {
-      throw new SqlException("User query needs explicit select column statement"); //$NON-NLS-1$
+      throw new SqlParserException("User query needs explicit select column statement"); //$NON-NLS-1$
    }
 
    @Override
@@ -107,7 +107,7 @@ public class UserQueryHandler implements SelectItemVisitor
             identifier = removeQuotesIfAny(column.getColumnName());
          }
          else {
-            throw new SqlException("Select item has no identifier: " + expr.toString()); //$NON-NLS-1$
+            throw new SqlParserException("Select item has no identifier: " + expr.toString()); //$NON-NLS-1$
          }
       }
       SqlColumn column = new SqlColumn(new MockColumn(identifier));

@@ -494,14 +494,9 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    @Override
    public void visit(net.sf.jsqlparser.schema.Column tableColumn)
    {
-      try {
-         String tableName = tableColumn.getTable().getFullyQualifiedName();
-         String columnName = tableColumn.getColumnName();
-         mExpression = mTableList.getColumn(tableName, columnName);
-      }
-      catch (SqlParserException e) {
-         throw new SqlException(e);
-      }
+      String tableName = tableColumn.getTable().getFullyQualifiedName();
+      String columnName = tableColumn.getColumnName();
+      mExpression = mTableList.getColumn(tableName, columnName);
    }
 
    /*

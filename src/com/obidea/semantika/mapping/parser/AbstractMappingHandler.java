@@ -23,7 +23,6 @@ import org.apache.commons.lang.StringUtils;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.sql.parser.SqlFactory;
-import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ITerm;
@@ -100,12 +99,7 @@ public abstract class AbstractMappingHandler
 
    public void setSqlQuery(String sqlString)
    {
-      try {
-         mSqlQuery = mSqlFactory.create(sqlString);
-      }
-      catch (SqlParserException e) {
-         throw new SemantikaRuntimeException(e);
-      }
+      mSqlQuery = mSqlFactory.create(sqlString);
    }
 
    public SqlQuery getSqlQuery()

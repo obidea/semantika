@@ -91,14 +91,9 @@ public class JoinConditionHandler implements ExpressionVisitor
    @Override
    public void visit(Column tableColumn)
    {
-      try {
-         String tableName = tableColumn.getTable().getFullyQualifiedName();
-         String columnName = tableColumn.getColumnName();
-         mJoinColumn = mFromTables.getColumn(tableName, columnName);
-      }
-      catch (SqlParserException e) {
-         throw new SqlException(e);
-      }
+      String tableName = tableColumn.getTable().getFullyQualifiedName();
+      String columnName = tableColumn.getColumnName();
+      mJoinColumn = mFromTables.getColumn(tableName, columnName);
    }
 
    @Override
