@@ -22,7 +22,7 @@ import com.obidea.semantika.mapping.exception.MappingParserException;
 
 public class PredicateObjectMapElementHandler extends AbstractMappingElementHandler
 {
-   private URI mPropertyUri;
+   private URI mPredicateUri;
    private ITerm mObjectMapValue;
 
    public PredicateObjectMapElementHandler(TermalXmlParserHandler handler)
@@ -57,7 +57,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    public void attribute(String name, String value) throws MappingParserException
    {
       if (name.equals(R2RmlVocabulary.PREDICATE.getQName())) {
-         setPropertyUri(getUri(value));
+         setPredicateUri(getUri(value));
       }
       else if (name.equals(R2RmlVocabulary.COLUMN.getQName())) {
          setTermMap(TermMap.COLUMN_VALUE);
@@ -121,15 +121,15 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
       }
    }
 
-   private void setPropertyUri(URI propertyUri) throws PrefixNotFoundException, PropertyNotFoundException
+   private void setPredicateUri(URI propertyUri) throws PrefixNotFoundException, PropertyNotFoundException
    {
       checkProperty(propertyUri);
-      mPropertyUri = propertyUri;
+      mPredicateUri = propertyUri;
    }
 
-   public URI getPropertyUri()
+   public URI getPredicateUri()
    {
-      return mPropertyUri;
+      return mPredicateUri;
    }
 
    private void setObjectMapValue(ITerm objectTerm)

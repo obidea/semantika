@@ -116,8 +116,8 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    @Override
    protected void handleChild(PredicateObjectMapElementHandler handler)
    {
-      final URI propertyUri = handler.getPropertyUri();
-      IPropertyMapping pm = getMappingObjectFactory().createPropertyMapping(propertyUri, getSourceQuery());
+      final URI predicateUri = handler.getPredicateUri();
+      IPropertyMapping pm = getMappingObjectFactory().createPropertyMapping(predicateUri, getSourceQuery());
       pm.setSubjectMapValue(getSubjectMapValue());
       pm.setObjectMapValue(handler.getObjectMapValue());
       mMappingSet.add(pm);
