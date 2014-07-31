@@ -15,17 +15,16 @@
  */
 package com.obidea.semantika.datatype.exception;
 
-
-public class DataTypeCastingException extends DataTypeReasonerException
+public class DataTypeConversionException extends DataTypeReasonerException
 {
    private static final long serialVersionUID = 629451L;
 
-   public DataTypeCastingException(String message)
+   public DataTypeConversionException(String message)
    {
       super(message);
    }
 
-   public DataTypeCastingException(String message, Throwable cause)
+   public DataTypeConversionException(String message, Throwable cause)
    {
       super(message, cause);
    }
