@@ -42,7 +42,7 @@ public class LogicalTableElementHandler extends AbstractMappingQueryElementHandl
    public void endElement() throws MappingParserException
    {
       try {
-         setQuery(createQuery());
+         setSqlQuery(createQuery());
          getParentElement().handleChild(this);
          mSqlString = ""; //$NON-NLS-1$ // clear the SQL string
       }

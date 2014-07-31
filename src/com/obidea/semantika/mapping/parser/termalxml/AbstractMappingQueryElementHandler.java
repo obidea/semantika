@@ -31,7 +31,7 @@ public abstract class AbstractMappingQueryElementHandler extends AbstractTermalE
       return mQuery;
    }
 
-   protected void setQuery(SqlQuery query)
+   protected void setSqlQuery(SqlQuery query)
    {
       mQuery = query;
    }
