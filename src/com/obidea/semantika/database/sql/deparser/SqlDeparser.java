@@ -35,12 +35,10 @@ import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.database.sql.base.SqlJoinCondition;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.dialect.IDialect;
-import com.obidea.semantika.database.sql.parser.SqlException;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.mapping.base.sql.SqlAddition;
 import com.obidea.semantika.mapping.base.sql.SqlAnd;
-import com.obidea.semantika.mapping.base.sql.SqlStr;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlConcat;
 import com.obidea.semantika.mapping.base.sql.SqlDivide;
@@ -56,6 +54,7 @@ import com.obidea.semantika.mapping.base.sql.SqlMultiply;
 import com.obidea.semantika.mapping.base.sql.SqlNotEqualsTo;
 import com.obidea.semantika.mapping.base.sql.SqlOr;
 import com.obidea.semantika.mapping.base.sql.SqlRegex;
+import com.obidea.semantika.mapping.base.sql.SqlStr;
 import com.obidea.semantika.mapping.base.sql.SqlSubtract;
 import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
 import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
@@ -445,9 +444,9 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
       append(mDialect.view(subQueryExpression.getViewName()));
    }
 
-   private SqlException unknownSqlExpressionException(ISqlFunction sqlFunction)
+   private SqlDeparserException unknownSqlExpressionException(ISqlFunction sqlFunction)
    {
-      return new SqlException("Unable to produce SQL string from expression: " + sqlFunction); //$NON-NLS-1$
+      return new SqlDeparserException("Unable to produce SQL function expression: " + sqlFunction); //$NON-NLS-1$
    }
 
    class SelectItemVisitor implements ISqlExpressionVisitor
@@ -468,7 +467,7 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
             visitSqlUriConcat((SqlUriConcat) function);
          }
          else {
-            throw new SqlException("Unable to produce SQL select item expression: " + function); //$NON-NLS-1$
+            throw new SqlDeparserException("Unable to produce SQL select item expression: " + function); //$NON-NLS-1$
          }
       }
 

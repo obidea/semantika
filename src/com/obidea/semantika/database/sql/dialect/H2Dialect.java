@@ -18,7 +18,7 @@ package com.obidea.semantika.database.sql.dialect;
 import java.sql.Types;
 import java.util.List;
 
-import com.obidea.semantika.database.sql.parser.SqlException;
+import com.obidea.semantika.database.sql.deparser.SqlDeparserException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 
 public class H2Dialect extends Sql99Dialect
@@ -55,7 +55,7 @@ public class H2Dialect extends Sql99Dialect
    @Override
    public String lang(String text)
    {
-      throw new SqlException("Unable to produce SQL string for LANG expression:" +
+      throw new SqlDeparserException("Unable to produce SQL lang expression. " +
             "H2 doesn't have the sufficient built-in expressions"); //$NON-NLS-1$
    }
 
