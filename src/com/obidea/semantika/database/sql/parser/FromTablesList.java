@@ -29,7 +29,8 @@ import com.obidea.semantika.util.StringUtils;
 /**
  * A utility class to keep a list of tables in the FROM clause.
  */
-/* package */class FromTablesList implements Iterator<SqlTable>, Iterable<SqlTable>
+/* package */
+class FromTablesList implements Iterator<SqlTable>, Iterable<SqlTable>
 {
    private List<ITable> mSelectionList = new ArrayList<ITable>();
 
