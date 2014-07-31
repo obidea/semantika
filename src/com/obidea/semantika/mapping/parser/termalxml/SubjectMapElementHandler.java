@@ -120,6 +120,9 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
 
    private void checkClassSignature(URI uri) throws ClassNotFoundException
    {
+      if (uri == null) {
+         return; // if input is null then nothing to check
+      }
       if (isStrictParsing()) {
          if (getOntology().containClass(uri)) {
             return;
