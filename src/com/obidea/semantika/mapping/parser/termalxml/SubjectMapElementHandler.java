@@ -22,7 +22,7 @@ import com.obidea.semantika.mapping.exception.MappingParserException;
 
 public class SubjectMapElementHandler extends AbstractMappingElementHandler
 {
-   private URI mClassUri;
+   private URI mSubjectUri;
    private ITerm mSubjectMapValue;
 
    public SubjectMapElementHandler(TermalXmlParserHandler handler)
@@ -53,7 +53,7 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    public void attribute(String name, String value) throws MappingParserException
    {
       if (name.equals(R2RmlVocabulary.CLASS.getQName())) {
-         setClassUri(getUri(value));
+         setSubjectUri(getUri(value));
       }
       else if (name.equals(R2RmlVocabulary.COLUMN.getQName())) {
          setTermMap(TermMap.COLUMN_VALUE);
@@ -93,15 +93,15 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
       }
    }
 
-   private void setClassUri(URI classUri) throws ClassNotFoundException, PrefixNotFoundException
+   private void setSubjectUri(URI classUri) throws ClassNotFoundException, PrefixNotFoundException
    {
       checkClassSignature(classUri);
-      mClassUri = classUri;
+      mSubjectUri = classUri;
    }
 
-   public URI getClassUri()
+   public URI getSubjectUri()
    {
-      return mClassUri;
+      return mSubjectUri;
    }
 
    private void setSubjectMapValue(ITerm subjectTerm)

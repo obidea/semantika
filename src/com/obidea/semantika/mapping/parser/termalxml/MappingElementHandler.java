@@ -105,9 +105,9 @@ public class MappingElementHandler extends AbstractTermalElementHandler
       final ITerm subjectTerm = handler.getSubjectMapValue();
       setSubjectMapValue(subjectTerm);
       
-      final URI classUri = handler.getClassUri();
-      if (classUri != null) {
-         IClassMapping cm = getMappingObjectFactory().createClassMapping(classUri, getSourceQuery());
+      final URI subjectUri = handler.getSubjectUri();
+      if (subjectUri != null) {
+         IClassMapping cm = getMappingObjectFactory().createClassMapping(subjectUri, getSourceQuery());
          cm.setSubjectMapValue(subjectTerm);
          mMappingSet.add(cm);
       }
