@@ -49,26 +49,6 @@ public abstract class AbstractMappingHandler
       mDatabaseMetadata = metaModel.getDatabaseMetadata();
    }
 
-   public IOntology getOntology()
-   {
-      return mOntology;
-   }
-
-   public IDatabaseMetadata getDatabaseMetadata()
-   {
-      return mDatabaseMetadata;
-   }
-
-   public void addMapping(IMapping mapping)
-   {
-      mMappings.add(mapping);
-   }
-
-   public List<IMapping> getMappings()
-   {
-      return mMappings;
-   }
-
    public void setBaseIri(String baseIri)
    {
       mBaseIri = baseIri;
@@ -79,7 +59,27 @@ public abstract class AbstractMappingHandler
       return mBaseIri;
    }
 
-   public void setSqlQuery(SqlQuery sqlQuery)
+   public IOntology getOntology()
+   {
+      return mOntology;
+   }
+
+   public IDatabaseMetadata getDatabaseMetadata()
+   {
+      return mDatabaseMetadata;
+   }
+
+   protected void addMapping(IMapping mapping)
+   {
+      mMappings.add(mapping);
+   }
+
+   public List<IMapping> getMappings()
+   {
+      return mMappings;
+   }
+
+   protected void setSqlQuery(SqlQuery sqlQuery)
    {
       mSqlQuery = sqlQuery;
    }
@@ -89,7 +89,7 @@ public abstract class AbstractMappingHandler
       return mSqlQuery;
    }
 
-   public void setSubjectUri(URI classUri)
+   protected void setSubjectUri(URI classUri)
    {
       mSubjectUri = classUri;
    }
@@ -99,7 +99,7 @@ public abstract class AbstractMappingHandler
       return mSubjectUri;
    }
 
-   public void setPredicateUri(URI propertyUri)
+   protected void setPredicateUri(URI propertyUri)
    {
       mPredicateUri = propertyUri;
    }
@@ -109,7 +109,7 @@ public abstract class AbstractMappingHandler
       return mPredicateUri;
    }
 
-   public void setSubjectMapValue(ITerm subjectTerm)
+   protected void setSubjectMapValue(ITerm subjectTerm)
    {
       mSubjectMapValue = subjectTerm;
    }
@@ -119,7 +119,7 @@ public abstract class AbstractMappingHandler
       return mSubjectMapValue;
    }
 
-   public void setPredicateMapValue(ITerm predicateTerm)
+   protected void setPredicateMapValue(ITerm predicateTerm)
    {
       mPredicateMapValue = predicateTerm;
    }
@@ -129,7 +129,7 @@ public abstract class AbstractMappingHandler
       return mPredicateMapValue;
    }
 
-   public void setObjectMapValue(ITerm objectTerm)
+   protected void setObjectMapValue(ITerm objectTerm)
    {
       mObjectMapValue = objectTerm;
    }
