@@ -48,7 +48,7 @@ public class JSqlParser implements ISqlParser
             return ssh.parse(ss);
          }
          else {
-            throw new UnsupportedSqlExpressionException("Only SELECT statement is valid"); //$NON-NLS-1$
+            throw new SqlParserException("Only SELECT statement is valid"); //$NON-NLS-1$
          }
       }
       catch (UnsupportedSqlExpressionException e) {
