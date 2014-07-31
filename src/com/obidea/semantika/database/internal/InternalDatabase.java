@@ -37,7 +37,6 @@ import com.obidea.semantika.database.base.Schema;
 import com.obidea.semantika.database.base.Table;
 import com.obidea.semantika.database.exception.AmbiguousNamesException;
 import com.obidea.semantika.database.exception.TableNotFoundException;
-import com.obidea.semantika.exception.IllegalOperationException;
 import com.obidea.semantika.util.StringUtils;
 
 public class InternalDatabase extends AbstractInternalDatabase
@@ -173,7 +172,7 @@ public class InternalDatabase extends AbstractInternalDatabase
    private List<TemporaryTable> findCandidateTables(String anyTableName) throws SQLException
    {
       if (StringUtils.isEmpty(anyTableName)) {
-         throw new IllegalOperationException("The table name must not be empty."); //$NON-NLS-1$
+         throw new IllegalArgumentException("The table name must not be empty."); //$NON-NLS-1$
       }
       QualifiedName qname = QualifiedName.create(anyTableName);
       String schemaPattern = qname.getIdentifier(1);
