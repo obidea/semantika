@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.database.datatype;
 
+import static java.lang.String.format;
+
 public class UnsupportedSqlDataTypeException extends SqlDataTypeException
 {
    private static final long serialVersionUID = 629451L;
@@ -23,12 +25,12 @@ public class UnsupportedSqlDataTypeException extends SqlDataTypeException
 
    public UnsupportedSqlDataTypeException(int sqlType)
    {
+      super(format("Unsupported SQL type (value = %s)", sqlType)); //$NON-NLS-1$
       mSqlType = sqlType;
    }
 
-   @Override
-   public String getMessage()
+   public int getType()
    {
-      return String.format("Unsupported SQL type (value = %s)", mSqlType); //$NON-NLS-1$
+      return mSqlType;
    }
 }
