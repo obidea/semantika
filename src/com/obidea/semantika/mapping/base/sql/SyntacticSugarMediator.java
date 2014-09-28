@@ -15,11 +15,8 @@
  */
 package com.obidea.semantika.mapping.base.sql;
 
-import java.util.Set;
-
 import com.obidea.semantika.expression.base.AbstractAtom;
 import com.obidea.semantika.expression.base.IAtomVisitor;
-import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.Predicate;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
@@ -44,12 +41,6 @@ public class SyntacticSugarMediator extends AbstractAtom
    public final boolean isGround()
    {
       return false;
-   }
-
-   @Override
-   public Set<IFunction> getConstraints()
-   {
-      return CollectionUtils.createEmptySet(IFunction.class);
    }
 
    @Override

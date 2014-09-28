@@ -16,7 +16,6 @@
 package com.obidea.semantika.expression.base;
 
 import java.util.List;
-import java.util.Set;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
@@ -63,13 +62,6 @@ public interface IAtom extends ISignature, IExpressionObject
     * @return true if all arguments are constants, or false otherwise.
     */
    boolean isGround();
-
-   /**
-    * Get the constraint predicate functions.
-    * 
-    * @return a set of constraints predicate functions.
-    */
-   Set<? extends IFunction> getConstraints();
 
    /**
     * Applies the substitution unifier <code>V/T</code> to this atom by replacing 

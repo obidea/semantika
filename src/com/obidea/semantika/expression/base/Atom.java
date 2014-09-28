@@ -59,12 +59,6 @@ public class Atom extends AbstractAtom
             }
          }
       }
-      /*
-       * Apply the substitution to atom's constraints
-       */
-      for (IFunction constraint : getConstraints()) {
-         constraint.apply(binding);
-      }
    }
 
    @Override

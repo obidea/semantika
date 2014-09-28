@@ -86,17 +86,6 @@ public abstract class AbstractAtom implements IAtom
       return mGround;
    }
 
-   public void setConstraint(IFunction constraint)
-   {
-      mConstraints.add(constraint);
-   }
-
-   @Override
-   public Set<? extends IFunction> getConstraints()
-   {
-      return Collections.unmodifiableSet(mConstraints);
-   }
-
    @Override
    public void apply(TermSubstitutionBinding binding)
    {
@@ -110,7 +99,6 @@ public abstract class AbstractAtom implements IAtom
       int result = 1;
       result = prime * result + getPredicate().hashCode();
       result = prime * result + getTerms().hashCode();
-      result = prime * result + getConstraints().hashCode();
       return result;
    }
 
@@ -125,9 +113,7 @@ public abstract class AbstractAtom implements IAtom
       }
       if (obj instanceof AbstractAtom) {
          final AbstractAtom other = (AbstractAtom) obj;
-         return getPredicate().equals(other.getPredicate()) 
-               && getTerms().equals(other.getTerms())
-               && getConstraints().equals(other.getConstraints());
+         return getPredicate().equals(other.getPredicate()) && getTerms().equals(other.getTerms());
       }
       return false;
    }

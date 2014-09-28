@@ -17,7 +17,6 @@ package com.obidea.semantika.expression.base;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Syntactic sugar is a special atom with an empty predicate and empty terms. It is used to make
@@ -54,12 +53,6 @@ public abstract class SyntacticSugar extends AbstractAtom
 
    @Override
    public final boolean isGround()
-   {
-      throw new UnsupportedOperationException("Syntactic sugar cannot be determined ground or not"); //$NON-NLS-1$
-   }
-
-   @Override
-   public Set<AbstractFunction> getConstraints()
    {
       throw new UnsupportedOperationException("Syntactic sugar cannot be determined ground or not"); //$NON-NLS-1$
    }
