@@ -17,9 +17,7 @@ package com.obidea.semantika.expression.base;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
@@ -30,8 +28,6 @@ public abstract class AbstractAtom implements IAtom
    protected final IPredicate mPredicate;
 
    protected final List<ITerm> mTerms = new ArrayList<ITerm>();
-
-   protected final Set<IFunction> mConstraints = new HashSet<IFunction>();
 
    protected boolean mGround;
 
