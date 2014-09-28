@@ -21,15 +21,24 @@ import java.util.List;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
+/**
+ * The default implementation of {@link IAtom} interface.
+ */
 public abstract class AbstractAtom implements IAtom
 {
    private static final long serialVersionUID = 629451L;
 
+   /**
+    * The atom's predicate symbol.
+    */
    protected final IPredicate mPredicate;
 
+   /**
+    * The atom's arguments (or terms).
+    */
    protected final List<ITerm> mTerms = new ArrayList<ITerm>();
 
-   protected boolean mGround;
+   private boolean mGround;
 
    public AbstractAtom(final IPredicate predicate, final List<? extends ITerm> terms)
    {
