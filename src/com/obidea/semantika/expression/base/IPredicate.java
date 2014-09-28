@@ -16,20 +16,20 @@
 package com.obidea.semantika.expression.base;
 
 /**
- * A boolean-valued function that returns true or false depending on
- * the value of its variables.
+ * Represents the predicate symbol in predicate logic. It denotes a boolean-valued
+ * function that returns true or false depending on the value of its variables.
  */
 public interface IPredicate extends IExpressionObject
 {
    /**
-    * Returns the name given for this predicate.
+    * Returns the symbol given for this predicate.
     * 
-    * @return a predicate name.
+    * @return a predicate symbol (or its name).
     */
    String getName();
 
    /**
-    * Accept a visitor to collect the internal content of this predicate.
+    * Accept a visitor to process the internal properties of this predicate.
     * 
     * @param visitor
     *           a visitor object.

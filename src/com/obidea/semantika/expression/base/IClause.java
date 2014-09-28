@@ -19,7 +19,20 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A construction of a Horn clause.
+ * Represents the construction of Horn clause for logic programming.
+ * The object is commonly written in the form of an implication:
+ * <pre>
+ * u :- p, q, ..., t </pre>
+ * such that atom <code>u</code> is known as the head (or goal) and the
+ * remaining atoms <code>p</code>, <code>q</code> and <code>t</code>
+ * collectively are called the body.
+ * <p>
+ * <b>Update:</b>
+ * The interface supports the construction of Constrained Horn Clause
+ * (CHC) such that the complete presentation becomes:
+ * <pre>
+ * u :- p, q, ..., t, phi </pre>
+ * where formula <code>phi</code> is a set of logical constraints.
  */
 public interface IClause extends IExpressionObject
 {

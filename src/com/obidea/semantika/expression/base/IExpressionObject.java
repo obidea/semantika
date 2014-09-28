@@ -17,6 +17,9 @@ package com.obidea.semantika.expression.base;
 
 import java.io.Serializable;
 
+/**
+ * Represents the logic expression objects used by this framework.
+ */
 public interface IExpressionObject extends Serializable
 {
    // NO-OP
