@@ -19,6 +19,21 @@ import java.util.List;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
+/**
+ * Represents the construction of Datalog query object as in declarative
+ * logic language.
+ * <p>
+ * Datalog is a restricted form of logic programming with variables, predicates,
+ * and constants, but <b>without</b> function symbols. A Datalog rule has the
+ * form:
+ * <pre>
+ * R0(t0,...,th) :- R1(t1,...,ta), ..., Rn(tn,...,tz)</pre>
+ * 
+ * where <tt>R0,...,Rn</tt> are predicate (relation) symbols and each term
+ * <tt>ti</tt> is either a constant or a variable. The formula
+ * <tt>R0(t0,...,tm)</tt> is called the head of the rule and the sequence
+ * <tt>R1(t1,...,ta), ..., Rn(tn,...,tz)</tt> is the body.
+ */
 public interface IDatalog extends IClause
 {
    /**

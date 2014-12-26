@@ -19,6 +19,9 @@ import java.util.List;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
+/**
+ * Represent the function symbol.
+ */
 public interface IFunction extends ITerm, ISignature
 {
    /**

@@ -15,6 +15,9 @@
  */
 package com.obidea.semantika.expression.base;
 
+/**
+ * Represent the constant symbol.
+ */
 public interface IConstant extends ITerm
 {
    /**

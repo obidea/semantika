@@ -17,6 +17,9 @@ package com.obidea.semantika.expression.base;
 
 import java.net.URI;
 
+/**
+ * Represent the constant URI reference symbol.
+ */
 public interface IUriReference extends IConstant
 {
    /**

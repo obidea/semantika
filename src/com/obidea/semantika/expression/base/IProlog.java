@@ -19,6 +19,11 @@ import java.util.List;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
+/**
+ * Represents the construction of Prolog query object as in declarative
+ * logic language. Prolog is a general purpose logic programming with variables,
+ * predicates, constants and function symbols as the terms.
+ */
 public interface IProlog extends IClause
 {
    /**

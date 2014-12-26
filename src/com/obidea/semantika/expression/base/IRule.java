@@ -15,6 +15,9 @@
  */
 package com.obidea.semantika.expression.base;
 
+/**
+ * Represents the construction of a rule language.
+ */
 public interface IRule extends IDatalog
 {
    /**

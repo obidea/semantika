@@ -15,6 +15,9 @@
  */
 package com.obidea.semantika.expression.base;
 
+/**
+ * Represent the variable symbol.
+ */
 public interface IVariable extends ITerm
 {
    // NO-OP

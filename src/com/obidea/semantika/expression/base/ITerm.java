@@ -15,6 +15,10 @@
  */
 package com.obidea.semantika.expression.base;
 
+/**
+ * Represent the term symbol in predicate logic. A first-order term is recursively
+ * constructed from constant symbols, variables and function symbols.
+ */
 public interface ITerm extends IExpressionObject
 {
    /**
@@ -64,7 +68,7 @@ public interface ITerm extends IExpressionObject
    public String toString();
 
    /**
-    * Accept a visitor to collect the internal content of this class.
+    * Accept a visitor to collect the internal properties of this term.
     * 
     * @param visitor
     *           a visitor object.

@@ -15,6 +15,9 @@
  */
 package com.obidea.semantika.expression.base;
 
+/**
+ * Represent the constant literal symbol.
+ */
 public interface ILiteral extends IConstant
 {
    /**

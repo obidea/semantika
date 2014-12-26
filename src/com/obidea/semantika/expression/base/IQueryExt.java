@@ -17,6 +17,9 @@ package com.obidea.semantika.expression.base;
 
 import java.util.Set;
 
+/**
+ * Represents the construction of a query language.
+ */
 public interface IQueryExt extends IProlog
 {
    /**

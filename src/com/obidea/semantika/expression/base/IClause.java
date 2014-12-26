@@ -29,7 +29,7 @@ import java.util.Set;
  * <p>
  * <b>Update:</b>
  * The interface supports the construction of Constrained Horn Clause
- * (CHC) such that the complete presentation becomes:
+ * (CHC). The complete clause construction now becomes:
  * <pre>
  * u :- p, q, ..., t, phi </pre>
  * where formula <code>phi</code> is a set of logical constraints.

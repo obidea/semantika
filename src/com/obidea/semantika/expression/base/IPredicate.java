@@ -16,8 +16,7 @@
 package com.obidea.semantika.expression.base;
 
 /**
- * Represents the predicate symbol in predicate logic. It denotes a boolean-valued
- * function that returns true or false depending on the value of its variables.
+ * Represents the predicate symbol in predicate logic.
  */
 public interface IPredicate extends IExpressionObject
 {
