@@ -214,11 +214,6 @@ public final class TermUtils
       return (IFunction) Serializer.copy(function);
    }
 
-   public static IBNode copy(IBNode bnode)
-   {
-      return (IBNode) Serializer.copy(bnode);
-   }
-
    public static IVariable asVariable(ITerm term)
    {
       return (IVariable) term;
