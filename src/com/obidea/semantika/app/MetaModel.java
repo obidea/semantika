@@ -15,33 +15,47 @@
  */
 package com.obidea.semantika.app;
 
+import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.ontology.IOntology;
 
-public final class MetaModel implements IMetaModel
+public abstract class MetaModel implements IMetaModel
 {
-   private IDatabaseMetadata mDatabaseMetadata;
-   private IOntology mOntology;
-
-   public MetaModel(IDatabaseMetadata metadata, IOntology ontology)
+   protected static MetaModel getInstance(Settings settings)
    {
-      if (metadata == null) {
-         throw new IllegalArgumentException("Database metadata cannot be null"); //$NON-NLS-1$
+      IDatabase database = settings.getDatabase();
+      if (database == null) {
+         throw new IllegalArgumentException("Missing database"); //$NON-NLS-1$
       }
-      mDatabaseMetadata = metadata;
-      
-      // Ontology can be null (optional resource)
-      mOntology = ontology;
+      return new Delegate(database, settings);
    }
 
-   public IDatabaseMetadata getDatabaseMetadata()
+   private static class Delegate extends MetaModel
    {
-      return mDatabaseMetadata;
-   }
+      private IDatabaseMetadata mDatabaseMetadata;
+      private IOntology mOntology;
 
-   public IOntology getOntology()
-   {
-      return mOntology;
+      private Delegate(IDatabase database, Settings settings)
+      {
+         IDatabaseMetadata metadata = database.getMetadata();
+         if (metadata == null) {
+            throw new IllegalArgumentException("Missing database metadata"); //$NON-NLS-1$
+         }
+         mDatabaseMetadata = metadata;
+         mOntology = settings.getOntology();
+      }
+
+      @Override
+      public IDatabaseMetadata getDatabaseMetadata()
+      {
+         return mDatabaseMetadata;
+      }
+
+      @Override
+      public IOntology getOntology()
+      {
+         return mOntology;
+      }
    }
 }

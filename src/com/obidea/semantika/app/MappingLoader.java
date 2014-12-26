@@ -28,18 +28,17 @@ import com.obidea.semantika.io.StreamDocumentSource;
 import com.obidea.semantika.io.UriDocumentSource;
 import com.obidea.semantika.mapping.IMappingFactory;
 import com.obidea.semantika.mapping.IMappingSet;
-import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.exception.MappingFactoryNotFoundException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
 
 public class MappingLoader extends MappingLoaderBase
 {
-   private IMetaModel mMetaModel;
+   private MetaModel mMetaModel;
 
    private List<IMappingFactory> mMappingSetFactories = new ArrayList<IMappingFactory>();
 
-   public MappingLoader(IMetaModel metaModel)
+   public MappingLoader(MetaModel metaModel)
    {
       mMetaModel = metaModel;
    }
