@@ -18,6 +18,9 @@ package com.obidea.semantika.mapping.base;
 import com.obidea.semantika.expression.base.IClause;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
+/**
+ * Represent the construction of a mapping language.
+ */
 public interface IMapping extends IClause
 {
    /**

@@ -17,6 +17,9 @@ package com.obidea.semantika.mapping.base;
 
 import com.obidea.semantika.expression.base.ITerm;
 
+/**
+ * Represent the construction of a mapping language for defining property entities.
+ */
 public interface IPropertyMapping extends IMapping
 {
    /**

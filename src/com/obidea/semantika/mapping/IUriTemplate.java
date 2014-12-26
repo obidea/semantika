@@ -22,6 +22,9 @@ import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.IUriReference;
 
+/**
+ * Represent the built-in URI template function used by the mapping language.
+ */
 public interface IUriTemplate extends IFunction
 {
    String getTemplateString();

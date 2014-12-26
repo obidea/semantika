@@ -24,6 +24,9 @@ import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
 
+/**
+ * Represent a collection of mappings. 
+ */
 public interface IMappingSet extends Serializable
 {
    /**
