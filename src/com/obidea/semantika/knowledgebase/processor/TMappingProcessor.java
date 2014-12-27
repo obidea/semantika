@@ -73,11 +73,12 @@ import org.slf4j.Logger;
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
-import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
+import com.obidea.semantika.mapping.base.ClassMapping;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
+import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
@@ -91,7 +92,6 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
    private IgnoredAxioms mIgnoredAxioms = new IgnoredAxioms();
 
    private static OWLDataFactory sOwlDataFactory = new OWLDataFactoryImpl();
-   private static MappingObjectFactory sMappingFactory = MappingObjectFactory.getInstance();
 
    /*
     * Some selected TBox axioms types that need to be processed by the TMapping processor. *DO NOT
@@ -673,7 +673,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
       final TripleAtom targetAtom = mapping.getTargetAtom();
       final SqlQuery sourceQuery = mapping.getSourceQuery();
       
-      IClassMapping cm = sMappingFactory.createClassMapping(classSignature, sourceQuery);
+      ClassMapping cm = new ClassMapping(classSignature, sourceQuery);
       if (!isInverse) {
          cm.setSubjectMapValue(TripleAtom.getSubject(targetAtom));
       }
@@ -688,7 +688,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
       final TripleAtom targetAtom = mapping.getTargetAtom();
       final SqlQuery sourceQuery = mapping.getSourceQuery();
       
-      IPropertyMapping pm = sMappingFactory.createPropertyMapping(propertySignature, sourceQuery);
+      PropertyMapping pm = new PropertyMapping(propertySignature, sourceQuery);
       if (!isInverse) {
          pm.setSubjectMapValue(TripleAtom.getSubject(targetAtom));
          pm.setObjectMapValue(TripleAtom.getObject(targetAtom));
