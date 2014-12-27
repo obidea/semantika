@@ -35,14 +35,19 @@ public class MappingObjectFactory
       return sInstance;
    }
 
-   public ClassMapping createClassMapping(URI classSignature, SqlQuery sourceQuery)
+   public ClassMapping createClassMapping(URI classSignature, SqlQuery sourceQuery, ITerm subjectMapValue)
    {
-      return new ClassMapping(classSignature, sourceQuery);
+      ClassMapping cm = new ClassMapping(classSignature, sourceQuery);
+      cm.setSubjectMapValue(subjectMapValue);
+      return cm;
    }
 
-   public PropertyMapping createPropertyMapping(URI propertySignature, SqlQuery sourceQuery)
+   public PropertyMapping createPropertyMapping(URI propertySignature, SqlQuery sourceQuery, ITerm subjectMapValue, ITerm objectMapValue)
    {
-      return new PropertyMapping(propertySignature, sourceQuery);
+      PropertyMapping pm = new PropertyMapping(propertySignature, sourceQuery);
+      pm.setSubjectMapValue(subjectMapValue);
+      pm.setObjectMapValue(objectMapValue);
+      return pm;
    }
 
    public TripleAtom createClassAtom(URI classSignature, ITerm subjectMapValue)
