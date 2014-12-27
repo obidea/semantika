@@ -22,13 +22,12 @@ import com.obidea.semantika.ontology.IOntology;
 
 public abstract class MetaModel implements IMetaModel
 {
-   protected static MetaModel getInstance(Settings settings)
+   protected static MetaModel getInstance(IDatabase database, IOntology ontology)
    {
-      IDatabase database = settings.getDatabase();
       if (database == null) {
          throw new IllegalArgumentException("Missing database"); //$NON-NLS-1$
       }
-      return new Delegate(database, settings);
+      return new Delegate(database, ontology);
    }
 
    private static class Delegate extends MetaModel
@@ -36,14 +35,14 @@ public abstract class MetaModel implements IMetaModel
       private IDatabaseMetadata mDatabaseMetadata;
       private IOntology mOntology;
 
-      private Delegate(IDatabase database, Settings settings)
+      private Delegate(IDatabase database, IOntology ontology)
       {
          IDatabaseMetadata metadata = database.getMetadata();
          if (metadata == null) {
             throw new IllegalArgumentException("Missing database metadata"); //$NON-NLS-1$
          }
          mDatabaseMetadata = metadata;
-         mOntology = settings.getOntology();
+         mOntology = ontology;
       }
 
       @Override
