@@ -16,13 +16,6 @@
 package com.obidea.semantika.mapping.parser.r2rml;
 
 import static java.lang.String.format;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import io.github.johardi.r2rmlparser.R2RmlVocabulary;
 import io.github.johardi.r2rmlparser.document.IMappingVisitor;
 import io.github.johardi.r2rmlparser.document.LogicalTable;
@@ -32,6 +25,12 @@ import io.github.johardi.r2rmlparser.document.PredicateObjectMap;
 import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.datatype.DataType;
@@ -43,8 +42,6 @@ import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.UriTemplate;
-import com.obidea.semantika.mapping.base.ClassMapping;
-import com.obidea.semantika.mapping.base.PropertyMapping;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
@@ -123,9 +120,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
       // Create the class mapping if a class URI specified in the mapping
       if (getSubjectUri() != null) {
-         ClassMapping cm = sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery());
-         cm.setSubjectMapValue(getSubjectMapValue()); // subject template
-         addMapping(cm);
+         addMapping(sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery(),
+               getSubjectMapValue()));
       }
    }
 
@@ -145,11 +141,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       arg.getPredicateMap().accept(this);
       arg.getObjectMap().accept(this);
-      
-      PropertyMapping pm = sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery());
-      pm.setSubjectMapValue(getSubjectMapValue());
-      pm.setObjectMapValue(getObjectMapValue());
-      addMapping(pm);
+      addMapping(sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery(),
+            getSubjectMapValue(), getObjectMapValue()));
    }
 
    @Override
