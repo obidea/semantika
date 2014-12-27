@@ -16,7 +16,6 @@
 package com.obidea.semantika.expression.base;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Represents the construction of Horn clause for logic programming.
@@ -26,13 +25,6 @@ import java.util.Set;
  * such that atom <code>u</code> is known as the head (or goal) and the
  * remaining atoms <code>p</code>, <code>q</code> and <code>t</code>
  * collectively are called the body.
- * <p>
- * <b>Update:</b>
- * The interface supports the construction of Constrained Horn Clause
- * (CHC). The complete clause construction now becomes:
- * <pre>
- * u :- p, q, ..., t, phi </pre>
- * where formula <code>phi</code> is a set of logical constraints.
  */
 public interface IClause extends IExpressionObject
 {
@@ -56,13 +48,6 @@ public interface IClause extends IExpressionObject
     * @return a list of atoms that constructs the clause's body.
     */
    public List<IAtom> getBody();
-
-   /**
-    * Gets a set of constraints that occurs in the body of clause.
-    *
-    * @return a set of functions that uses constraint predicates.
-    */
-   public Set<IFunction> getConstraints();
 
    /**
     * Checks whether the clause is ground.

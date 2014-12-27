@@ -17,9 +17,7 @@ package com.obidea.semantika.expression.base;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 
@@ -32,8 +30,6 @@ public abstract class AbstractProlog implements IProlog
    protected List<ITerm> mDistTerm = new ArrayList<ITerm>();
 
    protected List<IAtom> mBody = new ArrayList<IAtom>();
-
-   protected Set<IFunction> mConstraints = new HashSet<IFunction>();
 
    protected boolean mGround = false;
 
@@ -92,12 +88,6 @@ public abstract class AbstractProlog implements IProlog
    }
 
    @Override
-   public Set<IFunction> getConstraints()
-   {
-      return Collections.unmodifiableSet(mConstraints);
-   }
-
-   @Override
    public boolean isGround()
    {
       return mGround;
@@ -116,7 +106,6 @@ public abstract class AbstractProlog implements IProlog
       int result = 1;
       result = prime * result + getHead().hashCode();
       result = prime * result + getBody().hashCode();
-      result = prime * result + getConstraints().hashCode();
       return result;
    }
 
@@ -152,20 +141,6 @@ public abstract class AbstractProlog implements IProlog
             }
             sb.append("\n   "); //$NON-NLS-1$
             sb.append(atom);
-            needComma = true;
-         }
-      }
-      sb.append("\n"); //$NON-NLS-1$
-      
-      sb.append("CONSTRAINT:");
-      if (mConstraints.size() > 0) {
-         needComma = false;
-         for (final IFunction constraint : getConstraints()) {
-            if (needComma) {
-               sb.append(","); //$NON-NLS-1$
-            }
-            sb.append("\n   "); //$NON-NLS-1$
-            sb.append(TermUtils.toString(constraint));
             needComma = true;
          }
       }

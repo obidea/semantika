@@ -16,6 +16,7 @@
 package com.obidea.semantika.mapping.base.sql;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.obidea.semantika.database.sql.base.ISqlExpression;
@@ -30,6 +31,8 @@ import com.obidea.semantika.expression.base.ITerm;
 public abstract class PrologMediator extends AbstractProlog implements IQueryExt
 {
    private static final long serialVersionUID = 629451L;
+
+   private Set<IFunction> mFilters = new HashSet<IFunction>();
 
    public PrologMediator()
    {
@@ -51,26 +54,26 @@ public abstract class PrologMediator extends AbstractProlog implements IQueryExt
    protected void notifyWhereExpressionChanged(ISqlExpression expression)
    {
       IFunction filter = (IFunction) expression;
-      mConstraints.add(filter);
+      mFilters.add(filter);
    }
 
    protected void notifyQueryConstraintAllRemoved()
    {
-      mConstraints.clear();
+      mFilters.clear();
    }
 
    @Override
    public void setFilter(IFunction filter)
    {
       if (filter != null) {
-         mConstraints.add(filter);
+         mFilters.add(filter);
       }
    }
 
    @Override
    public Set<IFunction> getFilters()
    {
-      return Collections.unmodifiableSet(mConstraints);
+      return Collections.unmodifiableSet(mFilters);
    }
 
    @Override

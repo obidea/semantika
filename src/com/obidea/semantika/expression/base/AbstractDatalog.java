@@ -31,8 +31,6 @@ public abstract class AbstractDatalog implements IDatalog
 
    protected List<IAtom> mBody = new ArrayList<IAtom>();
 
-   protected Set<IFunction> mConstraints = new HashSet<IFunction>();
-
    protected List<IVariable> mAllVars = new ArrayList<IVariable>();
 
    protected List<IVariable> mDistVars = new ArrayList<IVariable>();
@@ -110,12 +108,6 @@ public abstract class AbstractDatalog implements IDatalog
    }
 
    @Override
-   public Set<IFunction> getConstraints()
-   {
-      return Collections.unmodifiableSet(mConstraints);
-   }
-
-   @Override
    public void addDistVar(IVariable var)
    {
       mDistVars.add(var);
@@ -166,7 +158,6 @@ public abstract class AbstractDatalog implements IDatalog
       int result = 1;
       result = prime * result + getHead().hashCode();
       result = prime * result + getBody().hashCode();
-      result = prime * result + getConstraints().hashCode();
       return result;
    }
 
@@ -205,14 +196,6 @@ public abstract class AbstractDatalog implements IDatalog
             needComma = true;
          }
       }
-      
-      if (mConstraints.size() > 0) {
-         for (final IFunction constraint : mConstraints) {
-            sb.append(", ");
-            sb.append(TermUtils.toString(constraint));
-         }
-      }
-      sb.append("\n"); //$NON-NLS-1$
       return sb.toString();
    }
 }

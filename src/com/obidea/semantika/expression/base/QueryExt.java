@@ -16,6 +16,7 @@
 package com.obidea.semantika.expression.base;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
@@ -25,6 +26,8 @@ public class QueryExt extends AbstractProlog implements IQueryExt
    private static final long serialVersionUID = 629451L;
 
    private boolean mDistinct = false;
+
+   private Set<IFunction> mFilters = new HashSet<IFunction>();
 
    public QueryExt()
    {
@@ -53,14 +56,14 @@ public class QueryExt extends AbstractProlog implements IQueryExt
    public void setFilter(IFunction filter)
    {
       if (filter != null) {
-         mConstraints.add(filter);
+         mFilters.add(filter);
       }
    }
 
    @Override
    public Set<IFunction> getFilters()
    {
-      return Collections.unmodifiableSet(mConstraints);
+      return Collections.unmodifiableSet(mFilters);
    }
 
    @Override
@@ -124,5 +127,42 @@ public class QueryExt extends AbstractProlog implements IQueryExt
    public void accept(IQueryExtVisitor visitor)
    {
       visitor.visit(this);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + getHead().hashCode();
+      result = prime * result + getBody().hashCode();
+      result = prime * result + getFilters().hashCode();
+      return result;
+   }
+
+   /**
+    * Internal use only for debugging
+    */
+   @Override
+   public String toString()
+   {
+      final StringBuilder sb = new StringBuilder();
+      sb.append(super.toString());
+      sb.append("\n"); //$NON-NLS-1$
+      
+      if (mFilters.size() > 0) {
+         sb.append("FILTER:"); //$NON-NLS-1$
+         boolean needComma = false;
+         for (final IFunction filter : mFilters) {
+            if (needComma) {
+               sb.append(","); //$NON-NLS-1$
+            }
+            sb.append("\n   ");
+            sb.append(TermUtils.toString(filter));
+            needComma = true;
+         }
+      }
+      sb.append("\n"); //$NON-NLS-1$
+      return sb.toString();
    }
 }
