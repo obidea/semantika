@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.io.FileDocumentSource;
 import com.obidea.semantika.io.IDocumentSource;
 import com.obidea.semantika.io.StreamDocumentSource;
@@ -31,6 +32,7 @@ import com.obidea.semantika.mapping.IMappingSet;
 import com.obidea.semantika.mapping.exception.MappingCreationException;
 import com.obidea.semantika.mapping.exception.MappingFactoryNotFoundException;
 import com.obidea.semantika.mapping.parser.MappingParserConfiguration;
+import com.obidea.semantika.ontology.IOntology;
 
 public class MappingLoader extends MappingLoaderBase
 {
@@ -38,9 +40,9 @@ public class MappingLoader extends MappingLoaderBase
 
    private List<IMappingFactory> mMappingSetFactories = new ArrayList<IMappingFactory>();
 
-   public MappingLoader(MetaModel metaModel)
+   public MappingLoader(IDatabase database, IOntology ontology)
    {
-      mMetaModel = metaModel;
+      mMetaModel = MetaModel.getInstance(database, ontology);
    }
 
    public void addMappingSetFactory(IMappingFactory factory)
