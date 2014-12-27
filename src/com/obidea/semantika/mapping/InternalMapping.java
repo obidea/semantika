@@ -18,12 +18,10 @@ package com.obidea.semantika.mapping;
 import java.net.URI;
 import java.util.Set;
 
-import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
 import com.obidea.semantika.mapping.base.MappingVisitorAdapter;
-import com.obidea.semantika.mapping.base.TripleAtom;
 
 /* package */class InternalMapping extends AbstractInternalMapping
 {
@@ -173,14 +171,14 @@ import com.obidea.semantika.mapping.base.TripleAtom;
       @Override
       public void visit(IClassMapping mapping)
       {
-         add(getMappingBySignature(), getClassMappingSignature(mapping), mapping);
+         add(getMappingBySignature(), mapping.getSignature(), mapping);
          add(getMappingByType(), MappingType.CLASS_MAPPING, mapping);
       }
 
       @Override
       public void visit(IPropertyMapping mapping)
       {
-         add(getMappingBySignature(), getPropertyMappingSignature(mapping), mapping);
+         add(getMappingBySignature(), mapping.getSignature(), mapping);
          add(getMappingByType(), MappingType.PROPERTY_MAPPING, mapping);
       }
    }
@@ -190,33 +188,15 @@ import com.obidea.semantika.mapping.base.TripleAtom;
       @Override
       public void visit(IClassMapping mapping)
       {
-         remove(getMappingBySignature(), getClassMappingSignature(mapping), mapping);
+         remove(getMappingBySignature(), mapping.getSignature(), mapping);
          remove(getMappingByType(), MappingType.CLASS_MAPPING, mapping);
       }
 
       @Override
       public void visit(IPropertyMapping mapping)
       {
-         remove(getMappingBySignature(), getPropertyMappingSignature(mapping), mapping);
+         remove(getMappingBySignature(), mapping.getSignature(), mapping);
          remove(getMappingByType(), MappingType.PROPERTY_MAPPING, mapping);
       }
-   }
-
-   /*
-    * The mapping signature for class mapping is the object term in the mapping head
-    * (i.e., the class predicate name). The object term must be a URI reference object.
-    */
-   private static URI getClassMappingSignature(IClassMapping mapping)
-   {
-      return UriReference.getUri(TripleAtom.getObject(mapping.getTargetAtom()));
-   }
-
-   /*
-    * The mapping signature for class mapping is the predicate term in the mapping head
-    * (i.e., the property predicate name). The predicate term must be a URI reference object.
-    */
-   private static URI getPropertyMappingSignature(IPropertyMapping mapping)
-   {
-      return UriReference.getUri(TripleAtom.getPredicate(mapping.getTargetAtom()));
    }
 }
