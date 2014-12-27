@@ -19,9 +19,8 @@ import java.net.URI;
 
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
-import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.Predicate;
+import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class ClassMapping extends AbstractMapping implements IClassMapping
@@ -30,8 +29,9 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
 
    private TripleAtom mClassAtom;
 
-   private URI mClassSignature;
    private ITerm mSubjectMapValue;
+
+   private SqlQuery mSourceQuery;
 
    /**
     * Constructs a class mapping for a concept entity named in class signature such that each
@@ -45,14 +45,8 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
     */
    public ClassMapping(URI classSignature, SqlQuery sourceQuery)
    {
-      super(sourceQuery);
-      mClassSignature = classSignature;
-   }
-
-   @Override
-   public IPredicate getHeadSymbol()
-   {
-      return new Predicate(mClassSignature);
+      super(classSignature);
+      mSourceQuery = sourceQuery;
    }
 
    @Override
@@ -62,9 +56,16 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
          if (mSubjectMapValue == null) {
             throw new NullPointerException("Subject map has not defined yet."); //$NON-NLS-1$
          }
-         mClassAtom = sMappingFactory.createClassAtom(mClassSignature, mSubjectMapValue);
+         mClassAtom = MappingObjectFactory.getInstance().createClassAtom(getSignature(),
+               mSubjectMapValue);
       }
       return mClassAtom;
+   }
+
+   @Override
+   public SqlQuery getSourceQuery()
+   {
+      return mSourceQuery;
    }
 
    @Override
@@ -124,10 +125,10 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
             needComma = true;
          }
       }
-      if (getConstraints().size() > 0) {
-         for (final IFunction constraint : getConstraints()) {
+      if (getFilters().size() > 0) {
+         for (final IFunction filter : getFilters()) {
             sb.append(", "); //$NON-NLS-1$
-            sb.append(constraint);
+            sb.append(filter);
          }
       }
       return sb.toString();

@@ -19,9 +19,8 @@ import java.net.URI;
 
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
-import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.Predicate;
+import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 public class PropertyMapping extends AbstractMapping implements IPropertyMapping
@@ -30,9 +29,10 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
 
    private TripleAtom mPropertyAtom;
 
-   private URI mPropertySignature;
    private ITerm mSubjectMapValue;
    private ITerm mObjectMapValue;
+
+   private SqlQuery mSourceQuery;
 
    /**
     * Constructs a property mapping for a named role/attribute in property signature such that each
@@ -46,14 +46,8 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
     */
    public PropertyMapping(URI propertySignature, SqlQuery sourceQuery)
    {
-      super(sourceQuery);
-      mPropertySignature = propertySignature;
-   }
-
-   @Override
-   public IPredicate getHeadSymbol()
-   {
-      return new Predicate(mPropertySignature);
+      super(propertySignature);
+      mSourceQuery = sourceQuery;
    }
 
    @Override
@@ -66,9 +60,16 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
          if (mObjectMapValue == null) {
             throw new NullPointerException("Object map has not defined yet."); //$NON-NLS-1$
          }
-         mPropertyAtom = sMappingFactory.createPropertyAtom(mPropertySignature, mSubjectMapValue, mObjectMapValue);
+         mPropertyAtom = MappingObjectFactory.getInstance().createPropertyAtom(getSignature(),
+               mSubjectMapValue, mObjectMapValue);
       }
       return mPropertyAtom;
+   }
+
+   @Override
+   public SqlQuery getSourceQuery()
+   {
+      return mSourceQuery;
    }
 
    @Override
@@ -143,10 +144,10 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
             needComma = true;
          }
       }
-      if (getConstraints().size() > 0) {
-         for (final IFunction constraint : getConstraints()) {
+      if (getFilters().size() > 0) {
+         for (final IFunction filter : getFilters()) {
             sb.append(", "); //$NON-NLS-1$
-            sb.append(constraint);
+            sb.append(filter);
          }
       }
       return sb.toString();

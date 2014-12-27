@@ -15,13 +15,14 @@
  */
 package com.obidea.semantika.mapping.base;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
-import com.obidea.semantika.mapping.MappingObjectFactory;
-import com.obidea.semantika.mapping.base.sql.SqlQuery;
+import com.obidea.semantika.expression.base.IPredicate;
+import com.obidea.semantika.expression.base.Predicate;
 
 /**
  * Provides a skeletal implementation of the <code>IMapping</code> interface.
@@ -30,19 +31,23 @@ public abstract class AbstractMapping implements IMapping
 {
    private static final long serialVersionUID = 629451L;
 
-   private SqlQuery mSourceQuery;
+   protected URI mSignature;
 
-   protected static MappingObjectFactory sMappingFactory = MappingObjectFactory.getInstance();
-
-   public AbstractMapping(SqlQuery sourceQuery)
+   public AbstractMapping(URI signature)
    {
-      mSourceQuery = sourceQuery;
+      mSignature = signature;
    }
 
    @Override
-   public SqlQuery getSourceQuery()
+   public URI getSignature()
    {
-      return mSourceQuery;
+      return mSignature;
+   }
+
+   @Override
+   public IPredicate getHeadSymbol()
+   {
+      return new Predicate(mSignature);
    }
 
    @Override
@@ -57,10 +62,9 @@ public abstract class AbstractMapping implements IMapping
       return getSourceQuery().getBody();
    }
 
-   @Override 
-   public Set<IFunction> getConstraints()
+   public Set<IFunction> getFilters()
    {
-      return getSourceQuery().getConstraints();
+      return getSourceQuery().getFilters();
    }
 
    @Override

@@ -15,6 +15,8 @@
  */
 package com.obidea.semantika.mapping.base;
 
+import java.net.URI;
+
 import com.obidea.semantika.expression.base.IClause;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
@@ -24,13 +26,18 @@ import com.obidea.semantika.mapping.base.sql.SqlQuery;
 public interface IMapping extends IClause
 {
    /**
-    * Returns the target atom that represents the class or property atom
+    * Return the signature that identifies this mapping.
+    */
+   public URI getSignature();
+
+   /**
+    * Return the target atom that represents the class or property atom
     * defined in the ontology.
     */
    public TripleAtom getTargetAtom();
 
    /**
-    * Gets the source query object that represents the data projection over the
+    * Return the source query object that represents the data projection over the
     * variables occurred in the target atom (see {@link getTargetAtom()}).
     */
    public SqlQuery getSourceQuery();
