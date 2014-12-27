@@ -120,8 +120,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       }
       // Create the class mapping if a class URI specified in the mapping
       if (getSubjectUri() != null) {
-         addMapping(sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery(),
-               getSubjectMapValue()));
+         addMapping(sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery(), getSubjectMapValue()));
       }
    }
 
@@ -141,8 +140,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       arg.getPredicateMap().accept(this);
       arg.getObjectMap().accept(this);
-      addMapping(sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery(),
-            getSubjectMapValue(), getObjectMapValue()));
+      addMapping(sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery(), getSubjectMapValue(),
+            getObjectMapValue()));
    }
 
    @Override
@@ -226,7 +225,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    private void checkPropertySignature(URI uri)
    {
       if (uri == null) {
-         return; // if input is null then nothing to check
+         throw new IllegalArgumentException("Property name is null");
       }
       if (isStrictParsing()) {
          if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
