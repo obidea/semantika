@@ -218,7 +218,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          if (getOntology().containClass(uri)) {
             return;
          }
-         throw new SemantikaRuntimeException("Class URI not found in ontology \"" + uri + "\"");
+         throw new SemantikaRuntimeException(format("Class <%s> is not found in ontology", uri));
       }
    }
 
@@ -231,7 +231,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
             return;
          }
-         throw new SemantikaRuntimeException("Property URI not found in ontology \"" + uri + "\"");
+         throw new SemantikaRuntimeException(format("Property <%s> is not found in ontology", uri));
       }
    }
 

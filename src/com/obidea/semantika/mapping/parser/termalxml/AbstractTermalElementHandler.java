@@ -154,13 +154,13 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
    protected ClassNotFoundException classNotFoundException(URI value)
    {
       // XXX Strange bug related to line number
-      return new ClassNotFoundException("Class URI not found in ontology \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new ClassNotFoundException("Class  <" + value + "> is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber()-1, getColumnNumber());
    }
 
    protected PropertyNotFoundException propertyNotFoundException(URI value)
    {
-      return new PropertyNotFoundException("Property URI not found in ontology \"" + value + "\"", //$NON-NLS-1$ //$NON-NLS-2$
+      return new PropertyNotFoundException("Property <" + value + "> is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 
