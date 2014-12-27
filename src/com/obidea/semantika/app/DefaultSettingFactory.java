@@ -132,7 +132,7 @@ public class DefaultSettingFactory extends SettingFactory
 
    private static MappingLoader buildMappingLoader(Settings settings)
    {
-      return MappingLoaderFactory.createMappingLoader(MetaModel.getInstance(settings));
+      return MappingLoaderFactory.createMappingLoader(settings.getDatabase(), settings.getOntology());
    }
 
    private static MappingParserConfiguration createParserConfiguration(PropertiesConfiguration properties, int order)

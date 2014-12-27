@@ -15,14 +15,16 @@
  */
 package com.obidea.semantika.app;
 
+import com.obidea.semantika.database.IDatabase;
 import com.obidea.semantika.mapping.EmptyMappingSetFactory;
 import com.obidea.semantika.mapping.ParsableMappingSetFactory;
+import com.obidea.semantika.ontology.IOntology;
 
 public class MappingLoaderFactory
 {
-   public static MappingLoader createMappingLoader(MetaModel metaModel)
+   public static MappingLoader createMappingLoader(IDatabase database, IOntology ontology)
    {
-      MappingLoader mappingLoader = new MappingLoader(metaModel);
+      MappingLoader mappingLoader = new MappingLoader(database, ontology);
       mappingLoader.addMappingSetFactory(new EmptyMappingSetFactory());
       mappingLoader.addMappingSetFactory(new ParsableMappingSetFactory());
       return mappingLoader;
