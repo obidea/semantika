@@ -19,8 +19,7 @@ import java.net.URI;
 
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.mapping.MappingSet;
-import com.obidea.semantika.mapping.base.IClassMapping;
-import com.obidea.semantika.mapping.base.IPropertyMapping;
+import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
@@ -102,14 +101,13 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    @Override
    protected void handleChild(SubjectMapElementHandler handler) throws MappingParserException
    {
-      final ITerm subjectTerm = handler.getSubjectMapValue();
-      setSubjectMapValue(subjectTerm);
+      // Shared the subject map value globally
+      setSubjectMapValue(handler.getSubjectMapValue());
       
       final URI subjectUri = handler.getSubjectUri();
       if (subjectUri != null) {
-         IClassMapping cm = getMappingObjectFactory().createClassMapping(subjectUri, getSourceQuery());
-         cm.setSubjectMapValue(subjectTerm);
-         mMappingSet.add(cm);
+         addMapping(getMappingObjectFactory().createClassMapping(subjectUri, getSourceQuery(),
+               getSubjectMapValue()));
       }
    }
 
@@ -117,9 +115,14 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    protected void handleChild(PredicateObjectMapElementHandler handler)
    {
       final URI predicateUri = handler.getPredicateUri();
-      IPropertyMapping pm = getMappingObjectFactory().createPropertyMapping(predicateUri, getSourceQuery());
-      pm.setSubjectMapValue(getSubjectMapValue());
-      pm.setObjectMapValue(handler.getObjectMapValue());
-      mMappingSet.add(pm);
+      if (predicateUri != null) {
+         addMapping(getMappingObjectFactory().createPropertyMapping(predicateUri, getSourceQuery(),
+               getSubjectMapValue(), handler.getObjectMapValue()));
+      }
+   }
+
+   private void addMapping(IMapping mapping)
+   {
+      mMappingSet.add(mapping);
    }
 }
