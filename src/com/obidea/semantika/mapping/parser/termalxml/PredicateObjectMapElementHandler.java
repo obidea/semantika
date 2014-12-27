@@ -149,7 +149,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    private void checkPropertySignature(URI uri) throws PropertyNotFoundException
    {
       if (uri == null) {
-         return; // if input is null then nothing to check
+         throw new IllegalArgumentException("Missing property name"); //$NON-NLS-1$
       }
       if (isStrictParsing()) {
          if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
