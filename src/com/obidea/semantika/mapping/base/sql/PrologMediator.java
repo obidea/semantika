@@ -27,6 +27,7 @@ import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.IQueryExtVisitor;
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.TermUtils;
 
 public abstract class PrologMediator extends AbstractProlog implements IQueryExt
 {
@@ -86,5 +87,41 @@ public abstract class PrologMediator extends AbstractProlog implements IQueryExt
    public void accept(IQueryExtVisitor visitor)
    {
       visitor.visit(this);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + getHead().hashCode();
+      result = prime * result + getBody().hashCode();
+      result = prime * result + getFilters().hashCode();
+      return result;
+   }
+
+   /**
+    * Internal use only for debugging
+    */
+   @Override
+   public String toString()
+   {
+      final StringBuilder sb = new StringBuilder();
+      sb.append(super.toString());
+      
+      if (mFilters.size() > 0) {
+         sb.append("FILTER:"); //$NON-NLS-1$
+         boolean needComma = false;
+         for (final IFunction filter : mFilters) {
+            if (needComma) {
+               sb.append(","); //$NON-NLS-1$
+            }
+            sb.append("\n   ");
+            sb.append(TermUtils.toString(filter));
+            needComma = true;
+         }
+      }
+      sb.append("\n"); //$NON-NLS-1$
+      return sb.toString();
    }
 }
