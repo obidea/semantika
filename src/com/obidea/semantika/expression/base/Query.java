@@ -149,7 +149,6 @@ public class Query extends AbstractDatalog implements IQuery
    {
       final StringBuilder sb = new StringBuilder();
       sb.append(super.toString());
-      sb.append("\n"); //$NON-NLS-1$
       
       if (mFilters.size() > 0) {
          sb.append("FILTER:"); //$NON-NLS-1$
