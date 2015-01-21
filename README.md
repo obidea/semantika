@@ -17,16 +17,16 @@ Feature
 API Overview
 ------------
 
-### System Setup
+#### System Setup
 
-An instance of `com.obidea.semantika.app.ApplicationManager` is created by loading a configuration file, i.e., `application.cfg.xml` in your classpath. [Please refer to our wiki page for more details about Semantika configuration settings](https://github.com/obidea/semantika-api/wiki/1.-XML-Configuration-File).
+An instance of `com.obidea.semantika.app.ApplicationManager` is created by loading the configuration file `application.cfg.xml` in your classpath. [Please refer to our wiki page for more details about Semantika configuration settings](https://github.com/obidea/semantika/wiki/1.-XML-Configuration-File).
 ```java
 ApplicationManager manager = new ApplicationFactory()
              .configure("application.cfg.xml")
              .createApplicationManager();
 ```
 
-### SPARQL Query Answer
+#### SPARQL Query Answer
 
 The `ApplicationManager` then creates `SparqlQueryEngine` which is a thread-safe object that is initiated once to serve SPARQL query answering.
 ```java
@@ -38,25 +38,7 @@ QueryResult result = queryEngine.evaluate(sparql);
 queryEngine.stop();
 ```
 
-In addition, the query engine allows you to manage result fetching for efficient data retrieval. The example below shows you how to create a simple paging where each page contains 100 items.
-
-```java
-int offset = 0;
-int limit = 100;
-int maxPage = 10;
-int pageNum = 1;
-while (pageNum <= maxPage) {
-   QueryResult result = queryEngine.createQuery(sparql)
-                                    .setFirstResult(offset)
-                                    .setMaxResults(limit).evaluate();
-   // do something with the result
-   // ...
-   offset += limit;
-   pageNum++;
-}
-```
-
-### RDB2RDF Export
+#### RDB2RDF Export
 
 The `ApplicationManager` can also create `RdfMaterializerEngine` which is a thread-safe object that is initiated once to serve RDB2RDF data exporting.
 
