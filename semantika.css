@@ -1,0 +1,130 @@
+h2 {
+  padding-bottom: 9px;
+  margin: 15px 0 20px;
+  border-bottom: 1px solid #eee;
+}
+
+h3 {
+  font-size: 19px;
+  margin-bottom: 14px;
+}
+
+pre {
+  font-size: 11px;
+}
+
+.jumbotron {
+  padding-top: 20px;
+  padding-bottom: 30px;
+  margin-bottom: 25px;
+}
+
+.lead {
+  margin-bottom: 25px;
+}
+
+p.releasedate {
+  font-size: 13px;
+  margin-top: -12px;	
+}
+
+.container {
+  width: auto;
+  max-width: 1250px;
+  padding: 0 15px;
+}
+
+.space-bottom {
+  padding-bottom: 40px;   
+}
+
+.smaller-font {
+  font-size: 13px;   
+}
+
+.table {
+  margin-bottom: 0px;
+}
+
+#row {
+  overflow: hidden;
+}
+
+#footer {
+  padding-top: 45px;
+  height: 120px;
+}
+
+.ontology-icon {
+  position: relative;
+}
+ 
+/*replace the content value with the 
+corresponding value from the list below*/
+ 
+.ontology-icon:before {
+    content: "\f126"; 
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: #fff;
+    font-size: 55px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: -8px;
+    left: 15px;
+    z-index: 1;
+}
+
+.mapping-icon {
+    position: relative;
+}
+ 
+/*replace the content value with the 
+corresponding value from the list below*/
+ 
+.mapping-icon:before {
+    content: "\f136"; 
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: #fff;
+    font-size: 50px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: -5px;
+    left: 0px;
+    z-index: 1;
+}
+
+.configuration-icon {
+    position: relative;
+}
+ 
+/*replace the content value with the 
+corresponding value from the list below*/
+ 
+.configuration-icon:before {
+    content: "\f085"; 
+    font-family: FontAwesome;
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+/*--adjust as necessary--*/
+    color: #fff;
+    font-size: 45px;
+    padding-right: 0.5em;
+    position: absolute;
+    top: -3px;
+    left: 0px;
+    z-index: 1;
+}
+
+.inner {
+	position: relative;
+	z-index: 2;
+}
