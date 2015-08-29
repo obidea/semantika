@@ -87,6 +87,11 @@ public final class StringUtils
       return StringUtils.getBytesUnchecked(string, "UTF-8"); //$NON-NLS-1$
    }
 
+   public static String[] splitArrayString(String text)
+   {
+      return text.replaceAll("(^.|.$)", "").split(", ");
+   }
+
    private StringUtils()
    {
       // NO-OP: Prevent instantiation
