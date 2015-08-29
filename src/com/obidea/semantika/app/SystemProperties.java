@@ -154,7 +154,7 @@ public class SystemProperties extends Properties
       sb.append("\n"); //$NON-NLS-1$
       sb.append(Environment.TRANSACTION_MAX_ROWS).append("=").append(getTransactionMaxRows()); //$NON-NLS-1$
       sb.append("\n"); //$NON-NLS-1$
-      sb.append(Environment.ONTOLOGY_SOURCE).append("=").append(getOntologySource().getAbsolutePath()); //$NON-NLS-1$
+      sb.append(Environment.ONTOLOGY_SOURCE).append("=").append(getOntologySource().getPath()); //$NON-NLS-1$
       sb.append("\n"); //$NON-NLS-1$
       
       boolean needNewline = false;
@@ -162,7 +162,7 @@ public class SystemProperties extends Properties
          if (needNewline) {
             sb.append("\n"); //$NON-NLS-1$
          }
-         sb.append(Environment.MAPPING_SOURCE).append("=").append(file.getAbsolutePath()); //$NON-NLS-1$
+         sb.append(Environment.MAPPING_SOURCE).append("=").append(file.getPath()); //$NON-NLS-1$
          needNewline = true;
       }
       return sb.toString();

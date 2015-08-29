@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
@@ -56,7 +57,7 @@ public class DefaultSettingFactory extends SettingFactory
       settings.addSystemProperties(Environment.TRANSACTION_FETCH_SIZE, properties.getString(Environment.TRANSACTION_FETCH_SIZE, "-1"));
       settings.addSystemProperties(Environment.TRANSACTION_MAX_ROWS, properties.getString(Environment.TRANSACTION_MAX_ROWS, "-1"));
       settings.addSystemProperties(Environment.ONTOLOGY_SOURCE, properties.getString(Environment.ONTOLOGY_SOURCE));
-      settings.addSystemProperties(Environment.MAPPING_SOURCE, properties.getStringArray(Environment.MAPPING_SOURCE).toString());
+      settings.addSystemProperties(Environment.MAPPING_SOURCE, Arrays.asList(properties.getStringArray(Environment.MAPPING_SOURCE))+"");
    }
 
    @Override
