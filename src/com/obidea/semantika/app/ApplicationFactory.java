@@ -159,6 +159,15 @@ public class ApplicationFactory
             Environment.CONNECTION_URL,
             mProperties.getString(Environment.CONNECTION_URL));
       LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.TRANSACTION_TIMEOUT,
+            mProperties.getString(Environment.TRANSACTION_TIMEOUT));
+      LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.TRANSACTION_FETCH_SIZE,
+            mProperties.getString(Environment.TRANSACTION_FETCH_SIZE));
+      LOG.debug("* {} = {}", //$NON-NLS-1$
+            Environment.TRANSACTION_MAX_ROWS,
+            mProperties.getString(Environment.TRANSACTION_MAX_ROWS));
+      LOG.debug("* {} = {}", //$NON-NLS-1$
             Environment.ONTOLOGY_SOURCE,
             mProperties.getString(Environment.ONTOLOGY_SOURCE));
       

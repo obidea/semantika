@@ -129,6 +129,11 @@ public class ApplicationManager implements IApplicationManager, IQueryEngineFact
       return mSettings.getDatabase();
    }
 
+   public String getSystemInfo()
+   {
+      return getSystemProperties().toString();
+   }
+
    /*
     * A utility method to compile ontology, database and mapping set into a single knowledge base
     * object. The mapping set in this knowledge base is modifiable and thus can be optimized

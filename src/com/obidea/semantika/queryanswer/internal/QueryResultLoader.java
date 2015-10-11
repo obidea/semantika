@@ -136,28 +136,31 @@ public abstract class QueryResultLoader
 
    private static QueryResult buildQueryResult(ResultSet rs, QueryMetadata metadata) throws SQLException
    {
+      final List<String> selectLabels = new ArrayList<String>();
       QueryResultBuilder builder = new QueryResultBuilder();
       builder.start(metadata.getSelectNames());
       while (rs.next()) {
-         ValueArray valueArray = getValueArrayFromResultSet(rs, metadata);
+         ValueArray valueArray = getValueArrayFromResultSet(rs, metadata, selectLabels);
          builder.handleResultFragment(valueArray);
       }
       return builder.getQueryResult();
    }
 
-   private static ValueArray getValueArrayFromResultSet(ResultSet rs, QueryMetadata metadata) throws SQLException
+   private static ValueArray getValueArrayFromResultSet(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException
    {
-      List<String> selectLabels = new ArrayList<String>();
       List<IValue> values = getSelectValues(rs, metadata, selectLabels);
       return new ValueArray(selectLabels, values);
    }
 
    private static List<IValue> getSelectValues(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException
    {
+      boolean needAdd = selectLabels.isEmpty();
       List<IValue> values = new ArrayList<IValue>();
       for (int i = 1; i <= metadata.size(); i++) {
-         String label = getLabel(metadata, i);
-         selectLabels.add(label);
+         if (needAdd) {
+            String label = getLabel(metadata, i);
+            selectLabels.add(label);
+         }
          IValue value = getValue(rs, metadata, i);
          values.add(value);
       }

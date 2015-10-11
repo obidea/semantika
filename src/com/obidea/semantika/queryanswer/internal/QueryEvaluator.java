@@ -52,7 +52,8 @@ public class QueryEvaluator implements IQueryEvaluator
    @Override
    public PreparedStatement prepareQueryStatement(String sql) throws SQLException, SemantikaException
    {
-      PreparedStatement ps = mConnectionManager.getConnection().prepareStatement(sql);
+      PreparedStatement ps = mConnectionManager.getConnection()
+            .prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
       setTimeout(ps);
       setFetchSize(ps);
       setMaxRows(ps);
@@ -78,6 +79,9 @@ public class QueryEvaluator implements IQueryEvaluator
       if (mIsTransactionFetchSizeSet) {
          if (mTransactionFetchSize <= 0) {
             throw new QueryEvaluationException("Invalid fetch size: " + mTransactionFetchSize); //$NON-NLS-1$
+         }
+         else if (mTransactionFetchSize == 1) { // streaming
+            stmt.setFetchSize(Integer.MIN_VALUE);
          }
          else {
             stmt.setFetchSize(mTransactionFetchSize);

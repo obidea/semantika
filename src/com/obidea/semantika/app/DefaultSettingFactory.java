@@ -21,6 +21,7 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 
@@ -47,9 +48,16 @@ public class DefaultSettingFactory extends SettingFactory
    void loadSystemProperties(PropertiesConfiguration properties, Settings settings) throws SemantikaException
    {
       settings.addSystemProperties(Environment.APPLICATION_FACTORY_NAME, properties.getString(Environment.APPLICATION_FACTORY_NAME));
+      settings.addSystemProperties(Environment.CONNECTION_URL, properties.getString(Environment.CONNECTION_URL));
+      settings.addSystemProperties(Environment.POOL_INITIAL_SIZE, properties.getString(Environment.POOL_INITIAL_SIZE, "-1"));
+      settings.addSystemProperties(Environment.POOL_MIN_SIZE, properties.getString(Environment.POOL_MIN_SIZE, "-1"));
+      settings.addSystemProperties(Environment.POOL_MAX_SIZE, properties.getString(Environment.POOL_MAX_SIZE, "-1"));
+      settings.addSystemProperties(Environment.POOL_TIMEOUT, properties.getString(Environment.POOL_TIMEOUT, "-1"));
       settings.addSystemProperties(Environment.TRANSACTION_TIMEOUT, properties.getString(Environment.TRANSACTION_TIMEOUT, "-1"));
       settings.addSystemProperties(Environment.TRANSACTION_FETCH_SIZE, properties.getString(Environment.TRANSACTION_FETCH_SIZE, "-1"));
       settings.addSystemProperties(Environment.TRANSACTION_MAX_ROWS, properties.getString(Environment.TRANSACTION_MAX_ROWS, "-1"));
+      settings.addSystemProperties(Environment.ONTOLOGY_SOURCE, properties.getString(Environment.ONTOLOGY_SOURCE));
+      settings.addSystemProperties(Environment.MAPPING_SOURCE, Arrays.asList(properties.getStringArray(Environment.MAPPING_SOURCE))+"");
    }
 
    @Override
