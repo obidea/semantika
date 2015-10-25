@@ -20,6 +20,14 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
+import com.obidea.semantika.database.sql.base.ISqlExpression;
+import com.obidea.semantika.database.sql.base.SqlSelectItem;
+import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlMappingFactory;
+import com.obidea.semantika.mapping.base.sql.SqlTable;
+import com.obidea.semantika.util.Serializer;
+
 import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
@@ -73,14 +81,6 @@ import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import net.sf.jsqlparser.statement.select.SelectItem;
 import net.sf.jsqlparser.statement.select.SelectItemVisitor;
 import net.sf.jsqlparser.statement.select.SubSelect;
-
-import com.obidea.semantika.database.sql.base.ISqlExpression;
-import com.obidea.semantika.database.sql.base.SqlSelectItem;
-import com.obidea.semantika.exception.SemantikaRuntimeException;
-import com.obidea.semantika.mapping.base.sql.SqlColumn;
-import com.obidea.semantika.mapping.base.sql.SqlMappingFactory;
-import com.obidea.semantika.mapping.base.sql.SqlTable;
-import com.obidea.semantika.util.Serializer;
 
 /* package */class SelectItemHandler implements SelectItemVisitor, ExpressionVisitor
 {

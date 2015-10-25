@@ -26,7 +26,6 @@ import org.coode.owlapi.owlxml.renderer.OWLXMLOntologyStorer;
 import org.coode.owlapi.owlxmlparser.OWLXMLParserFactory;
 import org.semanticweb.owlapi.io.OWLParserFactoryRegistry;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -35,15 +34,15 @@ import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
 import org.semanticweb.owlapi.util.NonMappingOntologyIRIMapper;
 import org.slf4j.Logger;
 
-import uk.ac.manchester.cs.owl.owlapi.EmptyInMemOWLOntologyFactory;
-import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
-import uk.ac.manchester.cs.owl.owlapi.OWLOntologyManagerImpl;
-import uk.ac.manchester.cs.owl.owlapi.ParsableOWLOntologyFactory;
-
 import com.obidea.semantika.ontology.IOntology;
 import com.obidea.semantika.ontology.OwlOntology;
 import com.obidea.semantika.ontology.exception.OntologyCreationException;
 import com.obidea.semantika.util.LogUtils;
+
+import uk.ac.manchester.cs.owl.owlapi.EmptyInMemOWLOntologyFactory;
+import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
+import uk.ac.manchester.cs.owl.owlapi.OWLOntologyManagerImpl;
+import uk.ac.manchester.cs.owl.owlapi.ParsableOWLOntologyFactory;
 
 public class OntologyLoader
 {
@@ -141,15 +140,7 @@ public class OntologyLoader
     */
    private String getDlExpresivity(OWLOntology ontology)
    {
-      String expressivity = "N/A"; //$NON-NLS-1$
-      try {
-         expressivity = printExpressivity(new DLExpressivityChecker(ontology.getImportsClosure()).getConstructs());
-      }
-      catch (OWLException e) {
-         LOG.error("Error while determining DL expressivity."); //$NON-NLS-1$
-         LOG.error("Detailed cause: {}", e.getMessage()); //$NON-NLS-1$
-      }
-      return expressivity;
+      return printExpressivity(new DLExpressivityChecker(ontology.getImportsClosure()).getConstructs());
    }
 
    private static String printExpressivity(List<Construct> constructs)

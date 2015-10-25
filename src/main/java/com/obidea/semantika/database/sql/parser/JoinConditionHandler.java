@@ -18,6 +18,11 @@ package com.obidea.semantika.database.sql.parser;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.obidea.semantika.database.sql.base.SqlJoinCondition;
+import com.obidea.semantika.exception.IllegalOperationException;
+import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.util.Serializer;
+
 import net.sf.jsqlparser.expression.AllComparisonExpression;
 import net.sf.jsqlparser.expression.AnalyticExpression;
 import net.sf.jsqlparser.expression.AnyComparisonExpression;
@@ -66,11 +71,6 @@ import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.RegExpMatchOperator;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.SubSelect;
-
-import com.obidea.semantika.database.sql.base.SqlJoinCondition;
-import com.obidea.semantika.exception.IllegalOperationException;
-import com.obidea.semantika.mapping.base.sql.SqlColumn;
-import com.obidea.semantika.util.Serializer;
 
 public class JoinConditionHandler implements ExpressionVisitor
 {
