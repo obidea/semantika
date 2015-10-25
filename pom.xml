@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>com.obidea.semantika</groupId>
    <artifactId>semantika-core</artifactId>
-   <version>1.8</version>
+   <version>1.7.2</version>
 
    <name>semantika</name>
    <description>Semantika is a ontology-based data access library for Java</description>
