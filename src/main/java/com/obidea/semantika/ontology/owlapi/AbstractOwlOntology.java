@@ -132,11 +132,11 @@ public abstract class AbstractOwlOntology implements IOntology
     *           the all sub properties (descendant) should be retrieved (<code>false</code>).
     * @return Returns a set of sub properties, or an empty set if the input entity doesn't exist.
     */
-   public Set<OWLPropertyExpression<?,?>> getSubProperties(OWLPropertyExpression<?,?> entity, boolean direct)
+   public Set<OWLPropertyExpression> getSubProperties(OWLPropertyExpression entity, boolean direct)
    {
-      Set<OWLPropertyExpression<?,?>> toReturn = new LinkedHashSet<OWLPropertyExpression<?,?>>();
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = mPropertyStructureHandler.getDescendants(entity, direct);
-      for (OwlNode<OWLPropertyExpression<?,?>> node : descendants.getNodes()) {
+      Set<OWLPropertyExpression> toReturn = new LinkedHashSet<OWLPropertyExpression>();
+      OwlNodeSet<OWLPropertyExpression> descendants = mPropertyStructureHandler.getDescendants(entity, direct);
+      for (OwlNode<OWLPropertyExpression> node : descendants.getNodes()) {
          toReturn.add(node.getEntity());
       }
       return toReturn;
@@ -153,11 +153,11 @@ public abstract class AbstractOwlOntology implements IOntology
     *           if the all super properties (ancestors) should be retrieved (<code>false</code>).
     * @return Returns a set of super properties, or an empty set if the input entity doesn't exist.
     */
-   public Set<OWLPropertyExpression<?,?>> getSuperProperties(OWLPropertyExpression<?,?> entity, boolean direct)
+   public Set<OWLPropertyExpression> getSuperProperties(OWLPropertyExpression entity, boolean direct)
    {
-      Set<OWLPropertyExpression<?,?>> toReturn = new LinkedHashSet<OWLPropertyExpression<?,?>>();
-      OwlNodeSet<OWLPropertyExpression<?,?>> ancestors = mPropertyStructureHandler.getAncestors(entity, direct);
-      for (OwlNode<OWLPropertyExpression<?,?>> node : ancestors.getNodes()) {
+      Set<OWLPropertyExpression> toReturn = new LinkedHashSet<OWLPropertyExpression>();
+      OwlNodeSet<OWLPropertyExpression> ancestors = mPropertyStructureHandler.getAncestors(entity, direct);
+      for (OwlNode<OWLPropertyExpression> node : ancestors.getNodes()) {
          toReturn.add(node.getEntity());
       }
       return toReturn;
@@ -203,16 +203,16 @@ public abstract class AbstractOwlOntology implements IOntology
     *           Specifies if the given property expression is included in the returned set.
     * @return Returns a set of sub property axioms.
     */
-   public Set<OWLSubPropertyAxiom<?>> traceDescendants(OWLPropertyExpression<?,?> entity, boolean includeSelf)
+   public Set<OWLSubPropertyAxiom<?>> traceDescendants(OWLPropertyExpression entity, boolean includeSelf)
    {
       Set<OWLSubPropertyAxiom<?>> toReturn = new LinkedHashSet<OWLSubPropertyAxiom<?>>();
       
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = new OwlNodeSet<OWLPropertyExpression<?,?>>();
+      OwlNodeSet<OWLPropertyExpression> descendants = new OwlNodeSet<OWLPropertyExpression>();
       if (includeSelf) {
          descendants.addNode(mPropertyStructureHandler.findNode(entity));
       }
       descendants.addNodeSet(mPropertyStructureHandler.getDescendants(entity, false));
-      for (OwlNode<OWLPropertyExpression<?,?>> node : descendants.getNodes()) {
+      for (OwlNode<OWLPropertyExpression> node : descendants.getNodes()) {
          if (!node.getParent().isRoot()) {
             if (entity.isObjectPropertyExpression()) {
                OWLObjectPropertyExpression subProperty = (OWLObjectPropertyExpression) node.getEntity();
@@ -271,16 +271,16 @@ public abstract class AbstractOwlOntology implements IOntology
     *           Specifies if the given property expression is included in the returned set.
     * @return Returns a set of sub property axioms.
     */
-   public Set<OWLSubPropertyAxiom<?>> traceAncestors(OWLPropertyExpression<?,?> entity, boolean includeSelf)
+   public Set<OWLSubPropertyAxiom<?>> traceAncestors(OWLPropertyExpression entity, boolean includeSelf)
    {
       Set<OWLSubPropertyAxiom<?>> toReturn = new LinkedHashSet<OWLSubPropertyAxiom<?>>();
       
-      OwlNodeSet<OWLPropertyExpression<?,?>> ancestors = new OwlNodeSet<OWLPropertyExpression<?,?>>();
+      OwlNodeSet<OWLPropertyExpression> ancestors = new OwlNodeSet<OWLPropertyExpression>();
       if (includeSelf) {
          ancestors.addNode(mPropertyStructureHandler.findNode(entity));
       }
       ancestors.addNodeSet(mPropertyStructureHandler.getAncestors(entity, false));
-      for (OwlNode<OWLPropertyExpression<?,?>> node : ancestors.getNodes()) {
+      for (OwlNode<OWLPropertyExpression> node : ancestors.getNodes()) {
          if (!node.getParent().isRoot()) {
             if (entity.isObjectPropertyExpression()) {
                OWLObjectPropertyExpression subProperty = (OWLObjectPropertyExpression) node.getEntity();

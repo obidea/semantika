@@ -20,18 +20,13 @@ import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
 
-import org.coode.owlapi.functionalparser.OWLFunctionalSyntaxParserFactory;
-import org.coode.owlapi.functionalrenderer.OWLFunctionalSyntaxOntologyStorer;
-import org.coode.owlapi.owlxml.renderer.OWLXMLOntologyStorer;
-import org.coode.owlapi.owlxmlparser.OWLXMLParserFactory;
-import org.semanticweb.owlapi.io.OWLParserFactoryRegistry;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.util.DLExpressivityChecker;
 import org.semanticweb.owlapi.util.DLExpressivityChecker.Construct;
-import org.semanticweb.owlapi.util.NonMappingOntologyIRIMapper;
 import org.slf4j.Logger;
 
 import com.obidea.semantika.ontology.IOntology;
@@ -39,37 +34,15 @@ import com.obidea.semantika.ontology.OwlOntology;
 import com.obidea.semantika.ontology.exception.OntologyCreationException;
 import com.obidea.semantika.util.LogUtils;
 
-import uk.ac.manchester.cs.owl.owlapi.EmptyInMemOWLOntologyFactory;
-import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
-import uk.ac.manchester.cs.owl.owlapi.OWLOntologyManagerImpl;
-import uk.ac.manchester.cs.owl.owlapi.ParsableOWLOntologyFactory;
-
 public class OntologyLoader
 {
    private OWLOntologyManager mOwlManager;
 
    private static final Logger LOG = LogUtils.createLogger("semantika.application"); //$NON-NLS-1$
 
-   static {
-      OWLParserFactoryRegistry registry = OWLParserFactoryRegistry.getInstance();
-      registry.registerParserFactory(new OWLXMLParserFactory());
-      registry.registerParserFactory(new OWLFunctionalSyntaxParserFactory());
-   }
-
    public OntologyLoader()
    {
-      mOwlManager = createOWLOntologyManager();
-   }
-
-   public static OWLOntologyManager createOWLOntologyManager()
-   {
-      OWLOntologyManager ontologyManager = new OWLOntologyManagerImpl(new OWLDataFactoryImpl());
-      ontologyManager.addOntologyStorer(new OWLXMLOntologyStorer());
-      ontologyManager.addOntologyStorer(new OWLFunctionalSyntaxOntologyStorer());
-      ontologyManager.addIRIMapper(new NonMappingOntologyIRIMapper());
-      ontologyManager.addOntologyFactory(new EmptyInMemOWLOntologyFactory());
-      ontologyManager.addOntologyFactory(new ParsableOWLOntologyFactory());
-      return ontologyManager;
+      mOwlManager = OWLManager.createOWLOntologyManager();
    }
 
    public IOntology createEmptyOntology() throws OntologyCreationException

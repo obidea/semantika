@@ -68,6 +68,7 @@ import org.semanticweb.owlapi.model.OWLSubPropertyChainOfAxiom;
 import org.semanticweb.owlapi.model.OWLSymmetricObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.OWLTransitiveObjectPropertyAxiom;
 import org.semanticweb.owlapi.model.SWRLRule;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.slf4j.Logger;
 
 import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
@@ -152,18 +153,16 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
        * Iterate over the selected TBox axiom types, including the import closure
        */
       for (AxiomType<?> type : TBoxAxiomTypes) {
-         for (OWLAxiom axiom : ontology.getAxioms(type, true)) {
+         for (OWLAxiom axiom : ontology.getAxioms(type, Imports.INCLUDED)) {
             axiom.accept(this);
          }
       }
       /*
        * Iterate other types of axiom (exclude the selected TBox axiom types) for debugging purpose.
        */
-      for (AxiomType<?> type : AxiomType.AXIOM_TYPES) {
-         if (TBoxAxiomTypes.contains(type)) {
-            continue;
-         }
-         for (OWLAxiom axiom : ontology.getAxioms(type, true)) {
+      for (OWLAxiom axiom : ontology.getAxioms(Imports.INCLUDED)) {
+         AxiomType<?> type = axiom.getAxiomType();
+         if (!TBoxAxiomTypes.contains(type)) {
             axiom.accept(this);
          }
       }

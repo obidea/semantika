@@ -18,28 +18,26 @@ package com.obidea.semantika.ontology.owlapi;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLSubDataPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubObjectPropertyOfAxiom;
 import org.semanticweb.owlapi.model.OWLSubPropertyAxiom;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
 
-/* package */class OwlPropertyStructureHandler extends OWLAxiomVisitorAdapter implements IOwlStructureHandler<OWLPropertyExpression<?,?>>
+/* package */class OwlPropertyStructureHandler extends OWLAxiomVisitorAdapter implements IOwlStructureHandler<OWLPropertyExpression>
 {
-   private OwlNode<OWLPropertyExpression<?,?>> mRoot = new OwlNode<OWLPropertyExpression<?,?>>();
+   private OwlNode<OWLPropertyExpression> mRoot = new OwlNode<OWLPropertyExpression>();
 
-   private Set<OWLPropertyExpression<?,?>> mPropertyCache = new HashSet<OWLPropertyExpression<?,?>>();
+   private Set<OWLPropertyExpression> mPropertyCache = new HashSet<OWLPropertyExpression>();
 
    public OwlPropertyStructureHandler(AbstractOwlOntology ontology)
    {
       OWLOntology ont = ontology.asOwlOntology();
-      for (AxiomType<?> type : AxiomType.RBoxAxiomTypes) {
-         for (OWLAxiom axiom : ont.getAxioms(type, true)) {
-            axiom.accept(this);
-         }
+      for (OWLAxiom axiom : ont.getRBoxAxioms(Imports.INCLUDED)) {
+         axiom.accept(this);
       }
    }
 
@@ -57,11 +55,11 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
 
    private void addSubPropertyAxiom(OWLSubPropertyAxiom<?> axiom)
    {
-      OWLPropertyExpression<?,?> subProperty = axiom.getSubProperty();
-      OWLPropertyExpression<?,?> superProperty = axiom.getSuperProperty();
+      OWLPropertyExpression subProperty = axiom.getSubProperty();
+      OWLPropertyExpression superProperty = axiom.getSuperProperty();
       
-      OwlNode<OWLPropertyExpression<?,?>> subClassNode = createNode(subProperty);
-      OwlNode<OWLPropertyExpression<?,?>> superClassNode = createNode(superProperty);
+      OwlNode<OWLPropertyExpression> subClassNode = createNode(subProperty);
+      OwlNode<OWLPropertyExpression> superClassNode = createNode(superProperty);
       
       if (mPropertyCache.contains(subProperty)) {
          subClassNode = findNode(subProperty);
@@ -81,18 +79,18 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
    }
 
    @Override
-   public OwlNode<OWLPropertyExpression<?,?>> findNode(OWLPropertyExpression<?,?> entity)
+   public OwlNode<OWLPropertyExpression> findNode(OWLPropertyExpression entity)
    {
       return mRoot.findNode(entity);
    }
 
    @Override
-   public OwlNodeSet<OWLPropertyExpression<?, ?>> getAncestors(OWLPropertyExpression<?, ?> entity, boolean direct)
+   public OwlNodeSet<OWLPropertyExpression> getAncestors(OWLPropertyExpression entity, boolean direct)
    {
-      OwlNodeSet<OWLPropertyExpression<?, ?>> ancestors = new OwlNodeSet<OWLPropertyExpression<?, ?>>();
-      OwlNode<OWLPropertyExpression<?, ?>> node = mRoot.findNode(entity);
+      OwlNodeSet<OWLPropertyExpression> ancestors = new OwlNodeSet<OWLPropertyExpression>();
+      OwlNode<OWLPropertyExpression> node = mRoot.findNode(entity);
       if (node != null) {
-         OwlNode<OWLPropertyExpression<?, ?>> parent = node.getParent();
+         OwlNode<OWLPropertyExpression> parent = node.getParent();
          while (!parent.isRoot()) {
             ancestors.addNode(parent);
             if (direct) {
@@ -105,12 +103,12 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
    }
 
    @Override
-   public OwlNodeSet<OWLPropertyExpression<?,?>> getDescendants(OWLPropertyExpression<?,?> entity, boolean direct)
+   public OwlNodeSet<OWLPropertyExpression> getDescendants(OWLPropertyExpression entity, boolean direct)
    {
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = new OwlNodeSet<OWLPropertyExpression<?,?>>();
-      OwlNode<OWLPropertyExpression<?,?>> node = mRoot.findNode(entity);
+      OwlNodeSet<OWLPropertyExpression> descendants = new OwlNodeSet<OWLPropertyExpression>();
+      OwlNode<OWLPropertyExpression> node = mRoot.findNode(entity);
       if (node != null) {
-         OwlNodeSet<OWLPropertyExpression<?,?>> children = node.getChildren();
+         OwlNodeSet<OWLPropertyExpression> children = node.getChildren();
          if (direct) {
             descendants.addNodeSet(children);
          }
@@ -121,21 +119,21 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
       return descendants;
    }
 
-   private static void collectChildren(OwlNodeSet<OWLPropertyExpression<?,?>> children, OwlNodeSet<OWLPropertyExpression<?,?>> descendants)
+   private static void collectChildren(OwlNodeSet<OWLPropertyExpression> children, OwlNodeSet<OWLPropertyExpression> descendants)
    {
       if (children.isEmpty()) {
          return;
       }
       descendants.addNodeSet(children);
-      OwlNodeSet<OWLPropertyExpression<?,?>> newChildren = new OwlNodeSet<OWLPropertyExpression<?,?>>();
-      for (OwlNode<OWLPropertyExpression<?,?>> node : children.getNodes()) {
+      OwlNodeSet<OWLPropertyExpression> newChildren = new OwlNodeSet<OWLPropertyExpression>();
+      for (OwlNode<OWLPropertyExpression> node : children.getNodes()) {
          newChildren.addNodeSet(node.getChildren());
       }
       collectChildren(newChildren, descendants);
    }
 
-   private static OwlNode<OWLPropertyExpression<?,?>> createNode(OWLPropertyExpression<?,?> entity)
+   private static OwlNode<OWLPropertyExpression> createNode(OWLPropertyExpression entity)
    {
-      return new OwlNode<OWLPropertyExpression<?,?>>(entity);
+      return new OwlNode<OWLPropertyExpression>(entity);
    }
 }

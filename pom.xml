@@ -64,25 +64,25 @@
          <artifactId>jsqlparser</artifactId>
          <version>0.8.9</version>
       </dependency>
-      <dependency>
+            <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-api</artifactId>
-         <version>3.5.3</version>
+         <version>4.1.0</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-apibinding</artifactId>
-         <version>3.5.3</version>
+         <version>4.1.0</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-impl</artifactId>
-         <version>3.5.3</version>
+         <version>4.1.0</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-parsers</artifactId>
-         <version>3.5.3</version>
+         <version>4.1.0</version>
       </dependency>
       <dependency>
          <groupId>org.openrdf.sesame</groupId>

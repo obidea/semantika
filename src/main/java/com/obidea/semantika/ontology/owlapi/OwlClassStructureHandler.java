@@ -18,7 +18,6 @@ package com.obidea.semantika.ontology.owlapi;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
@@ -31,6 +30,7 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyRangeAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
+import org.semanticweb.owlapi.model.parameters.Imports;
 import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
 
 /* package */class OwlClassStructureHandler extends OWLAxiomVisitorAdapter implements IOwlStructureHandler<OWLClassExpression>
@@ -47,10 +47,8 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
       mPropertyStructureHandler = ontology.getPropertyStructureHandler();
       mOwlDataFactory = ontology.getOwlDataFactory();
       OWLOntology ont = ontology.asOwlOntology();
-      for (AxiomType<?> type : AxiomType.TBoxAxiomTypes) {
-         for (OWLAxiom axiom : ont.getAxioms(type, true)) {
-            axiom.accept(this);
-         }
+      for (OWLAxiom axiom : ont.getTBoxAxioms(Imports.INCLUDED)) {
+         axiom.accept(this);
       }
    }
 
@@ -66,8 +64,8 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
       addSubClassAxiom(axiom.asOWLSubClassOfAxiom());
       
       OWLObjectPropertyExpression op = axiom.getProperty();
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = mPropertyStructureHandler.getDescendants(op, false);
-      for (OwlNode<OWLPropertyExpression<?,?>> node : descendants.getNodes()) {
+      OwlNodeSet<OWLPropertyExpression> descendants = mPropertyStructureHandler.getDescendants(op, false);
+      for (OwlNode<OWLPropertyExpression> node : descendants.getNodes()) {
          op = (OWLObjectPropertyExpression) node.getEntity();
          axiom = mOwlDataFactory.getOWLObjectPropertyDomainAxiom(op, axiom.getDomain());
          addSubClassAxiom(axiom.asOWLSubClassOfAxiom());
@@ -80,8 +78,8 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
       addSubClassAxiom(asSubClassOfAxiom(axiom));
       
       OWLObjectPropertyExpression op = axiom.getProperty();
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = mPropertyStructureHandler.getDescendants(op, false);
-      for (OwlNode<OWLPropertyExpression<?,?>> node : descendants.getNodes()) {
+      OwlNodeSet<OWLPropertyExpression> descendants = mPropertyStructureHandler.getDescendants(op, false);
+      for (OwlNode<OWLPropertyExpression> node : descendants.getNodes()) {
          op = (OWLObjectPropertyExpression) node.getEntity();
          axiom = mOwlDataFactory.getOWLObjectPropertyRangeAxiom(op, axiom.getRange());
          addSubClassAxiom(asSubClassOfAxiom(axiom));
@@ -94,8 +92,8 @@ import org.semanticweb.owlapi.util.OWLAxiomVisitorAdapter;
       addSubClassAxiom(axiom.asOWLSubClassOfAxiom());
       
       OWLDataPropertyExpression op = axiom.getProperty();
-      OwlNodeSet<OWLPropertyExpression<?,?>> descendants = mPropertyStructureHandler.getDescendants(op, false);
-      for (OwlNode<OWLPropertyExpression<?,?>> node : descendants.getNodes()) {
+      OwlNodeSet<OWLPropertyExpression> descendants = mPropertyStructureHandler.getDescendants(op, false);
+      for (OwlNode<OWLPropertyExpression> node : descendants.getNodes()) {
          op = (OWLDataPropertyExpression) node.getEntity();
          axiom = mOwlDataFactory.getOWLDataPropertyDomainAxiom(op, axiom.getDomain());
          addSubClassAxiom(axiom.asOWLSubClassOfAxiom());
