@@ -19,12 +19,12 @@ import static java.lang.String.format;
 
 import java.net.URISyntaxException;
 
+import org.openrdf.model.IRI;
 import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
-import org.openrdf.model.impl.ValueFactoryImpl;
+import org.openrdf.model.impl.SimpleValueFactory;
 
 import com.obidea.semantika.datatype.AbstractXmlType;
 import com.obidea.semantika.datatype.XmlDataTypeProfile;
@@ -35,7 +35,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
 {
    private static final long serialVersionUID = 629451L;
 
-   private ValueFactory mValueFactory = ValueFactoryImpl.getInstance();
+   private ValueFactory mValueFactory = SimpleValueFactory.getInstance();
 
    private String mSubjectValue;
    private String mPredicateValue;
@@ -63,7 +63,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
       int category = mProjection.getDataCategory(1);
       switch (category) {
          case TriplesProjection.DATA_URI:
-            return mValueFactory.createURI(getUriString(mSubjectValue));
+            return mValueFactory.createIRI(getUriString(mSubjectValue));
          case TriplesProjection.DATA_LITERAL:
             throw new TriplesStatementException("Subject cannot be literal"); //$NON-NLS-1$
          default:
@@ -72,12 +72,12 @@ import com.obidea.semantika.util.TemplateStringHelper;
    }
 
    @Override
-   public URI getPredicate()
+   public IRI getPredicate()
    {
       int category = mProjection.getDataCategory(2);
       switch (category) {
          case TriplesProjection.DATA_URI:
-            return mValueFactory.createURI(mPredicateValue);
+            return mValueFactory.createIRI(mPredicateValue);
          case TriplesProjection.DATA_LITERAL:
             throw new TriplesStatementException("Predicate cannot be literal"); //$NON-NLS-1$
          default:
@@ -91,14 +91,14 @@ import com.obidea.semantika.util.TemplateStringHelper;
       int category = mProjection.getDataCategory(3);
       switch (category) {
          case TriplesProjection.DATA_URI:
-            return mValueFactory.createURI(getUriString(mObjectValue));
+            return mValueFactory.createIRI(getUriString(mObjectValue));
          case TriplesProjection.DATA_LITERAL:
             try {
                AbstractXmlType<?> xmlType = XmlDataTypeProfile.getXmlDatatype(mProjection.getDatatype(3));
                Object value = xmlType.getValue(mObjectValue);
                return (xmlType instanceof XsdString) ?
                      mValueFactory.createLiteral(String.valueOf(value)) : // use syntactic sugar
-                     mValueFactory.createLiteral(String.valueOf(value), mValueFactory.createURI(xmlType.getName()));
+                     mValueFactory.createLiteral(String.valueOf(value), mValueFactory.createIRI(xmlType.getName()));
             }
             catch (Exception e) {
                throw new TriplesStatementException("Failed to create literal", e); //$NON-NLS-1$

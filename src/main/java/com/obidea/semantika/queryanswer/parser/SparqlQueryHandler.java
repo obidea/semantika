@@ -776,7 +776,7 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
       if (value instanceof org.openrdf.model.Literal) {
          org.openrdf.model.Literal literal = (org.openrdf.model.Literal) value;
          String lexicalValue = literal.getLabel();
-         org.openrdf.model.URI dt = literal.getDatatype();
+         org.openrdf.model.IRI dt = literal.getDatatype();
          if (dt == null) {
             /*
              * The returned datatype is null for query matching literal with string
@@ -789,8 +789,8 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
             mTerm = sExpressionFactory.getLiteral(lexicalValue, dt.stringValue());
          }
       }
-      else if (value instanceof org.openrdf.model.URI) {
-         org.openrdf.model.URI uri = (org.openrdf.model.URI) value;
+      else if (value instanceof org.openrdf.model.IRI) {
+         org.openrdf.model.IRI uri = (org.openrdf.model.IRI) value;
          URI uriRef = URI.create(uri.toString());
          mTerm = sExpressionFactory.getUriReference(uriRef);
       }
