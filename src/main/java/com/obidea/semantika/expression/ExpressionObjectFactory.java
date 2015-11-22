@@ -17,7 +17,6 @@ package com.obidea.semantika.expression;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +33,13 @@ import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.IVariable;
+import com.obidea.semantika.expression.base.IriReference;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.Predicate;
 import com.obidea.semantika.expression.base.Query;
 import com.obidea.semantika.expression.base.Rule;
 import com.obidea.semantika.expression.base.Term;
 import com.obidea.semantika.expression.base.TermUtils;
-import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.expression.base.Variable;
 
 public class ExpressionObjectFactory implements IExpressionObjectFactory
@@ -244,9 +243,9 @@ public class ExpressionObjectFactory implements IExpressionObjectFactory
    }
 
    @Override
-   public UriReference getUriReference(URI uri)
+   public IriReference getIriReference(String iriString)
    {
-      return (UriReference) TermUtils.makeUriReference(uri.toString());
+      return (IriReference) TermUtils.makeIriReference(iriString);
    }
 
    @Override

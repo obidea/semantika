@@ -17,7 +17,12 @@ package com.obidea.semantika.mapping.base;
 
 public final class TermType
 {
+   @Deprecated
    public static final int URI_TYPE = 0;
+
+   public static final int IRI_TYPE = 0;
+
    public static final int LITERAL_TYPE = 1;
+
    public static final int BNODE_TYPE = 2;
 }

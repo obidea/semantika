@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.mapping;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -23,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
@@ -49,19 +49,19 @@ public final class ReadOnlyMappingSet extends ImmutableMappingSet
    }
 
    @Override
-   public boolean contains(URI signature)
+   public boolean contains(Iri signature)
    {
       return mInternal.contains(signature);
    }
 
    @Override
-   public Set<IMapping> get(URI signature)
+   public Set<IMapping> get(Iri signature)
    {
       return mInternal.getValues(mInternal.getMappingBySignature(), signature);
    }
 
    @Override
-   public Set<URI> getMappingSignatures()
+   public Set<Iri> getMappingSignatures()
    {
       return mInternal.getMappingSignatures();
    }

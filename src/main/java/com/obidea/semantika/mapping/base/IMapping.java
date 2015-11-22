@@ -15,9 +15,8 @@
  */
 package com.obidea.semantika.mapping.base;
 
-import java.net.URI;
-
 import com.obidea.semantika.expression.base.IClause;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
 /**
@@ -28,7 +27,7 @@ public interface IMapping extends IClause
    /**
     * Return the signature that identifies this mapping.
     */
-   public URI getSignature();
+   public Iri getSignature();
 
    /**
     * Return the target atom that represents the class or property atom

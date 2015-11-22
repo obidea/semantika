@@ -16,17 +16,17 @@
 package com.obidea.semantika.mapping;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.base.IMapping;
 
 public abstract class AbstractInternalMapping implements IInternalMapping, Serializable
 {
    private static final long serialVersionUID = 629451L;
 
-   protected Pointer<URI, IMapping> getMappingBySignature()
+   protected Pointer<Iri, IMapping> getMappingBySignature()
    {
       return mMappingBySignature;
    }
@@ -66,7 +66,7 @@ public abstract class AbstractInternalMapping implements IInternalMapping, Seria
       return pointer.containsKey(key);
    }
 
-   private final MapPointer<URI, IMapping> mMappingBySignature = build();
+   private final MapPointer<Iri, IMapping> mMappingBySignature = build();
    private final MapPointer<MappingType<?>, IMapping> mMappingByType = build();
 
    private <K, V extends IMapping> MapPointer<K, V> build()

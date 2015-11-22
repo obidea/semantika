@@ -15,13 +15,13 @@
  */
 package com.obidea.semantika.mapping.base;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.IPredicate;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.expression.base.Predicate;
 
 /**
@@ -31,15 +31,15 @@ public abstract class AbstractMapping implements IMapping
 {
    private static final long serialVersionUID = 629451L;
 
-   protected URI mSignature;
+   protected Iri mSignature;
 
-   public AbstractMapping(URI signature)
+   public AbstractMapping(Iri signature)
    {
       mSignature = signature;
    }
 
    @Override
-   public URI getSignature()
+   public Iri getSignature()
    {
       return mSignature;
    }

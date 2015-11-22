@@ -15,21 +15,12 @@
  */
 package com.obidea.semantika.expression.base;
 
-import java.net.URI;
-
-/**
- * Represent the constant URI reference symbol.
- * 
- * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link IIriReference} instead.
- */
-@Deprecated
-public interface IUriReference extends IConstant
+public interface IIriReference extends IUriReference, IConstant
 {
    /**
-    * Returns the URI object from this constant.
+    * Returns the IRI object from this constant.
     * 
-    * @return the URI object.
+    * @return the IRI object.
     */
-   public URI toUri();
+   public Iri toIri();
 }

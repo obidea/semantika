@@ -15,9 +15,9 @@
  */
 package com.obidea.semantika.mapping;
 
-import java.net.URI;
 import java.util.Set;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
@@ -57,20 +57,20 @@ import com.obidea.semantika.mapping.base.MappingVisitorAdapter;
    /**
     * Checks if the internal keeps mappings with the given <code>signature</code>.
     * <p>
-    * A mapping signature is the predicate URI that identifies a class or a
+    * A mapping signature is the predicate IRI that identifies a class or a
     * property in the ontology.
     * 
     * @param signature
-    *           class or property URI
+    *           class or property IRI
     * @return Returns <code>true</code> if the internal keeps the mappings
     *         with the given signature, or <code>false</code> otherwise.
     */
-   public boolean contains(URI signature)
+   public boolean contains(Iri signature)
    {
       return containsKey(getMappingBySignature(), signature);
    }
 
-   public Set<URI> getMappingSignatures()
+   public Set<Iri> getMappingSignatures()
    {
       return getKeyset(getMappingBySignature());
    }
@@ -78,14 +78,14 @@ import com.obidea.semantika.mapping.base.MappingVisitorAdapter;
    /**
     * Gets all mappings with the same <code>signature</code>.
     * <p>
-    * A mapping signature is the predicate URI that identifies a class or a
+    * A mapping signature is the predicate IRI that identifies a class or a
     * property in the ontology.
     *
     * @param signature
-    *           class or property URI
+    *           class or property IRI
     * @return A set of mappings with the same signature.
     */
-   public Set<IMapping> getMappingsBySignature(URI signature)
+   public Set<IMapping> getMappingsBySignature(Iri signature)
    {
       return getValues(getMappingBySignature(), signature);
    }
@@ -132,7 +132,7 @@ import com.obidea.semantika.mapping.base.MappingVisitorAdapter;
     *
     * @return the count number.
     */
-   public int getMappingCountBySignature(URI signature)
+   public int getMappingCountBySignature(Iri signature)
    {
       final Set<IMapping> mappings = getValues(getMappingBySignature(), signature);
       if (mappings.isEmpty()) {

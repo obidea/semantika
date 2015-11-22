@@ -15,15 +15,14 @@
  */
 package com.obidea.semantika.knowledgebase;
 
-import java.net.URI;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.util.Namespaces;
 import com.obidea.semantika.util.StringUtils;
-import com.obidea.semantika.util.XmlUtils;
 
 public class DefaultPrefixManager implements IPrefixManager
 {
@@ -156,7 +155,7 @@ public class DefaultPrefixManager implements IPrefixManager
    }
 
    @Override
-   public URI expand(String qname)
+   public Iri expand(String qname)
    {
       int colonPos = qname.indexOf(":"); //$NON-NLS-1$
       if (colonPos != -1) {
@@ -166,29 +165,28 @@ public class DefaultPrefixManager implements IPrefixManager
          }
          String namespace = getNamespace(prefixName);
          String localName = qname.substring(colonPos + 1);
-         return URI.create(namespace + localName);
+         return Iri.create(namespace, localName);
       }
       else {
          String localName = qname;
          String defaultNamespace = getDefaultNamespace();
          if (StringUtils.isEmpty(defaultNamespace)) {
-            return URI.create(localName);
+            return Iri.create("", localName);
          }
          else {
-            return URI.create(defaultNamespace + localName);
+            return Iri.create(defaultNamespace, localName);
          }
       }
    }
 
    @Override
-   public String shorten(URI uri)
+   public String shorten(Iri iri)
    {
-      String uriString = uri.toString();
-      String namespace = XmlUtils.getNCNamePrefix(uriString);
+      String namespace = iri.getNamespace();
       for (String prefixName : getPrefixNames()) {
          String candidateNamespace = getNamespace(prefixName);
          if (namespace.equals(candidateNamespace)) {
-            return prefixName + ":" + XmlUtils.getNCNameSuffix(uriString);
+            return prefixName + ":" + iri.getLocalName();
          }
       }
       throw new NamespaceNotFoundException(namespace, this);

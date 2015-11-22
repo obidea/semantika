@@ -15,14 +15,13 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import java.net.URI;
-
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
 public class SubjectMapElementHandler extends AbstractMappingElementHandler
 {
-   private URI mSubjectUri;
+   private Iri mSubjectIri;
    private ITerm mSubjectMapValue;
 
    public SubjectMapElementHandler(TermalXmlParserHandler handler)
@@ -33,7 +32,7 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    @Override
    protected void decideDefaultTermType()
    {
-      mTermType = R2RmlVocabulary.IRI.getUri();
+      mTermType = R2RmlVocabulary.IRI.toString();
    }
 
    @Override
@@ -53,7 +52,7 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
    public void attribute(String name, String value) throws MappingParserException
    {
       if (name.equals(R2RmlVocabulary.CLASS.getQName())) {
-         setSubjectUri(getUri(value));
+         setSubjectIri(getIri(value));
       }
       else if (name.equals(R2RmlVocabulary.COLUMN.getQName())) {
          setTermMap(TermMap.COLUMN_VALUE);
@@ -68,10 +67,10 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
          setValue(value);
       }
       else if (name.equals(R2RmlVocabulary.TERM_TYPE.getQName())) {
-         setTermType(getUri(value).toString());
+         setTermType(getIri(value).toString());
       }
       else if (name.equals(R2RmlVocabulary.DATAYPE.getQName())) {
-         setDatatype(getUri(value).toString());
+         setDatatype(getIri(value).toString());
       }
       else {
          throw unknownXmlAttributeException(name);
@@ -93,15 +92,15 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
       }
    }
 
-   private void setSubjectUri(URI classUri) throws ClassNotFoundException, PrefixNotFoundException
+   private void setSubjectIri(Iri classIri) throws ClassNotFoundException, PrefixNotFoundException
    {
-      checkClassSignature(classUri);
-      mSubjectUri = classUri;
+      checkClassSignature(classIri);
+      mSubjectIri = classIri;
    }
 
-   public URI getSubjectUri()
+   public Iri getSubjectIri()
    {
-      return mSubjectUri;
+      return mSubjectIri;
    }
 
    private void setSubjectMapValue(ITerm subjectTerm)
@@ -118,16 +117,16 @@ public class SubjectMapElementHandler extends AbstractMappingElementHandler
     * Private utility methods
     */
 
-   private void checkClassSignature(URI uri) throws ClassNotFoundException
+   private void checkClassSignature(Iri iri) throws ClassNotFoundException
    {
-      if (uri == null) {
-         return; // if input is null then nothing to check
+      if (iri == null) {
+         throw new IllegalArgumentException("Missing class name"); //$NON-NLS-1$
       }
       if (isStrictParsing()) {
-         if (getOntology().containClass(uri)) {
+         if (getOntology().containClass(iri)) {
             return;
          }
-         throw classNotFoundException(uri);
+         throw classNotFoundException(iri);
       }
    }
 }

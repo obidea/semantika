@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import java.net.URI;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -23,6 +22,7 @@ import org.slf4j.Logger;
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.sql.parser.SqlParserException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.exception.DataTypeOverrideException;
@@ -151,16 +151,16 @@ public abstract class AbstractTermalElementHandler implements IMappingElementHan
             getLineNumber(), getColumnNumber());
    }
 
-   protected ClassNotFoundException classNotFoundException(URI value)
+   protected ClassNotFoundException classNotFoundException(Iri iri)
    {
       // XXX Strange bug related to line number
-      return new ClassNotFoundException("Class  <" + value + "> is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
+      return new ClassNotFoundException("Class  " + iri.toQuotedString() + " is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber()-1, getColumnNumber());
    }
 
-   protected PropertyNotFoundException propertyNotFoundException(URI value)
+   protected PropertyNotFoundException propertyNotFoundException(Iri iri)
    {
-      return new PropertyNotFoundException("Property <" + value + "> is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
+      return new PropertyNotFoundException("Property " + iri.toQuotedString() + " is not found in ontology", //$NON-NLS-1$ //$NON-NLS-2$
             getLineNumber(), getColumnNumber());
    }
 

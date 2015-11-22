@@ -15,12 +15,12 @@
  */
 package com.obidea.semantika.mapping.parser;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.IMetaModel;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
@@ -34,8 +34,8 @@ public abstract class AbstractMappingHandler
 
    private SqlQuery mSqlQuery;
 
-   private URI mSubjectUri;
-   private URI mPredicateUri;
+   private Iri mSubjectIri;
+   private Iri mPredicateIri;
 
    private ITerm mSubjectMapValue;
    private ITerm mPredicateMapValue;
@@ -89,24 +89,24 @@ public abstract class AbstractMappingHandler
       return mSqlQuery;
    }
 
-   protected void setSubjectUri(URI classUri)
+   protected void setSubjectIri(Iri subjectIri)
    {
-      mSubjectUri = classUri;
+      mSubjectIri = subjectIri;
    }
 
-   public URI getSubjectUri()
+   public Iri getSubjectIri()
    {
-      return mSubjectUri;
+      return mSubjectIri;
    }
 
-   protected void setPredicateUri(URI propertyUri)
+   protected void setPredicateIri(Iri predicateIri)
    {
-      mPredicateUri = propertyUri;
+      mPredicateIri = predicateIri;
    }
 
-   public URI getPredicateUri()
+   public Iri getPredicateIri()
    {
-      return mPredicateUri;
+      return mPredicateIri;
    }
 
    protected void setSubjectMapValue(ITerm subjectTerm)

@@ -23,7 +23,16 @@ public interface ITermVisitor
 
    void visit(ILiteral literal);
 
-   void visit(IUriReference uriReference);
+   /**
+    * @deprecated since 1.8. Use {@link ITermVisitor#visit(IIriReference)} instead.
+    */
+   @Deprecated
+   default void visit(IUriReference uriReference)
+   {
+      visit((IIriReference) uriReference);
+   }
+
+   void visit(IIriReference iriReference);
 
    void visit(IFunction function);
 }

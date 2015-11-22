@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.datatype.DataType;
+import com.obidea.semantika.expression.base.Iri;
 
 public class SqlMappingFactory
 {
@@ -76,9 +77,18 @@ public class SqlMappingFactory
       return new SqlValue(String.valueOf(value), DataType.BOOLEAN);
    }
 
+   /**
+    * @deprecated since 1.8. Use {@link SqlMappingFactory#createIriValueExpression(Iri)} instead.
+    */
+   @Deprecated
    public SqlUriValue createUriValueExpression(URI value)
    {
       return new SqlUriValue(String.valueOf(value));
+   }
+
+   public SqlIriValue createIriValueExpression(Iri value)
+   {
+      return new SqlIriValue(String.valueOf(value));
    }
 
    public SqlAddition createAdditionExpression(ISqlExpression leftParameter, ISqlExpression rightParameter)
@@ -161,14 +171,32 @@ public class SqlMappingFactory
       return new SqlConcat(parameters);
    }
 
+   /**
+    * @deprecated since 1.8. Use {@link SqlMappingFactory#createIriConcatExpression(ISqlExpression...)} instead.
+    */
+   @Deprecated
    public SqlUriConcat createUriConcatExpression(ISqlExpression... parameters)
    {
       return new SqlUriConcat(parameters);
    }
 
+   public SqlIriConcat createIriConcatExpression(ISqlExpression... parameters)
+   {
+      return new SqlIriConcat(parameters);
+   }
+
+   /**
+    * @deprecated since 1.8. Use {@link SqlMappingFactory#createIriConcatExpression(List)} instead.
+    */
+   @Deprecated
    public SqlUriConcat createUriConcatExpression(List<ISqlExpression> parameters)
    {
       return new SqlUriConcat(parameters);
+   }
+
+   public SqlIriConcat createIriConcatExpression(List<ISqlExpression> parameters)
+   {
+      return new SqlIriConcat(parameters);
    }
 
    public SqlRegex createRegexExpression(ISqlExpression text, ISqlExpression pattern, ISqlExpression flag)

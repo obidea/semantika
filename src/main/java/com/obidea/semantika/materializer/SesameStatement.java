@@ -62,7 +62,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
    {
       int category = mProjection.getDataCategory(1);
       switch (category) {
-         case TriplesProjection.DATA_URI:
+         case TriplesProjection.DATA_IRI:
             return mValueFactory.createIRI(getUriString(mSubjectValue));
          case TriplesProjection.DATA_LITERAL:
             throw new TriplesStatementException("Subject cannot be literal"); //$NON-NLS-1$
@@ -76,7 +76,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
    {
       int category = mProjection.getDataCategory(2);
       switch (category) {
-         case TriplesProjection.DATA_URI:
+         case TriplesProjection.DATA_IRI:
             return mValueFactory.createIRI(mPredicateValue);
          case TriplesProjection.DATA_LITERAL:
             throw new TriplesStatementException("Predicate cannot be literal"); //$NON-NLS-1$
@@ -90,7 +90,7 @@ import com.obidea.semantika.util.TemplateStringHelper;
    {
       int category = mProjection.getDataCategory(3);
       switch (category) {
-         case TriplesProjection.DATA_URI:
+         case TriplesProjection.DATA_IRI:
             return mValueFactory.createIRI(getUriString(mObjectValue));
          case TriplesProjection.DATA_LITERAL:
             try {

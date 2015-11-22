@@ -15,8 +15,26 @@
  */
 package com.obidea.semantika.expression.base;
 
-public abstract class AtomVisitorAdapter implements IAtomVisitor
+/**
+ * A helper class to implement {@link IQueryExtVisitor}
+ *
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @since 1.8
+ */
+public abstract class QueryExtVisitorAdapter implements IQueryExtVisitor
 {
+   @Override
+   public void visit(IAtom atom)
+   {
+      // NO-OP: To be implemented by subclasses
+   }
+
+   @Override
+   public void visit(IPredicate predicate)
+   {
+      // NO-OP: To be implemented by subclasses
+   }
+
    @Override
    public void visit(IVariable variable)
    {
@@ -24,7 +42,7 @@ public abstract class AtomVisitorAdapter implements IAtomVisitor
    }
 
    @Override
-   public void visit(IConstant constant)
+   public void visit(IConstant literal)
    {
       // NO-OP: To be implemented by subclasses
    }
@@ -48,13 +66,7 @@ public abstract class AtomVisitorAdapter implements IAtomVisitor
    }
 
    @Override
-   public void visit(IAtom atom)
-   {
-      // NO-OP: To be implemented by subclasses
-   }
-
-   @Override
-   public void visit(IPredicate predicate)
+   public void visit(IQueryExt query)
    {
       // NO-OP: To be implemented by subclasses
    }

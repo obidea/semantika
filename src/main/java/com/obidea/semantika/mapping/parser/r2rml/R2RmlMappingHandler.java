@@ -16,6 +16,12 @@
 package com.obidea.semantika.mapping.parser.r2rml;
 
 import static java.lang.String.format;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+
 import io.github.johardi.r2rmlparser.R2RmlVocabulary;
 import io.github.johardi.r2rmlparser.document.IMappingVisitor;
 import io.github.johardi.r2rmlparser.document.LogicalTable;
@@ -26,22 +32,17 @@ import io.github.johardi.r2rmlparser.document.RefObjectMap;
 import io.github.johardi.r2rmlparser.document.SubjectMap;
 import io.github.johardi.r2rmlparser.document.TermMap;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.obidea.semantika.database.sql.parser.SqlFactory;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.ExpressionObjectFactory;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.UriReference;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.IMetaModel;
+import com.obidea.semantika.mapping.IriTemplate;
 import com.obidea.semantika.mapping.MappingObjectFactory;
-import com.obidea.semantika.mapping.UriTemplate;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
@@ -72,17 +73,17 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    }
 
    @Override
-   public void setSubjectUri(URI classUri)
+   public void setSubjectIri(Iri subjectIri)
    {
-      checkClassSignature(classUri);
-      super.setSubjectUri(classUri);
+      checkClassSignature(subjectIri);
+      super.setSubjectIri(subjectIri);
    }
 
    @Override
-   public void setPredicateUri(URI propertyUri)
+   public void setPredicateIri(Iri propertyIri)
    {
-      checkPropertySignature(propertyUri);
-      super.setPredicateUri(propertyUri);
+      checkPropertySignature(propertyIri);
+      super.setPredicateIri(propertyIri);
    }
 
    @Override
@@ -101,7 +102,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    public void visit(SubjectMap arg)
    {
       validateSubjectMap(arg);
-      setSubjectUri(createUri(arg.getClassIri()));
+      setSubjectIri(Iri.create(arg.getClassIri()));
       
       int termMap = arg.getType();
       String value = arg.getValue();
@@ -119,8 +120,8 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             break;
       }
       // Create the class mapping if a class URI specified in the mapping
-      if (getSubjectUri() != null) {
-         addMapping(sMappingObjectFactory.createClassMapping(getSubjectUri(), getSqlQuery(), getSubjectMapValue()));
+      if (getSubjectIri() != null) {
+         addMapping(sMappingObjectFactory.createClassMapping(getSubjectIri(), getSqlQuery(), getSubjectMapValue()));
       }
    }
 
@@ -140,7 +141,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
    {
       arg.getPredicateMap().accept(this);
       arg.getObjectMap().accept(this);
-      addMapping(sMappingObjectFactory.createPropertyMapping(getPredicateUri(), getSqlQuery(), getSubjectMapValue(),
+      addMapping(sMappingObjectFactory.createPropertyMapping(getPredicateIri(), getSqlQuery(), getSubjectMapValue(),
             getObjectMapValue()));
    }
 
@@ -156,9 +157,9 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          case TermMap.COLUMN_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use column-valued term map"); //$NON-NLS-1$
          case TermMap.CONSTANT_VALUE:
-            ITerm predicateTerm = getLiteralTerm(value, termType, datatype);
-            setPredicateUri(createUri(predicateTerm));
-            setPredicateMapValue(predicateTerm);
+            IIriReference predicateIri = (IIriReference) getLiteralTerm(value, termType, datatype);
+            setPredicateIri(predicateIri.toIri());
+            setPredicateMapValue(predicateIri);
             break;
          case TermMap.TEMPLATE_VALUE:
             throw new IllegalR2RmlMappingException("Predicate map cannot use template-valued term map"); //$NON-NLS-1$
@@ -209,29 +210,23 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
     * Private utility methods
     */
 
-   private void checkClassSignature(URI uri)
+   private void checkClassSignature(Iri iri)
    {
-      if (uri == null) {
-         return; // if input is null then nothing to check
-      }
       if (isStrictParsing()) {
-         if (getOntology().containClass(uri)) {
+         if (getOntology().containClass(iri)) {
             return;
          }
-         throw new SemantikaRuntimeException(format("Class <%s> is not found in ontology", uri));
+         throw new SemantikaRuntimeException(format("Class %s is not found in ontology", iri.toQuotedString()));
       }
    }
 
-   private void checkPropertySignature(URI uri)
+   private void checkPropertySignature(Iri iri)
    {
-      if (uri == null) {
-         throw new IllegalArgumentException("Property name is null");
-      }
       if (isStrictParsing()) {
-         if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
+         if (getOntology().containObjectProperty(iri) || getOntology().containDataProperty(iri)) {
             return;
          }
-         throw new SemantikaRuntimeException(format("Property <%s> is not found in ontology", uri));
+         throw new SemantikaRuntimeException(format("Property %s is not found in ontology", iri.toQuotedString()));
       }
    }
 
@@ -242,7 +237,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
          SqlColumn column = getColumnTerm(columnName);
-         column.setTermType(TermType.URI_TYPE);
+         column.setTermType(TermType.IRI_TYPE);
          return column;
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
@@ -265,7 +260,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          if (!StringUtils.isEmpty(datatype)) {
             throw new IllegalR2RmlMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
-         return sExpressionObjectFactory.getUriReference(createUri(value));
+         return sExpressionObjectFactory.getIriReference(value);
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
          return (StringUtils.isEmpty(datatype)) ?
@@ -287,7 +282,7 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
          R2RmlTemplate template = new R2RmlTemplate(value);
          String templateString = template.getTemplateString();
          List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-         UriTemplate uriTemplate = sMappingObjectFactory.createUriTemplate(templateString, parameters);
+         IriTemplate uriTemplate = sMappingObjectFactory.createIriTemplate(templateString, parameters);
          return uriTemplate;
       }
       else if (termType.equals(R2RmlVocabulary.LITERAL)) {
@@ -328,21 +323,5 @@ public class R2RmlMappingHandler extends AbstractMappingHandler implements IMapp
       catch (IllegalArgumentException e) {
          throw new IllegalR2RmlMappingException(e.getMessage());
       }
-   }
-
-   private URI createUri(String uriString)
-   {
-      if (!StringUtils.isEmpty(uriString)) {
-         return URI.create(uriString);
-      }
-      return null;
-   }
-
-   private URI createUri(ITerm term)
-   {
-      if (term instanceof UriReference) {
-         return ((UriReference) term).toUri();
-      }
-      return null;
    }
 }

@@ -32,7 +32,7 @@ public class TriplesProjection
    /**
     * A constant to indicate the projected data as an object identifier.
     */
-   static final int DATA_URI = 0;
+   static final int DATA_IRI = 0;
 
    /**
     * A constant to indicate the projected data as a literal value.
@@ -76,7 +76,7 @@ public class TriplesProjection
       ISqlExpression expression = getSelectItem(position).getExpression();
       IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
       switch (mapTerm.getTermType()) {
-         case TermType.URI_TYPE: return DATA_URI;
+         case TermType.IRI_TYPE: return DATA_IRI;
          case TermType.LITERAL_TYPE: return DATA_LITERAL;
          default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
                mapTerm.getTermType(), expression));
@@ -95,7 +95,7 @@ public class TriplesProjection
       ISqlExpression expression = getSelectItem(position).getExpression();
       IMappingTerm mapTerm = (IMappingTerm) expression; // look as a mapping term
       switch (mapTerm.getTermType()) {
-         case TermType.URI_TYPE: return null; // no datatype for object identifier
+         case TermType.IRI_TYPE: return null; // no datatype for object identifier
          case TermType.LITERAL_TYPE: return mapTerm.getDatatype();
          default: throw new SemantikaRuntimeException(format("Illegal term type (%s): %s", //$NON-NLS-1$
                mapTerm.getTermType(), expression));

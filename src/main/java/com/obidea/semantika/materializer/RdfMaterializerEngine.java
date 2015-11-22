@@ -30,19 +30,19 @@ import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.deparser.SqlDeparser;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.io.FileDocumentTarget;
 import com.obidea.semantika.io.IDocumentTarget;
-import com.obidea.semantika.mapping.IUriTemplate;
+import com.obidea.semantika.mapping.IIriTemplate;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
+import com.obidea.semantika.mapping.base.sql.SqlIriConcat;
+import com.obidea.semantika.mapping.base.sql.SqlIriValue;
 import com.obidea.semantika.mapping.base.sql.SqlIsNotNull;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.mapping.base.sql.SqlSelectQuery;
-import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.base.sql.SqlUriValue;
 import com.obidea.semantika.queryanswer.processor.TermToSqlConverter;
 import com.obidea.semantika.util.LogUtils;
 
@@ -252,33 +252,33 @@ public class RdfMaterializerEngine implements IMaterializerEngine
 
    private void setSubject(SqlQuery query, ITerm term)
    {
-      if (term instanceof IUriTemplate) {
-         SqlUriConcat uriConcatExpression = mConverter.toSqlUriConcat((IUriTemplate) term);
-         SqlSelectItem selectItem = new SqlSelectItem(uriConcatExpression);
+      if (term instanceof IIriTemplate) {
+         SqlIriConcat iriConcatExpression = mConverter.toSqlIriConcat((IIriTemplate) term);
+         SqlSelectItem selectItem = new SqlSelectItem(iriConcatExpression);
          selectItem.setAliasName("subject"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
       }
-      else if (term instanceof IUriReference) {
-         SqlUriValue valueExpression = mConverter.toSqlUriValue((IUriReference) term);
+      else if (term instanceof IIriReference) {
+         SqlIriValue valueExpression = mConverter.toSqlIriValue((IIriReference) term);
          SqlSelectItem selectItem = new SqlSelectItem(valueExpression);
          selectItem.setAliasName("subject"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
       }
       else {
-         throw new SemantikaRuntimeException("Other type: " + term.getClass());
+         throw new SemantikaRuntimeException("Unsupported other type: " + term.getClass());
       }
    }
 
    private void setPredicate(SqlQuery query, ITerm term)
    {
-      if (term instanceof IUriReference) {
-         SqlUriValue valueExpression = mConverter.toSqlUriValue((IUriReference) term);
+      if (term instanceof IIriReference) {
+         SqlIriValue valueExpression = mConverter.toSqlIriValue((IIriReference) term);
          SqlSelectItem selectItem = new SqlSelectItem(valueExpression);
          selectItem.setAliasName("predicate"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
       }
       else {
-         throw new SemantikaRuntimeException("Other type: " + term.getClass());
+         throw new SemantikaRuntimeException("Unsupported other type: " + term.getClass());
       }
    }
 
@@ -289,14 +289,14 @@ public class RdfMaterializerEngine implements IMaterializerEngine
          selectItem.setAliasName("object"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
       }
-      else if (term instanceof IUriTemplate) {
-         SqlUriConcat uriConcatExpression = mConverter.toSqlUriConcat((IUriTemplate) term);
-         SqlSelectItem selectItem = new SqlSelectItem(uriConcatExpression);
+      else if (term instanceof IIriTemplate) {
+         SqlIriConcat iriConcatExpression = mConverter.toSqlIriConcat((IIriTemplate) term);
+         SqlSelectItem selectItem = new SqlSelectItem(iriConcatExpression);
          selectItem.setAliasName("object"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
       }
-      else if (term instanceof IUriReference) {
-         SqlUriValue valueExpression = mConverter.toSqlUriValue((IUriReference) term);
+      else if (term instanceof IIriReference) {
+         SqlIriValue valueExpression = mConverter.toSqlIriValue((IIriReference) term);
          SqlSelectItem selectItem = new SqlSelectItem(valueExpression);
          selectItem.setAliasName("object"); //$NON-NLS-1$
          query.addSelectItem(selectItem);
@@ -333,9 +333,9 @@ public class RdfMaterializerEngine implements IMaterializerEngine
          ISqlExpression filter = new SqlIsNotNull((SqlColumn) term);
          query.addWhereExpression(filter);
       }
-      else if (term instanceof IUriTemplate) {
-         IUriTemplate uriTemplate = (IUriTemplate) term;
-         for (ITerm parameter : uriTemplate.getParameters()) {
+      else if (term instanceof IIriTemplate) {
+         IIriTemplate iriTemplate = (IIriTemplate) term;
+         for (ITerm parameter : iriTemplate.getParameters()) {
             setNotNullFilter(query, parameter);
          }
       }

@@ -22,15 +22,15 @@ import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.base.ExpressionConstant;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.TermVisitorAdapter;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.knowledgebase.UnificationException;
 import com.obidea.semantika.knowledgebase.Unifier;
-import com.obidea.semantika.mapping.IUriTemplate;
+import com.obidea.semantika.mapping.IIriTemplate;
 import com.obidea.semantika.mapping.base.sql.SqlAddition;
 import com.obidea.semantika.mapping.base.sql.SqlAnd;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
@@ -39,6 +39,8 @@ import com.obidea.semantika.mapping.base.sql.SqlEqualsTo;
 import com.obidea.semantika.mapping.base.sql.SqlFunction;
 import com.obidea.semantika.mapping.base.sql.SqlGreaterThan;
 import com.obidea.semantika.mapping.base.sql.SqlGreaterThanEquals;
+import com.obidea.semantika.mapping.base.sql.SqlIriConcat;
+import com.obidea.semantika.mapping.base.sql.SqlIriValue;
 import com.obidea.semantika.mapping.base.sql.SqlIsNotNull;
 import com.obidea.semantika.mapping.base.sql.SqlIsNull;
 import com.obidea.semantika.mapping.base.sql.SqlLessThan;
@@ -48,12 +50,10 @@ import com.obidea.semantika.mapping.base.sql.SqlMultiply;
 import com.obidea.semantika.mapping.base.sql.SqlNotEqualsTo;
 import com.obidea.semantika.mapping.base.sql.SqlOr;
 import com.obidea.semantika.mapping.base.sql.SqlSubtract;
-import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
-import com.obidea.semantika.mapping.base.sql.SqlUriValue;
 import com.obidea.semantika.mapping.base.sql.SqlValue;
 import com.obidea.semantika.util.Serializer;
 
-public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, maybe SqlMappingVisitorAdapter
+public class TermToSqlConverter extends TermVisitorAdapter
 {
    private ISqlExpression mReturnExpression = null;
 
@@ -79,9 +79,9 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       return sSqlFactory.createValueExpression(literal.getLexicalValue(), literal.getDatatype());
    }
 
-   public SqlUriValue toSqlUriValue(IUriReference uriReference)
+   public SqlIriValue toSqlIriValue(IIriReference iriReference)
    {
-      return sSqlFactory.createUriValueExpression(uriReference.toUri());
+      return sSqlFactory.createIriValueExpression(iriReference.toIri());
    }
 
    public SqlAnd toSqlAnd(IFunction function)
@@ -180,7 +180,7 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       return sSqlFactory.createIsNotNullExpression(e);
    }
 
-   public SqlUriConcat toSqlUriConcat(IUriTemplate uriTemplate)
+   public SqlIriConcat toSqlIriConcat(IIriTemplate uriTemplate)
    {
       String templateString = uriTemplate.getTemplateString();
       SqlValue templateValue = sSqlFactory.createStringValueExpression(templateString);
@@ -190,7 +190,7 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       for (ITerm templateParameter : uriTemplate.getParameters()) {
          parameters.add(getExpression(templateParameter));
       }
-      return sSqlFactory.createUriConcatExpression(parameters);
+      return sSqlFactory.createIriConcatExpression(parameters);
    }
 
    private ISqlExpression toSqlRegex(IFunction function)
@@ -234,9 +234,9 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
    }
 
    @Override
-   public void visit(IUriReference uriReference)
+   public void visit(IIriReference iriReference)
    {
-      mReturnExpression = toSqlUriValue(uriReference);
+      mReturnExpression = toSqlIriValue(iriReference);
    }
 
    @Override
@@ -249,14 +249,14 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
 
    private ISqlExpression visitFunction(IFunction function)
    {
-      return (function instanceof IUriTemplate)
-            ? visitUriTemplateFunction((IUriTemplate) function)
+      return (function instanceof IIriTemplate)
+            ? visitIriTemplateFunction((IIriTemplate) function)
             : visitBuildInFunction(function);
    }
 
-   private ISqlExpression visitUriTemplateFunction(IUriTemplate uriTemplate)
+   private ISqlExpression visitIriTemplateFunction(IIriTemplate iriTemplate)
    {
-      return toSqlUriConcat(uriTemplate);
+      return toSqlIriConcat(iriTemplate);
    }
 
    private ISqlExpression visitBuildInFunction(IFunction function)
@@ -271,13 +271,13 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       else if (functionName.equals(ExpressionConstant.EQUAL)) {
          ITerm t1 = function.getParameter(0);
          ITerm t2 = function.getParameter(1);
-         if (t1 instanceof IUriTemplate && t2 instanceof IUriReference) {
+         if (t1 instanceof IIriTemplate && t2 instanceof IIriReference) {
             mReturnExpression = getExtendedEqualExpression(t1, t2);
          }
-         else if (t2 instanceof IUriTemplate && t1 instanceof IUriReference) {
+         else if (t2 instanceof IIriTemplate && t1 instanceof IIriReference) {
             mReturnExpression = getExtendedEqualExpression(t2, t1);
          }
-         else if (t1 instanceof IUriTemplate && t2 instanceof IUriTemplate) {
+         else if (t1 instanceof IIriTemplate && t2 instanceof IIriTemplate) {
             mReturnExpression = getExtendedEqualExpression(t2, t1);
          }
          else {
@@ -287,13 +287,13 @@ public class TermToSqlConverter extends TermVisitorAdapter // XXX: Fix this, may
       else if (functionName.equals(ExpressionConstant.NOT_EQUAL)) {
          ITerm t1 = function.getParameter(0);
          ITerm t2 = function.getParameter(1);
-         if (t1 instanceof IUriTemplate && t2 instanceof IUriReference) {
+         if (t1 instanceof IIriTemplate && t2 instanceof IIriReference) {
             mReturnExpression = getExtendedNotEqualExpression(t1, t2);
          }
-         else if (t2 instanceof IUriTemplate && t1 instanceof IUriReference) {
+         else if (t2 instanceof IIriTemplate && t1 instanceof IIriReference) {
             mReturnExpression = getExtendedNotEqualExpression(t1, t2);
          }
-         else if (t1 instanceof IUriTemplate && t2 instanceof IUriTemplate) {
+         else if (t1 instanceof IIriTemplate && t2 instanceof IIriTemplate) {
             mReturnExpression = getExtendedNotEqualExpression(t1, t2);
          }
          else {

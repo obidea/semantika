@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.queryanswer.processor;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -33,16 +32,16 @@ import com.obidea.semantika.exception.SemantikaRuntimeException;
 import com.obidea.semantika.expression.base.AtomVisitorAdapter;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.expression.base.Join;
 import com.obidea.semantika.expression.base.Literal;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.expression.base.TermUtils;
-import com.obidea.semantika.expression.base.UriReference;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.knowledgebase.UnificationException;
 import com.obidea.semantika.knowledgebase.Unifier;
@@ -73,7 +72,7 @@ import com.obidea.semantika.util.Serializer;
  */
 public class QueryUnfolder extends AtomVisitorAdapter implements IUnfolder
 {
-   private static final URI RDF_TYPE = RdfVocabulary.TYPE.getUri();
+   private static final String RDF_TYPE = RdfVocabulary.TYPE.toString();
 
    private ImmutableMappingSet mMappingSet;
 
@@ -753,7 +752,7 @@ public class QueryUnfolder extends AtomVisitorAdapter implements IUnfolder
 
    private Set<IMapping> findMappings(TripleAtom tupleExpression)
    {
-      URI signature = getTupleSignature(tupleExpression);
+      Iri signature = getTupleSignature(tupleExpression);
       Set<IMapping> matchedMappings = mMappingSet.get(signature);
       if (matchedMappings.isEmpty()) {
          throw new SemantikaRuntimeException("No mapping found for assertion: " + signature); //$NON-NLS-1$
@@ -761,17 +760,17 @@ public class QueryUnfolder extends AtomVisitorAdapter implements IUnfolder
       return matchedMappings;
    }
 
-   private URI getTupleSignature(TripleAtom expr)
+   private Iri getTupleSignature(TripleAtom expr)
    {
-      IUriReference predicate = TermUtils.asUriReference(TripleAtom.getPredicate(expr));
-      URI signature = UriReference.getUri(predicate);
+      IIriReference predicate = TermUtils.asIriReference(TripleAtom.getPredicate(expr));
+      Iri signature = predicate.toIri();
       
       /*
        * If the expression is a class expression (i.e., predicate uses rdf:type)
        */
-      if (signature.equals(RDF_TYPE)) {
-         IUriReference object = TermUtils.asUriReference(TripleAtom.getObject(expr));
-         signature = UriReference.getUri(object);
+      if (signature.toString().equals(RDF_TYPE)) {
+         IIriReference object = TermUtils.asIriReference(TripleAtom.getObject(expr));
+         signature = object.toIri();
       }
       return signature;
    }

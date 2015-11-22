@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.knowledgebase.processor;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +34,7 @@ import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IRule;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.IVariable;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.knowledgebase.UnificationException;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
@@ -80,7 +80,7 @@ public class ReferentialIntegrityProcessor implements IKnowledgeBaseProcessor
       
       createForeignKeyRules();
       
-      for (URI signature : mMappingSet.getMappingSignatures()) {
+      for (Iri signature : mMappingSet.getMappingSignatures()) {
          Set<IMapping> mappings = mMappingSet.get(signature);
          if (mappings.size() == 1) { // skip if found a single mapping
             continue;
@@ -90,7 +90,7 @@ public class ReferentialIntegrityProcessor implements IKnowledgeBaseProcessor
       logIgnoreMappings();
    }
 
-   private void doOptimization(URI signature, Set<IMapping> mappings)
+   private void doOptimization(Iri signature, Set<IMapping> mappings)
    {
       List<IMapping> removeList = new ArrayList<IMapping>();
       List<IMapping> mappingList = CollectionUtils.toList(mappings);

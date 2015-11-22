@@ -27,6 +27,7 @@ import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.util.OWLObjectVisitorAdapter;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.util.Serializer;
@@ -35,7 +36,7 @@ public abstract class OwlObjectHandler extends OWLObjectVisitorAdapter
 {
    protected MutableMappingSet mMappingSet;
 
-   protected URI mSignature;
+   protected Iri mSignature;
 
    protected boolean mIsInverse = false;
 
@@ -77,26 +78,27 @@ public abstract class OwlObjectHandler extends OWLObjectVisitorAdapter
    @Override
    public void visit(OWLClass expr)
    {
-      mSignature = expr.getIRI().toURI();
+      mSignature = toIri(expr.getIRI().toURI());
    }
 
    @Override
    public void visit(OWLDataProperty expr)
    {
-      mSignature = expr.getIRI().toURI();
+      mSignature = toIri(expr.getIRI().toURI());
    }
 
    @Override
    public void visit(OWLObjectProperty expr)
    {
-      mSignature = expr.getIRI().toURI();
+      mSignature = toIri(expr.getIRI().toURI());
    }
 
    @Override
    public void visit(OWLObjectInverseOf expr)
    {
       mIsInverse = true;
-      mSignature = expr.getInverse().asOWLObjectProperty().getIRI().toURI();
+      OWLObjectProperty op = expr.getInverse().asOWLObjectProperty();
+      mSignature = toIri(op.getIRI().toURI());
    }
 
    @Override
@@ -109,5 +111,10 @@ public abstract class OwlObjectHandler extends OWLObjectVisitorAdapter
    public void visit(OWLObjectSomeValuesFrom expr)
    {
       expr.getProperty().accept(this);
+   }
+
+   private static Iri toIri(URI uri)
+   {
+      return Iri.create(uri);
    }
 }

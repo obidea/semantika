@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.expression.base;
+package com.obidea.semantika.mapping;
 
-import java.net.URI;
+import java.util.List;
+
+import com.obidea.semantika.expression.base.IConstant;
+import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
+import com.obidea.semantika.expression.base.ITerm;
 
 /**
- * Represent the constant URI reference symbol.
+ * Represent the built-in IRI template function used by the mapping language.
  * 
  * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link IIriReference} instead.
+ * @since 1.8
  */
-@Deprecated
-public interface IUriReference extends IConstant
+public interface IIriTemplate extends IUriTemplate, IFunction
 {
-   /**
-    * Returns the URI object from this constant.
-    * 
-    * @return the URI object.
-    */
-   public URI toUri();
+   String getTemplateString();
+
+   List<? extends ITerm> getParameters();
+
+   IIriReference execute(List<? extends IConstant> arguments);
 }

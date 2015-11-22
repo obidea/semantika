@@ -15,9 +15,8 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import java.net.URI;
-
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.MappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
@@ -104,9 +103,9 @@ public class MappingElementHandler extends AbstractTermalElementHandler
       // Shared the subject map value globally
       setSubjectMapValue(handler.getSubjectMapValue());
       
-      final URI subjectUri = handler.getSubjectUri();
-      if (subjectUri != null) {
-         addMapping(getMappingObjectFactory().createClassMapping(subjectUri, getSourceQuery(),
+      final Iri subjectIri = handler.getSubjectIri();
+      if (subjectIri != null) {
+         addMapping(getMappingObjectFactory().createClassMapping(subjectIri, getSourceQuery(),
                getSubjectMapValue()));
       }
    }
@@ -114,9 +113,9 @@ public class MappingElementHandler extends AbstractTermalElementHandler
    @Override
    protected void handleChild(PredicateObjectMapElementHandler handler)
    {
-      final URI predicateUri = handler.getPredicateUri();
-      if (predicateUri != null) {
-         addMapping(getMappingObjectFactory().createPropertyMapping(predicateUri, getSourceQuery(),
+      final Iri predicateIri = handler.getPredicateIri();
+      if (predicateIri != null) {
+         addMapping(getMappingObjectFactory().createPropertyMapping(predicateIri, getSourceQuery(),
                getSubjectMapValue(), handler.getObjectMapValue()));
       }
    }

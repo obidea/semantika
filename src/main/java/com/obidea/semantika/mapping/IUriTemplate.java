@@ -24,7 +24,11 @@ import com.obidea.semantika.expression.base.IUriReference;
 
 /**
  * Represent the built-in URI template function used by the mapping language.
+ * 
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @deprecated since 1.8. Use {@link IIriTemplate} instead.
  */
+@Deprecated
 public interface IUriTemplate extends IFunction
 {
    String getTemplateString();

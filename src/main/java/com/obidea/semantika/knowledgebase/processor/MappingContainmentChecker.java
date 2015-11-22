@@ -26,16 +26,16 @@ import com.obidea.semantika.expression.base.AtomVisitorAdapter;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IConstant;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
 import com.obidea.semantika.expression.base.IRule;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.TermUtils;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.knowledgebase.UnificationException;
 import com.obidea.semantika.knowledgebase.Unifier;
-import com.obidea.semantika.mapping.IUriTemplate;
+import com.obidea.semantika.mapping.IIriTemplate;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.TripleAtom;
 import com.obidea.semantika.mapping.base.sql.SqlJoin;
@@ -94,8 +94,8 @@ public class MappingContainmentChecker
          @Override
          public void visit(IFunction function)
          {
-            if (function instanceof IUriTemplate) {
-               IUriTemplate uriTemplate = (IUriTemplate) function;
+            if (function instanceof IIriTemplate) {
+               IIriTemplate uriTemplate = (IIriTemplate) function;
                List<IConstant> templateArgs = new ArrayList<IConstant>();
                for (ITerm term : uriTemplate.getParameters()) {
                   if (term instanceof IVariable) {
@@ -105,17 +105,17 @@ public class MappingContainmentChecker
                      templateArgs.add((IConstant) term);
                   }
                }
-               IUriReference uriConstant = uriTemplate.execute(templateArgs);
-               constantList.add(uriConstant);
+               IIriReference iriRef = uriTemplate.execute(templateArgs);
+               constantList.add(iriRef);
             }
             else {
                // NO-OP: Should never go here
             }
          }
          @Override
-         public void visit(IUriReference uriReference)
+         public void visit(IIriReference iriReference)
          {
-            constantList.add(uriReference);
+            constantList.add(iriReference);
          }
          @Override
          public void visit(ILiteral literal)

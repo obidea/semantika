@@ -15,14 +15,13 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import java.net.URI;
-
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.exception.MappingParserException;
 
 public class PredicateObjectMapElementHandler extends AbstractMappingElementHandler
 {
-   private URI mPredicateUri;
+   private Iri mPredicateIri;
    private ITerm mObjectMapValue;
 
    public PredicateObjectMapElementHandler(TermalXmlParserHandler handler)
@@ -34,9 +33,9 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    protected void decideDefaultTermType()
    {
       switch (getTermMap()) {
-         case COLUMN_VALUE: mTermType = R2RmlVocabulary.LITERAL.getUri(); break;
+         case COLUMN_VALUE: mTermType = R2RmlVocabulary.LITERAL.toString(); break;
          case CONSTANT_VALUE:
-         case TEMPLATE_VALUE: mTermType = R2RmlVocabulary.IRI.getUri(); break;
+         case TEMPLATE_VALUE: mTermType = R2RmlVocabulary.IRI.toString(); break;
       }
    }
 
@@ -57,7 +56,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
    public void attribute(String name, String value) throws MappingParserException
    {
       if (name.equals(R2RmlVocabulary.PREDICATE.getQName())) {
-         setPredicateUri(getUri(value));
+         setPredicateIri(getIri(value));
       }
       else if (name.equals(R2RmlVocabulary.COLUMN.getQName())) {
          setTermMap(TermMap.COLUMN_VALUE);
@@ -72,10 +71,10 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
          setValue(value);
       }
       else if (name.equals(R2RmlVocabulary.TERM_TYPE.getQName())) {
-         setTermType(getUri(value).toString());
+         setTermType(getIri(value).toString());
       }
       else if (name.equals(R2RmlVocabulary.DATAYPE.getQName())) {
-         setDatatype(getUri(value).toString());
+         setDatatype(getIri(value).toString());
       }
       else {
          throw unknownXmlAttributeException(name);
@@ -102,7 +101,7 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
        * Do not override user-defined term type
        */
       if (!bUserDefinedTermType) {
-         mTermType = R2RmlVocabulary.LITERAL.getUri();
+         mTermType = R2RmlVocabulary.LITERAL.toString();
       }
    }
 
@@ -121,15 +120,15 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
       }
    }
 
-   private void setPredicateUri(URI propertyUri) throws PrefixNotFoundException, PropertyNotFoundException
+   private void setPredicateIri(Iri propertyIri) throws PrefixNotFoundException, PropertyNotFoundException
    {
-      checkPropertySignature(propertyUri);
-      mPredicateUri = propertyUri;
+      checkPropertySignature(propertyIri);
+      mPredicateIri = propertyIri;
    }
 
-   public URI getPredicateUri()
+   public Iri getPredicateIri()
    {
-      return mPredicateUri;
+      return mPredicateIri;
    }
 
    private void setObjectMapValue(ITerm objectTerm)
@@ -146,16 +145,16 @@ public class PredicateObjectMapElementHandler extends AbstractMappingElementHand
     * Private utility methods
     */
 
-   private void checkPropertySignature(URI uri) throws PropertyNotFoundException
+   private void checkPropertySignature(Iri iri) throws PropertyNotFoundException
    {
-      if (uri == null) {
+      if (iri == null) {
          throw new IllegalArgumentException("Missing property name"); //$NON-NLS-1$
       }
       if (isStrictParsing()) {
-         if (getOntology().containObjectProperty(uri) || getOntology().containDataProperty(uri)) {
+         if (getOntology().containObjectProperty(iri) || getOntology().containDataProperty(iri)) {
             return;
          }
-         throw propertyNotFoundException(uri);
+         throw propertyNotFoundException(iri);
       }
    }
 }

@@ -15,8 +15,6 @@
  */
 package com.obidea.semantika.util;
 
-import java.net.URI;
-
 public enum RdfVocabulary
 {
    /*
@@ -67,8 +65,9 @@ public enum RdfVocabulary
       return getPrefix() + ":" + getLocalName(); //$NON-NLS-1$
    }
 
-   public URI getUri()
+   @Override
+   public String toString()
    {
-      return URI.create(getNamespace() + getLocalName());
+      return getNamespace() + getLocalName();
    }
 }

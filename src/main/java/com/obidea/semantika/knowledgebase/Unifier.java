@@ -24,15 +24,20 @@ import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IConstant;
 import com.obidea.semantika.expression.base.IExpressionObject;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ISignature;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.TermUtils;
-import com.obidea.semantika.mapping.IUriTemplate;
+import com.obidea.semantika.mapping.IIriTemplate;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.util.Serializer;
 
+/**
+ * Contains the unifying algorithm for logical terms.
+ *
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ */
 public class Unifier
 {
    public static TermSubstitutionBinding findSubstitution(IAtom a1, IAtom a2) throws UnificationException
@@ -81,11 +86,11 @@ public class Unifier
          findSubstitution(TermUtils.asFunction(t1), TermUtils.asFunction(t2), substitution);
       }
       
-      if (t1 instanceof IUriTemplate && t2 instanceof IUriReference) {
-         findSubstitution((IUriTemplate) t1, TermUtils.asUriReference(t2), substitution);
+      if (t1 instanceof IIriTemplate && t2 instanceof IIriReference) {
+         findSubstitution((IIriTemplate) t1, TermUtils.asIriReference(t2), substitution);
       }
-      if (t1 instanceof IUriReference && t2 instanceof IUriTemplate) {
-         findSubstitution((IUriTemplate) t2, TermUtils.asUriReference(t1), substitution);
+      if (t1 instanceof IIriReference && t2 instanceof IIriTemplate) {
+         findSubstitution((IIriTemplate) t2, TermUtils.asIriReference(t1), substitution);
       }
       
       // Create a substitution unifier between variable and term
@@ -128,23 +133,23 @@ public class Unifier
       checkOverflowUnification(fc1, fc2);
    }
 
-   public static void findSubstitution(IUriTemplate uriTemplate, IUriReference uriReference, TermSubstitutionBinding substitution) throws UnificationException
+   public static void findSubstitution(IIriTemplate iriTemplate, IIriReference iriReference, TermSubstitutionBinding substitution) throws UnificationException
    {
-      String templateString = uriTemplate.getTemplateString();
+      String templateString = iriTemplate.getTemplateString();
       String templateRegex = templateString.replaceAll("\\{\\d+\\}", "(.*)"); //$NON-NLS-1$
       Pattern templatePattern = Pattern.compile(templateRegex);
       
       List<ITerm> parameters = new ArrayList<ITerm>();
-      Matcher m = templatePattern.matcher(uriReference.getLexicalValue());
+      Matcher m = templatePattern.matcher(iriReference.getLexicalValue());
       if (m.matches()) {
          for (int i = 1; i <= m.groupCount(); i++) {
             String value = m.group(i); // value comes from pattern matching
-            String datatype = uriTemplate.getParameter(i-1).getDatatype(); // datatype comes from template function
+            String datatype = iriTemplate.getParameter(i-1).getDatatype(); // datatype comes from template function
             parameters.add(TermUtils.makeTypedLiteral(value, datatype)); //$NON-NLS-1$
          }
       }
-      IUriTemplate u2 = MappingObjectFactory.getInstance().createUriTemplate(templateString, parameters);
-      findSubstitution(uriTemplate, u2, substitution);
+      IIriTemplate u2 = MappingObjectFactory.getInstance().createIriTemplate(templateString, parameters);
+      findSubstitution(iriTemplate, u2, substitution);
    }
 
    private static void checkSyntacticalUnification(ISignature s1, ISignature s2) throws UnificationException

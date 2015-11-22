@@ -15,13 +15,13 @@
  */
 package com.obidea.semantika.knowledgebase.processor;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.obidea.semantika.database.sql.base.ISqlExpression;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.base.IMapping;
@@ -66,7 +66,7 @@ public class DisjunctionProcessor implements IKnowledgeBaseProcessor
       List<IMapping> removeList = new ArrayList<IMapping>();
       List<IMapping> addList = new ArrayList<IMapping>();
       
-      for (URI signature : mappingSet.getMappingSignatures()) {
+      for (Iri signature : mappingSet.getMappingSignatures()) {
          /*
           * The optimization only applies for target mappings that have the same signature.
           */

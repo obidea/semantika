@@ -25,12 +25,12 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import com.obidea.semantika.expression.base.FunctionSymbol;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
 import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.IQuery;
 import com.obidea.semantika.expression.base.IRule;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 
 public interface IExpressionObjectFactory
@@ -257,8 +257,21 @@ public interface IExpressionObjectFactory
     * @param uri
     *           a URI object.
     * @return a URI reference object.
+    * @deprecated since 1.8. Use {@link IExpressionObjectFactory#getIriReference(String)} instead.
     */
-   IUriReference getUriReference(URI uri);
+   @Deprecated
+   default com.obidea.semantika.expression.base.IUriReference getUriReference(URI uri) {
+      return getIriReference(uri.toString());
+   }
+
+   /**
+    * Creates an IRI reference object with the given valid IRI string.
+    * 
+    * @param iriString
+    *           an IRI string.
+    * @return an IRI reference object.
+    */
+   IIriReference getIriReference(String iriString);
 
    /**
     * Creates a function with the given function symbol and its parameters.

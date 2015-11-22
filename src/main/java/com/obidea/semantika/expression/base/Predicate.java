@@ -34,9 +34,28 @@ public class Predicate implements IPredicate
       mName = name;
    }
 
+   /**
+    * Creates a logic predicate
+    * 
+    * @param name
+    *       The predicate name in URI construct
+    * @deprecated since 1.8. Use constructor {@link Predicate(Iri)} instead.
+    */
+   @Deprecated
    public Predicate(URI name)
    {
       mName = name.toString();
+   }
+
+   /**
+    * Creates a logic predicate
+    * 
+    * @param name
+    *       The predicate name in IRI construct
+    */
+   public Predicate(Iri iri)
+   {
+      mName = iri.toString();
    }
 
    @Override

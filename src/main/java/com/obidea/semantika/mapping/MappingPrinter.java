@@ -17,27 +17,26 @@ package com.obidea.semantika.mapping;
 
 import com.obidea.semantika.database.sql.SqlPrinter;
 import com.obidea.semantika.expression.base.IAtom;
-import com.obidea.semantika.expression.base.IConstant;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
-import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
-import com.obidea.semantika.expression.base.UriReference;
+import com.obidea.semantika.expression.base.IriReference;
 import com.obidea.semantika.knowledgebase.EmptyPrefixManager;
 import com.obidea.semantika.knowledgebase.IPrefixManager;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IMappingVisitor;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
+import com.obidea.semantika.mapping.base.MappingVisitorAdapter;
 import com.obidea.semantika.mapping.base.TripleAtom;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
-public class MappingPrinter implements IMappingVisitor
+public class MappingPrinter extends MappingVisitorAdapter implements IMappingVisitor
 {
-   private static final IUriReference RDF_TYPE = new UriReference("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); //$NON-NLS-1$
+   private static final IIriReference RDF_TYPE = new IriReference("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"); //$NON-NLS-1$
 
    private SqlPrinter sqlPrinter = new SqlPrinter();
    private IPrefixManager mPrefixManager;
@@ -116,24 +115,12 @@ public class MappingPrinter implements IMappingVisitor
    }
 
    @Override
-   public void visit(IPredicate predicate)
-   {
-      // NO-OP
-   }
-
-   @Override
    public void visit(IVariable variable)
    {
       if (variable instanceof SqlColumn) {
          SqlColumn column = (SqlColumn) variable;
          mStringBuilder.append(column.getColumnName());
       }
-   }
-
-   @Override
-   public void visit(IConstant literal)
-   {
-      // NO-OP
    }
 
    @Override
@@ -155,14 +142,14 @@ public class MappingPrinter implements IMappingVisitor
    }
 
    @Override
-   public void visit(IUriReference uriReference)
+   public void visit(IIriReference iriReference)
    {
       /*
-       * Shorten the URI name using the given prefix manager, if possible. The
+       * Shorten the IRI name using the given prefix manager, if possible. The
        * name shortening will be ignored if no prefix mapping is defined (i.e.,
        * using the default EmptyPrefixManager).
        */
-      String shortenNameIfPossible = mPrefixManager.shorten(uriReference.toUri());
+      String shortenNameIfPossible = mPrefixManager.shorten(iriReference.toIri());
       mStringBuilder.append(shortenNameIfPossible);
    }
 

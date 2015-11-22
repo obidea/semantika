@@ -15,9 +15,10 @@
  */
 package com.obidea.semantika.knowledgebase;
 
-import java.net.URI;
 import java.util.Map;
 import java.util.Set;
+
+import com.obidea.semantika.expression.base.Iri;
 
 public interface IPrefixManager
 {
@@ -78,23 +79,23 @@ public interface IPrefixManager
    Set<String> getPrefixNames();
 
    /**
-    * Gets the URI from the given qualified name. The name must use a prefix
+    * Gets the IRI from the given qualified name. The name must use a prefix
     * that is registered in this manager, or a runtime exception will be thrown.
     * 
     * @param qname
-    *           the qualified name to expand to a full URI.
-    * @return Returns a URI object.
+    *           the qualified name to expand to a full IRI.
+    * @return Returns a IRI object.
     */
-   URI expand(String qname);
+   Iri expand(String qname);
 
    /**
-    * Gets the qualified name (i.e., prefixName:localName) for a given URI. The
-    * name must contains a namespace suffix that is registered with this
+    * Gets the qualified name (i.e., prefixName:localName) for a given IRI. The
+    * name must contains a namespace prefix that is registered with this
     * manager, or a runtime exception will be thrown.
     * 
-    * @param uri
-    *           the URI to shorten.
+    * @param iri
+    *           the IRI to shorten.
     * @return Returns a qualified name string.
     */
-   String shorten(URI uri);
+   String shorten(Iri iri);
 }

@@ -15,45 +15,46 @@
  */
 package com.obidea.semantika.mapping.base.sql;
 
+import java.util.List;
+
+import com.obidea.semantika.database.sql.base.ISqlExpression;
 import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
-import com.obidea.semantika.database.sql.base.ISqlValue;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.mapping.base.TermType;
 
 /**
  * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link SqlIriValue} instead.
+ * @since 1.8
  */
-public class SqlUriValue extends ConstantTerm implements ISqlValue
+public class SqlIriConcat extends SqlFunction
 {
    private static final long serialVersionUID = 629451L;
 
-   public SqlUriValue(String value)
+   public SqlIriConcat(List<ISqlExpression> expressions)
    {
       /*
-       * As a logical term, this constant has a datatype xsd:anyURI. However,
-       * as a mapping term, this constant has no datatype since it is treated
-       * as an object identifier.
+       * As a logical term, this function has a datatype xsd:anyURI. However,
+       * as a mapping term, this function has no datatype since it will
+       * construct an object identifier.
        */
-      super(value, DataType.ANY_URI);
+      super("IRICONCAT", DataType.ANY_URI, expressions); //$NON-NLS-1$
+   }
+
+   public SqlIriConcat(ISqlExpression... expressions)
+   {
+      super("IRICONCAT", DataType.ANY_URI, expressions); //$NON-NLS-1$
    }
 
    @Override
    public int getTermType()
    {
-      return TermType.URI_TYPE; // This function constructs an object identifier
+      return TermType.IRI_TYPE; // This function constructs an object identifier
    }
 
    @Override
-   public String getValue()
+   public String getStringExpression()
    {
-      return super.getLexicalValue();
-   }
-
-   @Override
-   public String getDatatype()
-   {
-      return super.getDatatype();
+      return "||"; //$NON-NLS-1$
    }
 
    @Override

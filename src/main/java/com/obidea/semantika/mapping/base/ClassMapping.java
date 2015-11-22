@@ -20,6 +20,7 @@ import java.net.URI;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
@@ -34,6 +35,15 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
    private SqlQuery mSourceQuery;
 
    /**
+    * @deprecated since 1.8. Use constructor {@link ClassMapping(Iri, SqlQuery)} instead.
+    */
+   @Deprecated
+   public ClassMapping(URI classSignature, SqlQuery sourceQuery)
+   {
+      this(Iri.create(classSignature), sourceQuery);
+   }
+
+   /**
     * Constructs a class mapping for a concept entity named in class signature such that each
     * instances of this concept is coming from the data in the database, represented by the source
     * query.
@@ -43,7 +53,7 @@ public class ClassMapping extends AbstractMapping implements IClassMapping
     * @param sourceQuery
     *           the data projection that will be mapped to the class instances.
     */
-   public ClassMapping(URI classSignature, SqlQuery sourceQuery)
+   public ClassMapping(Iri classSignature, SqlQuery sourceQuery)
    {
       super(classSignature);
       mSourceQuery = sourceQuery;

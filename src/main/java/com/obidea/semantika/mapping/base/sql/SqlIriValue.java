@@ -22,13 +22,13 @@ import com.obidea.semantika.mapping.base.TermType;
 
 /**
  * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link SqlIriValue} instead.
+ * @since 1.8
  */
-public class SqlUriValue extends ConstantTerm implements ISqlValue
+public class SqlIriValue extends ConstantTerm implements ISqlValue
 {
    private static final long serialVersionUID = 629451L;
 
-   public SqlUriValue(String value)
+   public SqlIriValue(String value)
    {
       /*
        * As a logical term, this constant has a datatype xsd:anyURI. However,
@@ -41,7 +41,7 @@ public class SqlUriValue extends ConstantTerm implements ISqlValue
    @Override
    public int getTermType()
    {
-      return TermType.URI_TYPE; // This function constructs an object identifier
+      return TermType.IRI_TYPE; // This function constructs an object identifier
    }
 
    @Override

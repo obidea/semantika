@@ -20,6 +20,7 @@ import java.net.URI;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
 import com.obidea.semantika.expression.base.ITerm;
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.MappingObjectFactory;
 import com.obidea.semantika.mapping.base.sql.SqlQuery;
 
@@ -35,6 +36,14 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
    private SqlQuery mSourceQuery;
 
    /**
+    * @deprecated since 1.8. Use constructor {@link PropertyMapping(Iri, SqlQuery)} instead.
+    */
+   public PropertyMapping(URI propertySignature, SqlQuery sourceQuery)
+   {
+      this(Iri.create(propertySignature), sourceQuery);
+   }
+
+   /**
     * Constructs a property mapping for a named role/attribute in property signature such that each
     * instances of this role/attribute is coming from the data in the database, represented by the
     * source query.
@@ -44,7 +53,7 @@ public class PropertyMapping extends AbstractMapping implements IPropertyMapping
     * @param sourceQuery
     *           the data projection that will be mapped to the property instances.
     */
-   public PropertyMapping(URI propertySignature, SqlQuery sourceQuery)
+   public PropertyMapping(Iri propertySignature, SqlQuery sourceQuery)
    {
       super(propertySignature);
       mSourceQuery = sourceQuery;

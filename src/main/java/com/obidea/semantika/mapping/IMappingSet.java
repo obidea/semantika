@@ -16,10 +16,10 @@
 package com.obidea.semantika.mapping;
 
 import java.io.Serializable;
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.mapping.base.IClassMapping;
 import com.obidea.semantika.mapping.base.IMapping;
 import com.obidea.semantika.mapping.base.IPropertyMapping;
@@ -71,33 +71,33 @@ public interface IMappingSet extends Serializable
 
    /**
     * Checks if the mapping set contains mappings with the given signature. A
-    * mapping signature is the class or property URI identifier.
+    * mapping signature is the class or property IRI identifier.
     * 
     * @param signature
     *           the mapping signature.
     * @return Returns <code>true</code> if such signature exists, or
     *         <code>false</code> otherwise.
     */
-   boolean contains (URI signature);
+   boolean contains (Iri signature);
 
    /**
     * Gets mappings given the mapping signature. A mapping signature is the
-    * class or property URI identifier.
+    * class or property IRI identifier.
     * 
     * @param signature
     *           the mapping signature.
     * @return A set of mappings with the given signature, or an empty set if the
     *         signature doesn't exist. The set is read-only.
     */
-   Set<IMapping> get(URI signature);
+   Set<IMapping> get(Iri signature);
 
    /**
     * Gets all mapping signatures stored in this mapping set. A mapping
-    * signature is the class or property URI identifier.
+    * signature is the class or property IRI identifier.
     * 
     * @return A set of mapping signatures.
     */
-   Set<URI> getMappingSignatures();
+   Set<Iri> getMappingSignatures();
 
    /**
     * Gets all mappings that assert concept entity.

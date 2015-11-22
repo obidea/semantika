@@ -15,60 +15,57 @@
  */
 package com.obidea.semantika.expression.base;
 
-import java.net.IDN;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.obidea.semantika.datatype.DataType;
-import com.obidea.semantika.exception.SemantikaRuntimeException;
 
 /**
- * Represents the URI Reference implementation.
- * 
+ * Represents the IRI Reference implementation.
+ *
  * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link IriReference} instead.
+ * @since 1.8
  */
-@Deprecated
-public class UriReference extends AbstractConstant implements IUriReference
+public class IriReference extends AbstractConstant implements IIriReference
 {
    private static final long serialVersionUID = 629451L;
 
    /**
-    * Constructs a URI reference which is built from a valid URI string input.
+    * Constructs a IRI reference which is built from a valid IRI string input.
     * 
-    * @param uri
-    *           a valid URI string.
+    * @param iriString
+    *           a valid IRI string.
     */
-   public UriReference(String uri)
+   public IriReference(String iriString)
    {
-      super(uri, DataType.ANY_URI);
+      super(iriString, DataType.ANY_URI);
    }
 
    /**
-    * Returns the URI object given the input <code>term</code>. This utility
+    * Returns the IRI object given the input <code>term</code>. This utility
     * method only returns value if the input term is inherent
-    * {@link IUriReference}. It returns <code>null</code> otherwise.
+    * {@link IIriReference}. It returns <code>null</code> otherwise.
     */
-   public static URI getUri(ITerm term)
+   public static Iri getIri(ITerm term)
    {
-      if (term instanceof IUriReference) {
-         IUriReference uriRef = (IUriReference) term;
-         return uriRef.toUri();
+      if (term instanceof IIriReference) {
+         IIriReference iriRef = (IIriReference) term;
+         return iriRef.toIri();
       }
       return null;
+   }
+
+   @Override
+   public Iri toIri()
+   {
+      String value = getLexicalValue();
+      return Iri.create(value);
    }
 
    @Override
    public URI toUri()
    {
       String value = getLexicalValue();
-      try {
-         final String idn = IDN.toASCII(value);
-         return new URI(idn).normalize();
-      }
-      catch (URISyntaxException e) {
-         throw new SemantikaRuntimeException("Failed parsing URI value (" + value + ")", e); //$NON-NLS-1$ //$NON-NLS-2$
-      }
+      return URI.create(value);
    }
 
    @Override
@@ -82,7 +79,7 @@ public class UriReference extends AbstractConstant implements IUriReference
    {
       final int prime = 31;
       int result = 1;
-      result = prime * result + toUri().hashCode();
+      result = prime * result + toIri().hashCode();
       result = prime * result + getDatatype().hashCode();
       return result;
    }
@@ -99,8 +96,7 @@ public class UriReference extends AbstractConstant implements IUriReference
       if (getClass() != obj.getClass()) {
          return false;
       }
-      final UriReference other = (UriReference) obj;
-      
+      final IriReference other = (IriReference) obj;
       return getLexicalValue().equals(other.getLexicalValue());
    }
 
@@ -116,6 +112,6 @@ public class UriReference extends AbstractConstant implements IUriReference
    @Override
    public String toString()
    {
-      return "<" + getLexicalValue() + ">";
+      return toIri().toQuotedString();
    }
 }

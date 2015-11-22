@@ -74,14 +74,9 @@ public enum R2RmlVocabulary
       return getPrefix() + ":" + getLocalName(); //$NON-NLS-1$
    }
 
-   public String getUri()
-   {
-      return getNamespace() + getLocalName();
-   }
-
    @Override
    public String toString()
    {
-      return getUri();
+      return getNamespace() + getLocalName();
    }
 }

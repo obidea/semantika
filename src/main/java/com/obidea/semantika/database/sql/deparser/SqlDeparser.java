@@ -45,6 +45,7 @@ import com.obidea.semantika.mapping.base.sql.SqlDivide;
 import com.obidea.semantika.mapping.base.sql.SqlEqualsTo;
 import com.obidea.semantika.mapping.base.sql.SqlGreaterThan;
 import com.obidea.semantika.mapping.base.sql.SqlGreaterThanEquals;
+import com.obidea.semantika.mapping.base.sql.SqlIriConcat;
 import com.obidea.semantika.mapping.base.sql.SqlIsNotNull;
 import com.obidea.semantika.mapping.base.sql.SqlIsNull;
 import com.obidea.semantika.mapping.base.sql.SqlLang;
@@ -56,7 +57,6 @@ import com.obidea.semantika.mapping.base.sql.SqlOr;
 import com.obidea.semantika.mapping.base.sql.SqlRegex;
 import com.obidea.semantika.mapping.base.sql.SqlStr;
 import com.obidea.semantika.mapping.base.sql.SqlSubtract;
-import com.obidea.semantika.mapping.base.sql.SqlUriConcat;
 import com.obidea.semantika.mapping.base.sql.SqlUserQuery;
 
 public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpressionVisitor
@@ -463,8 +463,8 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
          if (function instanceof SqlConcat) {
             visitSqlConcat((SqlConcat) function);
          }
-         else if (function instanceof SqlUriConcat) {
-            visitSqlUriConcat((SqlUriConcat) function);
+         else if (function instanceof SqlIriConcat) {
+            visitSqlIriConcat((SqlIriConcat) function);
          }
          else {
             throw new SqlDeparserException("Unable to produce SQL select item expression: " + function); //$NON-NLS-1$
@@ -480,11 +480,11 @@ public class SqlDeparser extends TextFormatter implements ISqlDeparser, ISqlExpr
          mExpressionString = mDialect.concat(arguments);
       }
 
-      private void visitSqlUriConcat(SqlUriConcat sqlUriConcat)
+      private void visitSqlIriConcat(SqlIriConcat sqlIriConcat)
       {
          List<String> arguments = new ArrayList<String>();
          
-         Iterator<ISqlExpression> iter = sqlUriConcat.getParameterExpressions().iterator();
+         Iterator<ISqlExpression> iter = sqlIriConcat.getParameterExpressions().iterator();
          ISqlValue stringTemplateValue = (ISqlValue) iter.next(); // must be a value
          arguments.add(mDialect.literal(stringTemplateValue.getValue()));
          arguments.add("' : '"); //$NON-NLS-1$

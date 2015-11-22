@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.queryanswer.parser;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,10 +107,10 @@ import com.obidea.semantika.expression.ExpressionObjectFactory;
 import com.obidea.semantika.expression.base.ExpressionConstant;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.Join;
 import com.obidea.semantika.expression.base.QueryExt;
@@ -157,9 +156,9 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
       return TermUtils.asLiteral(getTerm());
    }
 
-   protected IUriReference getUriReference()
+   protected IIriReference getIriReference()
    {
-      return TermUtils.asUriReference(getTerm());
+      return TermUtils.asIriReference(getTerm());
    }
 
    protected IFunction getFunction()
@@ -790,9 +789,8 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
          }
       }
       else if (value instanceof org.openrdf.model.IRI) {
-         org.openrdf.model.IRI uri = (org.openrdf.model.IRI) value;
-         URI uriRef = URI.create(uri.toString());
-         mTerm = sExpressionFactory.getUriReference(uriRef);
+         org.openrdf.model.IRI iri = (org.openrdf.model.IRI) value;
+         mTerm = sExpressionFactory.getIriReference(iri.toString());
       }
       else {
          throw new SparqlParserException("Unknown value constant class: " + value.getClass()); //$NON-NLS-1$

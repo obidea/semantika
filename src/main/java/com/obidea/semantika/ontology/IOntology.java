@@ -17,13 +17,42 @@ package com.obidea.semantika.ontology;
 
 import java.net.URI;
 
+import com.obidea.semantika.expression.base.Iri;
+
 public interface IOntology
 {
    int getAxiomCount();
 
-   boolean containClass(URI classUri);
+   /**
+    * @deprecated since 1.8. Use {@link IOntology#containClass(Iri)} instead.
+    */
+   @Deprecated
+   default boolean containClass(URI classUri)
+   {
+      return containClass(Iri.create(classUri));
+   }
 
-   boolean containDataProperty(URI propertyUri);
+   boolean containClass(Iri classIri);
 
-   boolean containObjectProperty(URI propertyUri);
+   /**
+    * @deprecated since 1.8. Use {@link IOntology#containDataProperty(Iri)} instead.
+    */
+   @Deprecated
+   default boolean containDataProperty(URI propertyUri)
+   {
+      return containDataProperty(Iri.create(propertyUri));
+   }
+
+   boolean containDataProperty(Iri propertyIri);
+
+   /**
+    * @deprecated since 1.8. Use {@link IOntology#containObjectProperty(Iri)} instead.
+    */
+   @Deprecated
+   default boolean containObjectProperty(URI propertyUri)
+   {
+      return containObjectProperty(Iri.create(propertyUri));
+   }
+
+   boolean containObjectProperty(Iri propertyiri);
 }

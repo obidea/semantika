@@ -36,7 +36,7 @@ public abstract class TermVisitorAdapter implements ITermVisitor
    }
 
    @Override
-   public void visit(IUriReference uriReference)
+   public void visit(IIriReference iriReference)
    {
       // NO-OP: To be implemented by subclasses
    }

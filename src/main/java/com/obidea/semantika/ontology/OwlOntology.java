@@ -15,11 +15,10 @@
  */
 package com.obidea.semantika.ontology;
 
-import java.net.URI;
-
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.parameters.Imports;
 
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 
 public class OwlOntology extends AbstractOwlOntology
@@ -36,20 +35,20 @@ public class OwlOntology extends AbstractOwlOntology
    }
 
    @Override
-   public boolean containClass(URI classUri)
+   public boolean containClass(Iri classIri)
    {
-      return mOwlOntology.containsClassInSignature(toIri(classUri), Imports.INCLUDED);
+      return mOwlOntology.containsClassInSignature(toIri(classIri.toUri()), Imports.INCLUDED);
    }
 
    @Override
-   public boolean containObjectProperty(URI propertyUri)
+   public boolean containObjectProperty(Iri propertyIri)
    {
-      return mOwlOntology.containsObjectPropertyInSignature(toIri(propertyUri), Imports.INCLUDED);
+      return mOwlOntology.containsObjectPropertyInSignature(toIri(propertyIri.toUri()), Imports.INCLUDED);
    }
 
    @Override
-   public boolean containDataProperty(URI propertyUri)
+   public boolean containDataProperty(Iri propertyIri)
    {
-      return mOwlOntology.containsDataPropertyInSignature(toIri(propertyUri), Imports.INCLUDED);
+      return mOwlOntology.containsDataPropertyInSignature(toIri(propertyIri.toUri()), Imports.INCLUDED);
    }
 }

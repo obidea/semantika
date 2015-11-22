@@ -15,14 +15,14 @@
  */
 package com.obidea.semantika.mapping.parser.termalxml;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.datatype.exception.UnsupportedDataTypeException;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.mapping.UriTemplate;
+import com.obidea.semantika.expression.base.Iri;
+import com.obidea.semantika.mapping.IriTemplate;
 import com.obidea.semantika.mapping.base.TermType;
 import com.obidea.semantika.mapping.base.sql.SqlColumn;
 import com.obidea.semantika.mapping.exception.MappingParserException;
@@ -143,15 +143,15 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
 
    protected SqlColumn getColumnTerm(String columnName, String termType, String datatype) throws MappingParserException
    {
-      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
+      if (termType.equals(R2RmlVocabulary.IRI.toString())) {
          if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
          SqlColumn column = getColumnTerm(columnName);
-         column.setTermType(TermType.URI_TYPE);
+         column.setTermType(TermType.IRI_TYPE);
          return column;
       }
-      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.LITERAL.toString())) {
          SqlColumn column = getColumnTerm(columnName);
          column.setTermType(TermType.LITERAL_TYPE);
          if (!StringUtils.isEmpty(datatype)) {
@@ -159,7 +159,7 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
          }
          return column;
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.toString())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
       throw unknownTermTypeException(termType);
@@ -167,18 +167,18 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
 
    protected ITerm getLiteralTerm(String value, String termType, String datatype) throws MappingParserException
    {
-      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
+      if (termType.equals(R2RmlVocabulary.IRI.toString())) {
          if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
-         return getExpressionObjectFactory().getUriReference(getUri(value));
+         return getExpressionObjectFactory().getIriReference(value);
       }
-      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.LITERAL.toString())) {
          return (StringUtils.isEmpty(datatype)) ?
             getExpressionObjectFactory().getLiteral(value, DataType.STRING) : // by default
             getExpressionObjectFactory().getLiteral(value, datatype);
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.toString())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
       throw unknownTermTypeException(termType);
@@ -186,30 +186,30 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
 
    protected ITerm getTemplateTerm(String value, String termType, String datatype) throws MappingParserException
    {
-      if (termType.equals(R2RmlVocabulary.IRI.getUri())) {
+      if (termType.equals(R2RmlVocabulary.IRI.toString())) {
          if (!StringUtils.isEmpty(datatype)) {
             throw illegalTermalMappingException("Cannot use rr:datatype together with term type rr:IRI"); //$NON-NLS-1$
          }
          return getUriTemplateFunction(value);
       }
-      else if (termType.equals(R2RmlVocabulary.LITERAL.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.LITERAL.toString())) {
          throw illegalTermalMappingException("Cannot use rr:template together with term type rr:Literal");
       }
-      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.getUri())) {
+      else if (termType.equals(R2RmlVocabulary.BLANK_NODE.toString())) {
          throw unsupportedTermTypeException("rr:BlankNode"); //$NON-NLS-1$
       }
       throw unknownTermTypeException(termType);
    }
 
-   protected URI getUri(String abbreviatedUri) throws PrefixNotFoundException
+   protected Iri getIri(String abbreviatedIri) throws PrefixNotFoundException
    {
-      String normalizedAbbreviatedUri = normalizedAbbreviatedUri(abbreviatedUri);
-      int colonPos = normalizedAbbreviatedUri.indexOf(":");
-      String prefixName = normalizedAbbreviatedUri.substring(0, colonPos);
-      String localName = normalizedAbbreviatedUri.substring(colonPos + 1);
+      String normalizedAbbreviatedIri = normalizedAbbreviatedIri(abbreviatedIri);
+      int colonPos = normalizedAbbreviatedIri.indexOf(":");
+      String prefixName = normalizedAbbreviatedIri.substring(0, colonPos);
+      String localName = normalizedAbbreviatedIri.substring(colonPos + 1);
       String namespace = getPrefixMapper().get(prefixName);
       if (!StringUtils.isEmpty(namespace)) {
-         return URI.create(namespace + localName);
+         return Iri.create(namespace, localName);
       }
       else {
          throw prefixNotFoundException(prefixName);
@@ -244,18 +244,18 @@ public abstract class AbstractMappingElementHandler extends AbstractTermalElemen
     * Private helper methods
     */
 
-   private String normalizedAbbreviatedUri(String input)
+   private String normalizedAbbreviatedIri(String input)
    {
       return (input.indexOf(":") != -1) ? input : ":" + input; //$NON-NLS-1$ //$NON-NLS-2$
    }
 
-   private UriTemplate getUriTemplateFunction(String functionCall) throws MappingParserException
+   private IriTemplate getUriTemplateFunction(String functionCall) throws MappingParserException
    {
       try {
          TermalTemplate template = new TermalTemplate(functionCall, getUriTemplateMapper());
          String templateString = template.getTemplateString();
          List<SqlColumn> parameters = getColumnTerms(template.getColumnNames());
-         return getMappingObjectFactory().createUriTemplate(templateString, parameters);
+         return getMappingObjectFactory().createIriTemplate(templateString, parameters);
       }
       catch (Exception e) {
          throw illegalTemplateCallException(e.getMessage());

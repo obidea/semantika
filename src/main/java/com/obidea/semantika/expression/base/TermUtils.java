@@ -55,9 +55,18 @@ public final class TermUtils
       return new Literal(value, EMPTY, datatype);
    }
 
+   /**
+    * @deprecated since 1.8. Use {@link TermUtils#makeIriReference(String)} instead.
+    */
+   @Deprecated
    public static IUriReference makeUriReference(String value)
    {
-      return new UriReference(value);
+      return makeIriReference(value);
+   }
+
+   public static IIriReference makeIriReference(String value)
+   {
+      return new IriReference(value);
    }
 
    public static IFunction makeFunction(String name, List<? extends ITerm> parameters)
@@ -179,9 +188,15 @@ public final class TermUtils
       return (term instanceof ILiteral) ? true : false;
    }
 
+   @Deprecated
    public static boolean isUriReference(ITerm term)
    {
       return (term instanceof IUriReference) ? true : false;
+   }
+
+   public static boolean isIriReference(ITerm term)
+   {
+      return (term instanceof IIriReference) ? true : false;
    }
 
    public static boolean isFunction(ITerm term)
@@ -204,9 +219,15 @@ public final class TermUtils
       return (ILiteral) Serializer.copy(literal);
    }
 
+   @Deprecated
    public static IUriReference copy(IUriReference uriReference)
    {
       return (IUriReference) Serializer.copy(uriReference);
+   }
+
+   public static IIriReference copy(IIriReference iriReference)
+   {
+      return (IIriReference) Serializer.copy(iriReference);
    }
 
    public static IFunction copy(IFunction function)
@@ -229,9 +250,15 @@ public final class TermUtils
       return (ILiteral) term;
    }
 
+   @Deprecated
    public static IUriReference asUriReference(ITerm term)
    {
       return (IUriReference) term;
+   }
+
+   public static IIriReference asIriReference(ITerm term)
+   {
+      return (IIriReference) term;
    }
 
    public static IFunction asFunction(ITerm term)
@@ -284,9 +311,9 @@ public final class TermUtils
             }
             stringCache.append("\""); //$NON-NLS-1$
          }
-         else if (constant instanceof IUriReference) {
-            IUriReference uriRef = (IUriReference) constant;
-            stringCache.append(uriRef.toUri());
+         else if (constant instanceof IIriReference) {
+            IIriReference iriRef = (IIriReference) constant;
+            stringCache.append(iriRef.toIri());
          }
          else if (constant instanceof NullValue) {
             NullValue nullValue = (NullValue) constant;

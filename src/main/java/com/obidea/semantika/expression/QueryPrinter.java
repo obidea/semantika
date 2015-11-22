@@ -18,18 +18,17 @@ package com.obidea.semantika.expression;
 import com.obidea.semantika.expression.base.IAtom;
 import com.obidea.semantika.expression.base.IConstant;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ILiteral;
-import com.obidea.semantika.expression.base.IPredicate;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.IQueryExtVisitor;
 import com.obidea.semantika.expression.base.ITerm;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.Join;
+import com.obidea.semantika.expression.base.QueryExtVisitorAdapter;
 import com.obidea.semantika.expression.base.SyntacticSugar;
 
-
-public class QueryPrinter implements IQueryExtVisitor
+public class QueryPrinter extends QueryExtVisitorAdapter implements IQueryExtVisitor
 {
    private StringBuilder mStringBuilder;
 
@@ -64,12 +63,6 @@ public class QueryPrinter implements IQueryExtVisitor
    }
 
    @Override
-   public void visit(IQueryExt query)
-   {
-      // NO-OP
-   }
-
-   @Override
    public void visit(IAtom atom)
    {
       if (atom instanceof SyntacticSugar) {
@@ -97,12 +90,6 @@ public class QueryPrinter implements IQueryExtVisitor
          }
          mStringBuilder.append(")"); //$NON-NLS-1$
       }
-   }
-
-   @Override
-   public void visit(IPredicate predicate)
-   {
-      // NO-OP
    }
 
    @Override
@@ -139,9 +126,9 @@ public class QueryPrinter implements IQueryExtVisitor
    }
 
    @Override
-   public void visit(IUriReference uriReference)
+   public void visit(IIriReference iriReference)
    {
-      mStringBuilder.append(uriReference.getLexicalValue());
+      mStringBuilder.append(iriReference.getLexicalValue());
    }
 
    @Override

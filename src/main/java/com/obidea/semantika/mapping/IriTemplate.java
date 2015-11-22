@@ -22,35 +22,34 @@ import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.expression.base.AbstractFunction;
 import com.obidea.semantika.expression.base.IConstant;
 import com.obidea.semantika.expression.base.IFunction;
+import com.obidea.semantika.expression.base.IIriReference;
 import com.obidea.semantika.expression.base.ITerm;
 import com.obidea.semantika.expression.base.ITermVisitor;
-import com.obidea.semantika.expression.base.IUriReference;
 import com.obidea.semantika.expression.base.IVariable;
 import com.obidea.semantika.expression.base.TermUtils;
 import com.obidea.semantika.knowledgebase.TermSubstitutionBinding;
 import com.obidea.semantika.util.StringUtils;
 
 /**
- * Represents the URI template implementation.
+ * Represents the IRI template implementation.
  *
  * @author Josef Hardi <josef.hardi@gmail.com>
- * @deprecated since 1.8. Use {@link IriTemplate} instead.
+ * @since 1.8
  */
-@Deprecated
-public class UriTemplate extends AbstractFunction implements IUriTemplate
+public class IriTemplate extends AbstractFunction implements IIriTemplate
 {
    private static final long serialVersionUID = 629451L;
 
    private String mTemplateString;
 
-   public UriTemplate(String templateString, ITerm... parameters)
+   public IriTemplate(String templateString, ITerm... parameters)
    {
       this(templateString, Arrays.asList(parameters));
    }
 
-   public UriTemplate(String templateString, List<? extends ITerm> parameters)
+   public IriTemplate(String templateString, List<? extends ITerm> parameters)
    {
-      super("&createUri", DataType.ANY_URI, parameters); //$NON-NLS-1$
+      super("&createIri", DataType.ANY_URI, parameters); //$NON-NLS-1$
       mTemplateString = templateString;
    }
 
@@ -84,8 +83,8 @@ public class UriTemplate extends AbstractFunction implements IUriTemplate
    @Override
    public boolean isEquivalent(Object obj)
    {
-      if (obj instanceof UriTemplate) {
-         UriTemplate other = (UriTemplate) obj;
+      if (obj instanceof IriTemplate) {
+         IriTemplate other = (IriTemplate) obj;
          return getTemplateString().equals(other.getTemplateString()) && getArity() == other.getArity();
       }
       return false;
@@ -103,7 +102,7 @@ public class UriTemplate extends AbstractFunction implements IUriTemplate
       if (getClass() != obj.getClass()) {
          return false;
       }
-      final UriTemplate other = (UriTemplate) obj;
+      final IriTemplate other = (IriTemplate) obj;
       return getName().equals(other.getName())
             && getTemplateString().equals(other.getTemplateString())
             && getParameters().equals(other.getParameters());
@@ -116,7 +115,7 @@ public class UriTemplate extends AbstractFunction implements IUriTemplate
    }
 
    @Override
-   public IUriReference execute(List<? extends IConstant> arguments)
+   public IIriReference execute(List<? extends IConstant> arguments)
    {
       String toReturn = mTemplateString;
       for (int i = 0; i < arguments.size(); i++) {
@@ -124,7 +123,7 @@ public class UriTemplate extends AbstractFunction implements IUriTemplate
          String str = StringUtils.useUnderscore(value);
          toReturn = toReturn.replace(holder(i+1), str);
       }
-      return TermUtils.makeUriReference(toReturn);
+      return TermUtils.makeIriReference(toReturn);
    }
 
    private String holder(int index)

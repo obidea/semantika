@@ -15,11 +15,12 @@
  */
 package com.obidea.semantika.knowledgebase;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import com.obidea.semantika.expression.base.Iri;
 
 public class EmptyPrefixManager implements IPrefixManager
 {
@@ -60,15 +61,15 @@ public class EmptyPrefixManager implements IPrefixManager
    }
 
    @Override
-   public URI expand(String qname)
+   public Iri expand(String qname)
    {
       return null;
    }
 
    @Override
-   public String shorten(URI uri)
+   public String shorten(Iri iri)
    {
-      return uri.toString();
+      return iri.toString();
    }
 
 }

@@ -22,6 +22,11 @@ import com.obidea.semantika.database.sql.base.ISqlExpressionVisitor;
 import com.obidea.semantika.datatype.DataType;
 import com.obidea.semantika.mapping.base.TermType;
 
+/**
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @deprecated since 1.8. Use {@link SqlIriConcat} instead.
+ */
+@Deprecated
 public class SqlUriConcat extends SqlFunction
 {
    private static final long serialVersionUID = 629451L;

@@ -15,7 +15,6 @@
  */
 package com.obidea.semantika.knowledgebase.processor;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -71,8 +70,7 @@ import org.semanticweb.owlapi.model.SWRLRule;
 import org.semanticweb.owlapi.model.parameters.Imports;
 import org.slf4j.Logger;
 
-import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
-
+import com.obidea.semantika.expression.base.Iri;
 import com.obidea.semantika.knowledgebase.model.IKnowledgeBase;
 import com.obidea.semantika.mapping.MutableMappingSet;
 import com.obidea.semantika.mapping.base.ClassMapping;
@@ -85,6 +83,8 @@ import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.ontology.owlapi.AbstractOwlOntology;
 import com.obidea.semantika.util.LogUtils;
 import com.obidea.semantika.util.MultiMap;
+
+import uk.ac.manchester.cs.owl.owlapi.OWLDataFactoryImpl;
 
 public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBaseProcessor
 {
@@ -195,7 +195,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
           */
          OWLClassExpression superClass = ax.getSuperClass();
          superClass.accept(this); // this call will produce (super class) mSignature and mIsInverse
-         URI superClassSignature = mSignature;
+         Iri superClassSignature = mSignature;
          for (IMapping subClassMapping : subClassMappings) {
             IClassMapping cm = createClassMapping(superClassSignature, subClassMapping, mIsInverse);
             addInferredMapping(cm);
@@ -230,7 +230,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
           */
          OWLDataPropertyExpression superProperty = (OWLDataPropertyExpression) ax.getSuperProperty();
          superProperty.accept(this); // this call will produce (super property) mSignature and mIsInverse
-         URI superPropertySignature = mSignature;
+         Iri superPropertySignature = mSignature;
          for (IMapping subPropertyMapping : subPropertyMappings) {
             IPropertyMapping pm = createPropertyMapping(superPropertySignature, subPropertyMapping, mIsInverse);
             addInferredMapping(pm);
@@ -265,7 +265,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
           */
          OWLObjectPropertyExpression superProperty = (OWLObjectPropertyExpression) ax.getSuperProperty();
          superProperty.accept(this); // this call will produce (super property) mSignature and mIsInverse
-         URI superPropertySignature = mSignature;
+         Iri superPropertySignature = mSignature;
          for (IMapping subPropertyMapping : subPropertyMappings) {
             IPropertyMapping pm = createPropertyMapping(superPropertySignature, subPropertyMapping, mIsInverse);
             addInferredMapping(pm);
@@ -338,7 +338,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
    {
       OWLObjectPropertyExpression ope = axiom.getProperty();
       ope.accept(this); // this call will produce (object property) mSignature
-      URI propertySignature = mSignature;
+      Iri propertySignature = mSignature;
       
       /*
        * Get all (copy) known mappings for the visited object property expression.
@@ -391,7 +391,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
 
    private void produceEquivalentClassMappings(Set<IMapping> mappings)
    {
-      URI classSignature = mSignature;
+      Iri classSignature = mSignature;
       for (IMapping mapping : mappings) {
          IClassMapping cm = createClassMapping(classSignature, mapping, mIsInverse);
          addInferredMapping(cm);
@@ -468,7 +468,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
 
    private void produceEquivalentPropertyMappings(Set<IMapping> mappings)
    {
-      URI propertySignature = mSignature;
+      Iri propertySignature = mSignature;
       for (IMapping mapping : mappings) {
          IPropertyMapping pm = createPropertyMapping(propertySignature, mapping, mIsInverse);
          addInferredMapping(pm);
@@ -667,7 +667,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
     * Private utility methods
     */
 
-   private static IClassMapping createClassMapping(URI classSignature, IMapping mapping, boolean isInverse)
+   private static IClassMapping createClassMapping(Iri classSignature, IMapping mapping, boolean isInverse)
    {
       final TripleAtom targetAtom = mapping.getTargetAtom();
       final SqlQuery sourceQuery = mapping.getSourceQuery();
@@ -682,7 +682,7 @@ public class TMappingProcessor extends OwlObjectHandler implements IKnowledgeBas
       return cm;
    }
 
-   private static IPropertyMapping createPropertyMapping(URI propertySignature, IMapping mapping, boolean isInverse)
+   private static IPropertyMapping createPropertyMapping(Iri propertySignature, IMapping mapping, boolean isInverse)
    {
       final TripleAtom targetAtom = mapping.getTargetAtom();
       final SqlQuery sourceQuery = mapping.getSourceQuery();

@@ -140,7 +140,7 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
          IMappingTerm mt = (IMappingTerm) selectItem.getExpression();
          switch (mt.getTermType()) {
             case TermType.LITERAL_TYPE: selectTypes[i] = mt.getDatatype(); break;
-            case TermType.URI_TYPE: selectTypes[i] = null; break;
+            case TermType.IRI_TYPE: selectTypes[i] = null; break;
          }
       }
       mQueryMetadata = new QueryMetadata(selectNames, selectTypes);
