@@ -28,9 +28,14 @@ public final class StringUtils
    private static final Pattern containsWhitespacePattern = Pattern.compile(".*\\s.*"); //$NON-NLS-1$
    private static final Pattern isAllWhitespacePattern = Pattern.compile("^\\s*$"); //$NON-NLS-1$
 
+   public static boolean isNull(final String text)
+   {
+      return text == null;
+   }
+
    public static boolean isEmpty(final String text)
    {
-      return text == null || text.isEmpty() || isAllWhitespacePattern.matcher(text).matches();
+      return isNull(text) || text.isEmpty() || isAllWhitespacePattern.matcher(text).matches();
    }
 
    public static boolean containsWhitespace(final String text)
