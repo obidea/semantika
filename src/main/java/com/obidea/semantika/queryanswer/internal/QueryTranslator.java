@@ -48,7 +48,7 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
          /*
           * Parse the SPARQL string into a set of query objects.
           */
-         QuerySet<IQueryExt> parsedQuery = SparqlFactory.create(queryString);
+         IQueryExt parsedQuery = SparqlFactory.create(queryString);
          
          /*
           * Process the input query set by expanding it using a query reformulator.
@@ -94,25 +94,25 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       }
    }
 
-   private QuerySet<IQueryExt> applyQueryReformulation(QuerySet<IQueryExt> querySet) throws QueryReformulationException
+   private QuerySet<IQueryExt> applyQueryReformulation(IQueryExt originalQuery) throws QueryReformulationException
    {
-      return mQueryEngine.getQueryReformulator().reformulate(querySet);
+      return mQueryEngine.getQueryReformulator().reformulate(originalQuery);
    }
    
-   private QuerySet<SqlQuery> applyQueryUnfolding(QuerySet<IQueryExt> querySet) throws QueryUnfoldingException
+   private QuerySet<SqlQuery> applyQueryUnfolding(QuerySet<IQueryExt> reformulatedQuery) throws QueryUnfoldingException
    {
-      return mQueryEngine.getQueryUnfolder().unfold(querySet);
+      return mQueryEngine.getQueryUnfolder().unfold(reformulatedQuery);
    }
 
-   private QuerySet<SqlQuery> applyQueryOptimization(QuerySet<SqlQuery> querySet) throws QueryOptimizationException
+   private QuerySet<SqlQuery> applyQueryOptimization(QuerySet<SqlQuery> unfoldedQuery) throws QueryOptimizationException
    {
-      return mQueryEngine.getQueryOptimizers().optimize(querySet);
+      return mQueryEngine.getQueryOptimizers().optimize(unfoldedQuery);
    }
 
-   private void renderSql(QuerySet<SqlQuery> inputQuery)
+   private void renderSql(QuerySet<SqlQuery> unfoldedQuery)
    {
       SqlDeparser deparser = new SqlDeparser(mQueryEngine.getTargetDatabase().getDialect());
-      mSqlString = deparser.deparse(inputQuery);
+      mSqlString = deparser.deparse(unfoldedQuery);
    }
 
    private void buildQueryMetadata(SqlQuery sqlQuery)

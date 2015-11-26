@@ -16,20 +16,17 @@
 package com.obidea.semantika.queryanswer.parser;
 
 import com.obidea.semantika.expression.base.IQueryExt;
-import com.obidea.semantika.expression.base.QuerySet;
 
 public class SparqlFactory
 {
-   public static QuerySet<IQueryExt> create(String sparqlString) throws SparqlParserException
+   public static IQueryExt create(String sparqlString) throws SparqlParserException
    {
       return create(sparqlString, new SparqlParser());
    }
 
-   public static QuerySet<IQueryExt> create(String sparqlString, AbstractSparqlParser parser) throws SparqlParserException
+   public static IQueryExt create(String sparqlString, AbstractSparqlParser parser) throws SparqlParserException
    {
       IQueryExt query = parser.parse(sparqlString);
-      QuerySet<IQueryExt> querySet = new QuerySet<IQueryExt>();
-      querySet.add(query);
-      return querySet;
+      return query;
    }
 }
