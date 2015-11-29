@@ -17,6 +17,7 @@ package com.obidea.semantika.queryanswer.parser;
 
 import org.openrdf.query.MalformedQueryException;
 import org.openrdf.query.QueryLanguage;
+import org.openrdf.query.algebra.TupleExpr;
 import org.openrdf.query.parser.ParsedQuery;
 import org.openrdf.query.parser.QueryParser;
 import org.openrdf.query.parser.QueryParserUtil;
@@ -37,8 +38,9 @@ public class SparqlParser extends AbstractSparqlParser
          QueryParser parser = QueryParserUtil.createParser(QueryLanguage.SPARQL);
          ParsedQuery query = parser.parseQuery(sparqlString, null); // base URI is null
          SparqlQueryHandler handler = new SparqlQueryHandler();
-         query.getTupleExpr().visit(handler);
-         return handler.getSparql();
+         TupleExpr expr = query.getTupleExpr();
+         expr.visit(handler);
+         return handler.getQueryExpression();
       }
       catch (MalformedQueryException e) {
          throw new SparqlParserException("SPARQL syntax error", e);

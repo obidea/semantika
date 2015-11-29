@@ -16,8 +16,12 @@
 package com.obidea.semantika.queryanswer.parser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.openrdf.model.IRI;
+import org.openrdf.model.Literal;
 import org.openrdf.model.Value;
 import org.openrdf.query.algebra.Add;
 import org.openrdf.query.algebra.And;
@@ -126,7 +130,10 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
 
    private ITerm mTerm;
 
-   private List<IVariable> mVarList;
+   private List<ITerm> mProjectionList = new ArrayList<>();
+
+   private Map<String, ValueExpr> unboundElements = new HashMap<>();
+   private List<String> unboundVariables = new ArrayList<>();
 
    private IAtom mQueryExpression;
 
@@ -135,7 +142,7 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
       mQueryExt = createEmptyQuery();
    }
 
-   public IQueryExt getSparql()
+   public IQueryExt getQueryExpression()
    {
       mQueryExt.addAtom(getQueryBody());
       return mQueryExt;
@@ -176,9 +183,9 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
       return (IAtom) Serializer.copy(mQueryExpression);
    }
 
-   protected List<IVariable> getVariableList()
+   protected List<ITerm> getProjectionList()
    {
-      return mVarList;
+      return mProjectionList;
    }
 
    @Override
@@ -342,11 +349,10 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Extension arg0) throws SparqlParserException
    {
-      List<String> unknownVariables = new ArrayList<String>();
+      arg0.getArg().visit(this); // should visit StatementPattern
       for (ExtensionElem el : arg0.getElements()) {
-         unknownVariables.add(el.getName());
+         unboundElements.put(el.getName(), el.getExpr());
       }
-      throw new SparqlParserException("Unknown projection variables: " + unknownVariables); //$NON-NLS-1$
    }
 
    @Override
@@ -560,7 +566,12 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(MultiProjection arg0) throws SparqlParserException
    {
-      // NO-OP
+      arg0.getArg().visit(this); // should visit Extension
+      arg0.visitChildren(this); // should visit ProjectionElemList
+      throwExceptionIfUnboundVariablesFound();
+      for (ITerm term : getProjectionList()) {
+         mQueryExt.addDistTerm(term);
+      }
    }
 
    @Override
@@ -614,32 +625,62 @@ public class SparqlQueryHandler implements QueryModelVisitor<SparqlParserExcepti
    @Override
    public void meet(Projection arg0) throws SparqlParserException
    {
+      arg0.getArg().visit(this);
       arg0.visitChildren(this);
-      for (IVariable var : getVariableList()) {
-         mQueryExt.addDistTerm(var);
+      throwExceptionIfUnboundVariablesFound();
+      for (ITerm term : getProjectionList()) {
+         mQueryExt.addDistTerm(term);
+      }
+   }
+
+   private void throwExceptionIfUnboundVariablesFound() throws SparqlParserException
+   {
+      if (!unboundVariables.isEmpty()) {
+         throw new SparqlParserException("Unbound projection variables: " + unboundVariables); //$NON-NLS-1$
       }
    }
 
    @Override
    public void meet(ProjectionElem arg0) throws SparqlParserException
    {
-      mTerm = sExpressionFactory.getVariable(arg0.getSourceName());
+      String elementName = arg0.getSourceName();
+      ValueExpr expr = unboundElements.get(elementName);
+      if (expr != null) { // if the projection element is unbound
+         if (expr instanceof Var) {
+            unboundVariables.add(elementName);
+         }
+         else if (expr instanceof ValueConstant) {
+            Value value = ((ValueConstant) expr).getValue();
+            if (value instanceof IRI) {
+               mTerm = sExpressionFactory.getIriReference(value.stringValue());
+            }
+            else if (value instanceof Literal) {
+               Literal lit = (Literal) value;
+               mTerm = sExpressionFactory.getLiteral(lit.getLabel(), lit.getDatatype().stringValue());
+            }
+            else {
+               throw new SparqlParserException("Blank node is not supported yet: " + value.stringValue()); //$NON-NLS-1$
+            }
+         }
+      }
+      else {
+         mTerm = sExpressionFactory.getVariable(arg0.getSourceName());
+      }
    }
 
    @Override
    public void meet(ProjectionElemList arg0) throws SparqlParserException
    {
-      mVarList = new ArrayList<IVariable>();
       for (ProjectionElem el : arg0.getElements()) {
          el.visit(this);
-         mVarList.add(getVariable());
+         mProjectionList.add(getTerm());
       }
    }
 
    @Override
    public void meet(Reduced arg0) throws SparqlParserException
    {
-      throw new UnsupportedSparqlExpressionException("Query modifier: REDUCED"); //$NON-NLS-1$
+      arg0.getArg().visit(this); // handling CONSTRUCT query
    }
 
    @Override
