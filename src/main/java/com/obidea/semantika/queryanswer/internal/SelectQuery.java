@@ -17,14 +17,6 @@ package com.obidea.semantika.queryanswer.internal;
 
 import java.util.List;
 
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.algebra.Slice;
-import org.openrdf.query.algebra.TupleExpr;
-import org.openrdf.query.parser.ParsedQuery;
-import org.openrdf.query.parser.QueryParser;
-import org.openrdf.query.parser.QueryParserUtil;
-
 import com.obidea.semantika.queryanswer.SparqlQueryEngine;
 import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.exception.QueryParserException;
@@ -33,70 +25,20 @@ import com.obidea.semantika.queryanswer.result.IQueryResultHandler;
 import com.obidea.semantika.queryanswer.result.ListResultHandler;
 import com.obidea.semantika.queryanswer.result.QueryResultHandlerException;
 
-public class SelectQuery
+public class SelectQuery extends QueryBase
 {
-   private static QueryParser sQueryValidator = QueryParserUtil.createParser(QueryLanguage.SPARQL);
-
-   private QueryModifiers mQueryModifiers = new QueryModifiers();
-   private UserStatementSettings mUserStatementSettings = new UserStatementSettings();
-
-   private String mSparqlString;
-   private SparqlQueryEngine mQueryEngine;
    private QueryMetadata mQueryMetadata;
 
-   public SelectQuery(String sparql, final SparqlQueryEngine engine, final QueryMetadata metadata)
+   public SelectQuery(String sparqlString, final SparqlQueryEngine engine, final QueryMetadata metadata)
          throws QueryParserException
    {
-      validateQuery(sparql);
-      mSparqlString = sparql;
-      mQueryEngine = engine;
+      super(sparqlString, engine);
       mQueryMetadata = metadata;
-   }
-
-   private void validateQuery(String sparqlString) throws QueryParserException
-   {
-      try {
-         ParsedQuery query = sQueryValidator.parseQuery(sparqlString, null); // base URI is null
-         
-         /*
-          * If the validation ok, do a quick scan on the query object to collect
-          * any query modifers, if any.
-          */
-         addModifiersIfExist(query);
-      }
-      catch (MalformedQueryException e) {
-         throw new QueryParserException(e.getMessage());
-      }
-   }
-
-   private void addModifiersIfExist(ParsedQuery query)
-   {
-      TupleExpr expr = query.getTupleExpr();
-      if (expr instanceof Slice) {
-         Slice sliceExpr = (Slice) expr;
-         mQueryModifiers.setLimit((int) sliceExpr.getLimit());
-         mQueryModifiers.setOffset((int) sliceExpr.getOffset());
-      }
    }
 
    public QueryMetadata getProjection()
    {
       return mQueryMetadata;
-   }
-
-   public String getQueryString()
-   {
-      return mSparqlString;
-   }
-
-   public QueryModifiers getModifiers()
-   {
-      return mQueryModifiers;
-   }
-
-   public UserStatementSettings getTransactionSettings()
-   {
-      return mUserStatementSettings;
    }
 
    public SelectQuery setMaxResults(int limit)
@@ -138,6 +80,7 @@ public class SelectQuery
       mUserStatementSettings.setMaxRows(maxRows);
    }
 
+   @Override
    public IQueryResult evaluate() throws QueryAnswerException
    {
       return mQueryEngine.evaluate(getQueryString(), getModifiers(), getTransactionSettings());
