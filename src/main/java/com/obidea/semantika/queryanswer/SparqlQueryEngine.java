@@ -20,6 +20,7 @@ import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.internal.ConnectionManager;
 import com.obidea.semantika.queryanswer.internal.ConnectionManagerException;
+import com.obidea.semantika.queryanswer.internal.ConstructQuery;
 import com.obidea.semantika.queryanswer.internal.DatabaseSession;
 import com.obidea.semantika.queryanswer.internal.QueryModifiers;
 import com.obidea.semantika.queryanswer.internal.QueryPlan;
@@ -27,6 +28,7 @@ import com.obidea.semantika.queryanswer.internal.QueryTranslationException;
 import com.obidea.semantika.queryanswer.internal.SelectQuery;
 import com.obidea.semantika.queryanswer.internal.UserStatementSettings;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
+import com.obidea.semantika.util.QueryUtils;
 
 public class SparqlQueryEngine extends AbstractQueryEngine
 {
@@ -79,15 +81,26 @@ public class SparqlQueryEngine extends AbstractQueryEngine
       return mConnectionManager;
    }
 
-   public SelectQuery createQuery(String sparql) throws QueryAnswerException
+   public SelectQuery createSelectQuery(String sparql) throws QueryAnswerException
    {
       return new SelectQuery(sparql, this, getQueryPlan(sparql).getQueryMetadata());
+   }
+
+   public ConstructQuery createConstructQuery(String sparql) throws QueryAnswerException
+   {
+      return new ConstructQuery(sparql, this);
    }
 
    @Override
    public IQueryResult evaluate(String sparql) throws QueryAnswerException
    {
-      return createQuery(sparql).evaluate();
+      switch (QueryUtils.determineQueryForm(sparql)) {
+         case SELECT: return createSelectQuery(sparql).evaluate();
+         case CONSTRUCT: return createConstructQuery(sparql).evaluate();
+         case ASK: throw new QueryAnswerException("Query ASK is not supported"); //$NON-NLS-1$
+         case DESCRIBE: throw new QueryAnswerException("Query DESCRIBE is not supported"); //$NON-NLS-1$
+         default: throw new QueryAnswerException("Unknown SPARQL query: " + sparql); //$NON-NLS-1$
+      }
    }
 
    @Override
@@ -95,8 +108,7 @@ public class SparqlQueryEngine extends AbstractQueryEngine
          throws QueryAnswerException
    {
       QueryPlan plan = getQueryPlan(sparql);
-      IQueryResult results = plan.evaluateQuery(modifiers, userSettings);
-      return results;
+      return plan.evaluateQuery(modifiers, userSettings);
    }
 
    @Override

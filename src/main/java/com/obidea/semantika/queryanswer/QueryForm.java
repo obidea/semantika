@@ -13,28 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.obidea.semantika.queryanswer.internal;
+package com.obidea.semantika.queryanswer;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-
-public interface IQueryEvaluator
+/**
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @since 1.8
+ */
+public enum QueryForm
 {
-   PreparedStatement prepareQueryStatement(String sql) throws Exception;
+   SELECT,
 
-   void closeQueryStatement(PreparedStatement ps, ResultSet rs) throws Exception;
+   CONSTRUCT,
 
-   ResultSet getResultSet(PreparedStatement ps) throws Exception;
+   ASK,
 
-   void setTransactionTimeout(int seconds);
-
-   void setTransactionFetchSize(int fetchSize);
-
-   void setTransactionMaxRows(int maxRows);
-
-   void unsetTransactionTimeout();
-
-   void unsetTransactionFetchSize();
-
-   void unsetTransactionMaxRows();
+   DESCRIBE
 }

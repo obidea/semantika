@@ -15,55 +15,56 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.obidea.semantika.exception.SemantikaException;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
-import com.obidea.semantika.queryanswer.internal.QueryMetadata.Column;
 import com.obidea.semantika.queryanswer.paging.SqlPaging;
 import com.obidea.semantika.queryanswer.paging.SqlPagingStrategy;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
-import com.obidea.semantika.queryanswer.result.IValue;
-import com.obidea.semantika.queryanswer.result.Literal;
-import com.obidea.semantika.queryanswer.result.QueryResult;
-import com.obidea.semantika.queryanswer.result.QueryResultBuilder;
-import com.obidea.semantika.queryanswer.result.Uri;
-import com.obidea.semantika.queryanswer.result.ValueArray;
-import com.obidea.semantika.util.TemplateStringHelper;
+import com.obidea.semantika.util.QueryUtils;
 
 public abstract class QueryResultLoader
 {
    protected AbstractQueryEngine mQueryEngine;
 
-   public QueryResultLoader(final AbstractQueryEngine queryEngine)
+   private IQueryResultBuilder mResultBuilder = new EmptyResultBuilder();
+
+   public QueryResultLoader(String queryString, final AbstractQueryEngine queryEngine)
    {
       mQueryEngine = queryEngine;
+      setQueryResultBuilder(queryString);
    }
 
-   protected IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws SQLException, SemantikaException
+   private void setQueryResultBuilder(String queryString)
+   {
+      if (QueryUtils.isSelectQuery(queryString)) {
+         mResultBuilder = new TupleResultBuilder();
+      }
+      else if (QueryUtils.isConstructQuery(queryString)) {
+         mResultBuilder = new GraphResultBuilder();
+      }
+   }
+
+   protected IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings) throws Exception
    {
       String sql = preprocessSql(getSqlString(), modifiers);
       final PreparedStatement ps =  preparedStatement(sql, userSettings);
-      final ResultSet rs = doQuery(ps);
+      final ResultSet resultSet = doQuery(ps);
       
       IQueryResult result = null;
       try {
-         result = buildQueryResult(rs, getQueryMetadata());
+         result = mResultBuilder.buildQueryResult(resultSet, getQueryMetadata());
       }
       finally {
-         mQueryEngine.getQueryEvaluator().closeQueryStatement(ps, rs);
+         mQueryEngine.getQueryEvaluator().closeQueryStatement(ps, resultSet);
       }
       return result;
    }
 
-   protected ResultSet doQuery(PreparedStatement ps) throws SQLException, SemantikaException
+   protected ResultSet doQuery(PreparedStatement ps) throws Exception
    {
       ResultSet rs = null;
       try {
@@ -103,7 +104,7 @@ public abstract class QueryResultLoader
       return sql;
    }
 
-   private PreparedStatement preparedStatement(String sql, UserStatementSettings settings) throws SQLException, SemantikaException
+   private PreparedStatement preparedStatement(String sql, UserStatementSettings settings) throws Exception
    {
       PreparedStatement ps = null;
       try {
@@ -123,90 +124,11 @@ public abstract class QueryResultLoader
             ps.setMaxRows(settings.getMaxRows().intValue());
          }
       }
-      catch (SQLException e) {
-         mQueryEngine.getQueryEvaluator().closeQueryStatement(ps, null);
-         throw e;
-      }
-      catch (SemantikaException e) {
+      catch (Exception e) {
          mQueryEngine.getQueryEvaluator().closeQueryStatement(ps, null);
          throw e;
       }
       return ps;
-   }
-
-   private static QueryResult buildQueryResult(ResultSet rs, QueryMetadata metadata) throws SQLException
-   {
-      final List<String> selectLabels = new ArrayList<String>();
-      QueryResultBuilder builder = new QueryResultBuilder();
-      builder.start(metadata.getSelectNames());
-      while (rs.next()) {
-         ValueArray valueArray = getValueArrayFromResultSet(rs, metadata, selectLabels);
-         builder.handleResultFragment(valueArray);
-      }
-      return builder.getQueryResult();
-   }
-
-   private static ValueArray getValueArrayFromResultSet(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException
-   {
-      List<IValue> values = getSelectValues(rs, metadata, selectLabels);
-      return new ValueArray(selectLabels, values);
-   }
-
-   private static List<IValue> getSelectValues(ResultSet rs, QueryMetadata metadata, List<String> selectLabels) throws SQLException
-   {
-      boolean needAdd = selectLabels.isEmpty();
-      List<IValue> values = new ArrayList<IValue>();
-      for (int i = 1; i <= metadata.size(); i++) {
-         if (needAdd) {
-            String label = getLabel(metadata, i);
-            selectLabels.add(label);
-         }
-         IValue value = getValue(rs, metadata, i);
-         values.add(value);
-      }
-      return values;
-   }
-
-   private static String getLabel(QueryMetadata metadata, int position) throws SQLException
-   {
-      return metadata.getColumn(position).getLabel();
-   }
-
-   private static IValue getValue(ResultSet resultSet, QueryMetadata metadata, int position) throws SQLException
-   {
-      String value = resultSet.getString(position);
-      /*
-       * If the JDBC ResultSet gives null, then this method returns null as well.
-       */
-      if (value == null) {
-         return null;
-      }
-      
-      Column c = metadata.getColumn(position);
-      if (c.isLiteral()) {
-         return new Literal(value, URI.create(c.getDatatype()));
-      }
-      else {
-         if (!validUri(value)) {
-            /*
-             * We assume if the URI string is invalid it means the given value is a
-             * URI template construction, i.e., <template> : <value1> <value2> etc. 
-             */
-            value = TemplateStringHelper.buildUri(value);
-         }
-         return new Uri(value);
-      }
-   }
-
-   private static boolean validUri(String uriString)
-   {
-      try {
-         new URI(uriString);
-      }
-      catch (URISyntaxException e) {
-         return false;
-      }
-      return true;
    }
 
    private SqlPaging getPaging()

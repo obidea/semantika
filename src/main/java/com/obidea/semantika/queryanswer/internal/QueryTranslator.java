@@ -15,12 +15,11 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.obidea.semantika.database.sql.base.SqlSelectItem;
 import com.obidea.semantika.database.sql.deparser.SqlDeparser;
-import com.obidea.semantika.exception.SemantikaException;
+import com.obidea.semantika.database.sql.dialect.IDialect;
 import com.obidea.semantika.expression.base.IQueryExt;
 import com.obidea.semantika.expression.base.QuerySet;
 import com.obidea.semantika.mapping.base.IMappingTerm;
@@ -29,21 +28,22 @@ import com.obidea.semantika.mapping.base.sql.SqlQuery;
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
 import com.obidea.semantika.queryanswer.parser.SparqlFactory;
 import com.obidea.semantika.queryanswer.parser.SparqlParserException;
+import com.obidea.semantika.queryanswer.processor.IOptimizer;
+import com.obidea.semantika.queryanswer.processor.IReformulator;
+import com.obidea.semantika.queryanswer.processor.IUnfolder;
 import com.obidea.semantika.queryanswer.processor.QueryOptimizationException;
 import com.obidea.semantika.queryanswer.processor.QueryReformulationException;
 import com.obidea.semantika.queryanswer.processor.QueryUnfoldingException;
-import com.obidea.semantika.queryanswer.result.IQueryResult;
 
-public class QueryTranslator extends QueryResultLoader implements IQueryTranslator
+public class QueryTranslator implements IQueryTranslator
 {
    private String mQueryString;
    private String mSqlString;
-
    private QueryMetadata mQueryMetadata;
 
    public QueryTranslator(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslationException
    {
-      super(queryEngine);
+      mQueryString = queryString;
       try {
          /*
           * Parse the SPARQL string into a set of query objects.
@@ -53,23 +53,23 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
          /*
           * Process the input query set by expanding it using a query reformulator.
           */
-         QuerySet<IQueryExt> reformulatedQuery = applyQueryReformulation(parsedQuery);
+         QuerySet<IQueryExt> reformulatedQuery = applyQueryReformulation(parsedQuery, queryEngine.getQueryReformulator());
          
          /*
           * Process the "expanded" query set by unfolding each query to a proper SQL query.
           */
-         QuerySet<SqlQuery> unfoldedQuery = applyQueryUnfolding(reformulatedQuery);
+         QuerySet<SqlQuery> unfoldedQuery = applyQueryUnfolding(reformulatedQuery, queryEngine.getQueryUnfolder());
          
          if (!unfoldedQuery.isEmpty()) {
             /*
              * Optimize the "unfolded" SQL query to increase the query performance.
              */
-            unfoldedQuery = applyQueryOptimization(unfoldedQuery);
+            unfoldedQuery = applyQueryOptimization(unfoldedQuery, queryEngine.getQueryOptimizers());
    
             /*
              * Translate the "unfolded" <code>QueryExt</code> objects into SQL string.
              */
-            renderSql(unfoldedQuery);
+            renderSql(unfoldedQuery, queryEngine.getTargetDatabase().getDialect());
             
             /*
              * Construct the query meta-information from taking one query sample
@@ -94,24 +94,24 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       }
    }
 
-   private QuerySet<IQueryExt> applyQueryReformulation(IQueryExt originalQuery) throws QueryReformulationException
+   private QuerySet<IQueryExt> applyQueryReformulation(IQueryExt originalQuery, IReformulator reformulator) throws QueryReformulationException
    {
-      return mQueryEngine.getQueryReformulator().reformulate(originalQuery);
+      return reformulator.reformulate(originalQuery);
    }
    
-   private QuerySet<SqlQuery> applyQueryUnfolding(QuerySet<IQueryExt> reformulatedQuery) throws QueryUnfoldingException
+   private QuerySet<SqlQuery> applyQueryUnfolding(QuerySet<IQueryExt> reformulatedQuery, IUnfolder unfolder) throws QueryUnfoldingException
    {
-      return mQueryEngine.getQueryUnfolder().unfold(reformulatedQuery);
+      return unfolder.unfold(reformulatedQuery);
    }
 
-   private QuerySet<SqlQuery> applyQueryOptimization(QuerySet<SqlQuery> unfoldedQuery) throws QueryOptimizationException
+   private QuerySet<SqlQuery> applyQueryOptimization(QuerySet<SqlQuery> unfoldedQuery, IOptimizer optimizer) throws QueryOptimizationException
    {
-      return mQueryEngine.getQueryOptimizers().optimize(unfoldedQuery);
+      return optimizer.optimize(unfoldedQuery);
    }
 
-   private void renderSql(QuerySet<SqlQuery> unfoldedQuery)
+   private void renderSql(QuerySet<SqlQuery> unfoldedQuery, IDialect sqlDialect)
    {
-      SqlDeparser deparser = new SqlDeparser(mQueryEngine.getTargetDatabase().getDialect());
+      SqlDeparser deparser = new SqlDeparser(sqlDialect);
       mSqlString = deparser.deparse(unfoldedQuery);
    }
 
@@ -146,7 +146,6 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
       mQueryMetadata = new QueryMetadata(selectNames, selectTypes);
    }
 
-   @Override
    public QueryMetadata getQueryMetadata()
    {
       return mQueryMetadata;
@@ -162,24 +161,5 @@ public class QueryTranslator extends QueryResultLoader implements IQueryTranslat
    public String getSqlString()
    {
       return mSqlString;
-   }
-
-   public IQueryResult evaluate() throws QueryEvaluationException
-   {
-      return evaluate(new QueryModifiers(), new UserStatementSettings());
-   }
-
-   public IQueryResult evaluate(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws QueryEvaluationException
-   {
-      try {
-         return super.evaluate(modifiers, userSettings);
-      }
-      catch (SQLException e) {
-         throw new QueryEvaluationException(e);
-      }
-      catch (SemantikaException e) {
-         throw new QueryEvaluationException(e);
-      }
    }
 }

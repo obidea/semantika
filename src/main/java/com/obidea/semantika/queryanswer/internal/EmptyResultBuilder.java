@@ -15,26 +15,20 @@
  */
 package com.obidea.semantika.queryanswer.internal;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public interface IQueryEvaluator
+import com.obidea.semantika.queryanswer.result.IQueryResult;
+import com.obidea.semantika.queryanswer.result.QueryResult;
+
+/**
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @since 1.8
+ */
+public class EmptyResultBuilder implements IQueryResultBuilder
 {
-   PreparedStatement prepareQueryStatement(String sql) throws Exception;
-
-   void closeQueryStatement(PreparedStatement ps, ResultSet rs) throws Exception;
-
-   ResultSet getResultSet(PreparedStatement ps) throws Exception;
-
-   void setTransactionTimeout(int seconds);
-
-   void setTransactionFetchSize(int fetchSize);
-
-   void setTransactionMaxRows(int maxRows);
-
-   void unsetTransactionTimeout();
-
-   void unsetTransactionFetchSize();
-
-   void unsetTransactionMaxRows();
+   @Override
+   public IQueryResult buildQueryResult(ResultSet resultSet, QueryMetadata metadata)
+   {
+      return new QueryResult.Builder().build();
+   }
 }

@@ -16,9 +16,10 @@
 package com.obidea.semantika.queryanswer.internal;
 
 import com.obidea.semantika.queryanswer.AbstractQueryEngine;
+import com.obidea.semantika.queryanswer.exception.QueryAnswerException;
 import com.obidea.semantika.queryanswer.result.IQueryResult;
 
-public class QueryPlan
+public class QueryPlan extends QueryResultLoader
 {
    private String mQueryString;
 
@@ -26,13 +27,9 @@ public class QueryPlan
 
    public QueryPlan(String queryString, AbstractQueryEngine queryEngine) throws QueryTranslationException
    {
+      super(queryString, queryEngine);
       mQueryString = queryString;
       mTranslator = new QueryTranslator(queryString, queryEngine);
-   }
-
-   public QueryMetadata getQueryMetadata()
-   {
-      return mTranslator.getQueryMetadata();
    }
 
    public String getQueryString()
@@ -40,14 +37,25 @@ public class QueryPlan
       return mQueryString;
    }
 
+   @Override
    public String getSqlString()
    {
       return mTranslator.getSqlString();
    }
 
-   public IQueryResult evaluateQuery(QueryModifiers modifiers, UserStatementSettings userSettings)
-         throws QueryEvaluationException
+   @Override
+   public QueryMetadata getQueryMetadata()
    {
-      return mTranslator.evaluate(modifiers, userSettings);
+      return mTranslator.getQueryMetadata();
+   }
+
+   public IQueryResult evaluateQuery(QueryModifiers modifiers, UserStatementSettings userSettings) throws QueryAnswerException
+   {
+      try {
+         return super.evaluate(modifiers, userSettings);
+      }
+      catch (Exception e) {
+         throw new QueryAnswerException(e);
+      }
    }
 }

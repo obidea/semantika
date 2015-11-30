@@ -16,7 +16,7 @@
 package com.obidea.semantika.queryanswer.result;
 
 import java.io.Serializable;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -28,14 +28,8 @@ public class ValueArray implements IValueArray, Serializable
    private List<String> mSelectNames;
    private List<IValue> mValues;
 
-   public ValueArray(List<String> selectNames, IValue... values)
+   ValueArray(List<String> selectNames, List<IValue> values)
    {
-      this(selectNames, Arrays.asList(values));
-   }
-
-   public ValueArray(List<String> selectNames, List<IValue> values)
-   {
-      assert selectNames.size() == values.size() : "Number of select names and values are not equal"; //$NON-NLS-1$
       mSelectNames = selectNames;
       mValues = values;
    }
@@ -124,5 +118,27 @@ public class ValueArray implements IValueArray, Serializable
       }
       sb.append("]"); //$NON-NLS-1$
       return sb.toString();
+   }
+
+   public static class Builder
+   {
+      private List<String> mSelectNames = new ArrayList<>();
+      private List<IValue> mValues = new ArrayList<>();
+
+      public Builder()
+      {
+         // NO-OP
+      }
+
+      public void put(String label, IValue value)
+      {
+         mSelectNames.add(label);
+         mValues.add(value);
+      }
+
+      public ValueArray build()
+      {
+         return new ValueArray(mSelectNames, mValues);
+      }
    }
 }

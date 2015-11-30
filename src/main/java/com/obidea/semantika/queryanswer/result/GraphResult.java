@@ -17,11 +17,16 @@ package com.obidea.semantika.queryanswer.result;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class QueryResult implements IQueryResult, Serializable
+import com.obidea.semantika.exception.SemantikaRuntimeException;
+
+/**
+ * @author Josef Hardi <josef.hardi@gmail.com>
+ * @since 1.8
+ */
+public class GraphResult implements IQueryResult, Serializable
 {
    private static final long serialVersionUID = 629451L;
 
@@ -30,7 +35,7 @@ public class QueryResult implements IQueryResult, Serializable
 
    private IValueArray mValueArray;
 
-   QueryResult(List<String> selectNames, Iterator<? extends IValueArray> valueArraysIter)
+   GraphResult(List<String> selectNames, Iterator<? extends IValueArray> valueArraysIter)
    {
       mSelectNames = selectNames;
       mValueArraysIter = valueArraysIter;
@@ -39,7 +44,7 @@ public class QueryResult implements IQueryResult, Serializable
    @Override
    public List<String> getSelectNames()
    {
-      return Collections.unmodifiableList(mSelectNames);
+      return mSelectNames;
    }
 
    @Override
@@ -70,15 +75,18 @@ public class QueryResult implements IQueryResult, Serializable
 
       public void add(IValueArray valueArray)
       {
+         if (valueArray.size() != 3) {
+            throw new SemantikaRuntimeException("Graph result is not in triples (size: " + valueArray.size() + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+         }
          if (mSelectNames.isEmpty()) {
             mSelectNames.addAll(valueArray.getSelectNames());
          }
          mValueArrays.add(valueArray);
       }
 
-      public QueryResult build()
+      public GraphResult build()
       {
-         return new QueryResult(mSelectNames, mValueArrays.iterator());
+         return new GraphResult(mSelectNames, mValueArrays.iterator());
       }
    }
 }
