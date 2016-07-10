@@ -18,7 +18,7 @@ package com.obidea.semantika.database.connection;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 
 import com.obidea.semantika.app.Environment;
 import com.obidea.semantika.exception.ConfigurationException;

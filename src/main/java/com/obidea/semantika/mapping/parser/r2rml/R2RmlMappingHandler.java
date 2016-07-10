@@ -20,7 +20,7 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import io.github.johardi.r2rmlparser.R2RmlVocabulary;
 import io.github.johardi.r2rmlparser.document.IMappingVisitor;

@@ -23,7 +23,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfiguration;
 
 import com.obidea.semantika.database.JdbcDatabase;
 import com.obidea.semantika.database.connection.ConnectionProviderFactory;
