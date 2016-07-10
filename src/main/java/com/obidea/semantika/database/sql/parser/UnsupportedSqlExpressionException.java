@@ -15,25 +15,47 @@
  */
 package com.obidea.semantika.database.sql.parser;
 
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.statement.select.FromItem;
+import net.sf.jsqlparser.statement.select.Join;
+import net.sf.jsqlparser.statement.select.SelectBody;
+
 public class UnsupportedSqlExpressionException extends SqlParserException
 {
    private static final long serialVersionUID = 629451L;
 
    private String mOperationName;
 
+   public UnsupportedSqlExpressionException(Expression expr)
+   {
+      super(String.format("The SQL expression '%s' is not supported yet", expr.toString()));
+   }
+
+   public UnsupportedSqlExpressionException(SelectBody selectBody)
+   {
+      super(String.format("The SQL select '%s' is not supported yet", selectBody.toString()));
+   }
+
+   public UnsupportedSqlExpressionException(FromItem fromItem)
+   {
+      super(String.format("The SQL from '%s' is not supported yet", fromItem.toString()));
+   }
+
+   public UnsupportedSqlExpressionException(Join join)
+   {
+      super(String.format("The SQL join '%s' is not supported yet", join.toString()));
+   }
+
+   @Deprecated
    public UnsupportedSqlExpressionException(String operation)
    {
+      super(String.format("SQL %s expression is not supported yet", operation));
       mOperationName = operation;
    }
 
+   @Deprecated
    public String getUnsupportedOperation()
    {
       return mOperationName;
-   }
-
-   @Override
-   public String getMessage()
-   {
-      return String.format("SQL %s expression is not supported yet", mOperationName);
    }
 }
