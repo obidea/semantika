@@ -67,22 +67,22 @@
             <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-api</artifactId>
-         <version>4.1.0</version>
+         <version>4.2.5</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-apibinding</artifactId>
-         <version>4.1.0</version>
+         <version>4.2.5</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-impl</artifactId>
-         <version>4.1.0</version>
+         <version>4.2.5</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.owlapi</groupId>
          <artifactId>owlapi-parsers</artifactId>
-         <version>4.1.0</version>
+         <version>4.2.5</version>
       </dependency>
       <dependency>
          <groupId>org.openrdf.sesame</groupId>
