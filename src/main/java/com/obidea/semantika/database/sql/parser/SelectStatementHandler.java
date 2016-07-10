@@ -22,71 +22,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-import net.sf.jsqlparser.expression.AllComparisonExpression;
-import net.sf.jsqlparser.expression.AnalyticExpression;
-import net.sf.jsqlparser.expression.AnyComparisonExpression;
-import net.sf.jsqlparser.expression.BinaryExpression;
-import net.sf.jsqlparser.expression.CaseExpression;
-import net.sf.jsqlparser.expression.CastExpression;
-import net.sf.jsqlparser.expression.DateValue;
-import net.sf.jsqlparser.expression.DoubleValue;
-import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.ExpressionVisitor;
-import net.sf.jsqlparser.expression.ExtractExpression;
-import net.sf.jsqlparser.expression.IntervalExpression;
-import net.sf.jsqlparser.expression.JdbcNamedParameter;
-import net.sf.jsqlparser.expression.JdbcParameter;
-import net.sf.jsqlparser.expression.LongValue;
-import net.sf.jsqlparser.expression.NullValue;
-import net.sf.jsqlparser.expression.OracleHierarchicalExpression;
-import net.sf.jsqlparser.expression.Parenthesis;
-import net.sf.jsqlparser.expression.SignedExpression;
-import net.sf.jsqlparser.expression.StringValue;
-import net.sf.jsqlparser.expression.TimeValue;
-import net.sf.jsqlparser.expression.TimestampValue;
-import net.sf.jsqlparser.expression.WhenClause;
-import net.sf.jsqlparser.expression.operators.arithmetic.Addition;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseAnd;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseOr;
-import net.sf.jsqlparser.expression.operators.arithmetic.BitwiseXor;
-import net.sf.jsqlparser.expression.operators.arithmetic.Concat;
-import net.sf.jsqlparser.expression.operators.arithmetic.Division;
-import net.sf.jsqlparser.expression.operators.arithmetic.Modulo;
-import net.sf.jsqlparser.expression.operators.arithmetic.Multiplication;
-import net.sf.jsqlparser.expression.operators.arithmetic.Subtraction;
-import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
-import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.Between;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsListVisitor;
-import net.sf.jsqlparser.expression.operators.relational.LikeExpression;
-import net.sf.jsqlparser.expression.operators.relational.Matches;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.MultiExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.RegExpMatchOperator;
-import net.sf.jsqlparser.statement.Statement;
-import net.sf.jsqlparser.statement.select.FromItem;
-import net.sf.jsqlparser.statement.select.FromItemVisitor;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.LateralSubSelect;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectItem;
-import net.sf.jsqlparser.statement.select.SelectVisitor;
-import net.sf.jsqlparser.statement.select.SetOperationList;
-import net.sf.jsqlparser.statement.select.SubJoin;
-import net.sf.jsqlparser.statement.select.SubSelect;
-import net.sf.jsqlparser.statement.select.ValuesList;
-import net.sf.jsqlparser.statement.select.WithItem;
-
 import com.obidea.semantika.database.IDatabaseMetadata;
 import com.obidea.semantika.database.base.ITable;
 import com.obidea.semantika.database.sql.base.ISqlExpression;
@@ -99,7 +34,40 @@ import com.obidea.semantika.mapping.base.sql.SqlSelectQuery;
 import com.obidea.semantika.mapping.base.sql.SqlTable;
 import com.obidea.semantika.util.Serializer;
 
-public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, ItemsListVisitor, ExpressionVisitor
+import net.sf.jsqlparser.expression.BinaryExpression;
+import net.sf.jsqlparser.expression.DateValue;
+import net.sf.jsqlparser.expression.DoubleValue;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.LongValue;
+import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.TimeValue;
+import net.sf.jsqlparser.expression.TimestampValue;
+import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
+import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
+import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
+import net.sf.jsqlparser.expression.operators.relational.IsNullExpression;
+import net.sf.jsqlparser.expression.operators.relational.MinorThan;
+import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
+import net.sf.jsqlparser.expression.operators.relational.NotEqualsTo;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.FromItem;
+import net.sf.jsqlparser.statement.select.FromItemVisitor;
+import net.sf.jsqlparser.statement.select.Join;
+import net.sf.jsqlparser.statement.select.LateralSubSelect;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
+import net.sf.jsqlparser.statement.select.SelectItem;
+import net.sf.jsqlparser.statement.select.SelectVisitor;
+import net.sf.jsqlparser.statement.select.SetOperationList;
+import net.sf.jsqlparser.statement.select.SubJoin;
+import net.sf.jsqlparser.statement.select.TableFunction;
+import net.sf.jsqlparser.statement.select.ValuesList;
+import net.sf.jsqlparser.statement.select.WithItem;
+
+public class SelectStatementHandler extends ExpressionAdapter implements SelectVisitor, FromItemVisitor
 {
    private IDatabaseMetadata mMetadata;
 
@@ -153,7 +121,7 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
       List<Join> joins = plainSelect.getJoins();
       if (joins != null) {
          for (Join join : joins) {
-            visitJoinExpression(join);
+            visitJoinExpression(join, new JoinConditionHandler(this));
          }
       }
       
@@ -209,12 +177,6 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    }
 
    @Override
-   public void visit(ExpressionList exprList)
-   {
-      throw new UnsupportedSqlExpressionException("IN"); //$NON-NLS-1$
-   }
-
-   @Override
    public void visit(net.sf.jsqlparser.schema.Table table)
    {
       String tn = table.getFullyQualifiedName();
@@ -232,53 +194,24 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
       }
    }
 
-   @Override
-   public void visit(SubSelect subSelect)
+   protected void visitJoinExpression(Join join, JoinConditionHandler handler)
    {
-      throw new UnsupportedSqlExpressionException("NESTED SELECT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(SubJoin subJoin)
-   {
-      throw new UnsupportedSqlExpressionException("NESTED JOIN"); //$NON-NLS-1$
-   }
-
-   protected void visitJoinExpression(Join join)
-   {
-      if (join.isSimple()) {
-         throw new UnsupportedSqlExpressionException("SIMPLE JOIN"); //$NON-NLS-1$
-      }
-      else if (join.isInner()) {
+      if (join.isInner()) {
          ISqlExpression leftExpression = mFromExpression;
          join.getRightItem().accept(this);
          ISqlExpression rightExpression = getExpression();
-         JoinConditionHandler handler = new JoinConditionHandler(this);
          join.getOnExpression().accept(handler);
          createJoinExpression(leftExpression, rightExpression, handler.getJoinConditions());
       }
-      else if (join.isOuter()) {
-         throw new UnsupportedSqlExpressionException("OUTER JOIN"); //$NON-NLS-1$
-      }
-      else if (join.isLeft()) {
-         throw new UnsupportedSqlExpressionException("LEFT JOIN"); //$NON-NLS-1$
-      }
-      else if (join.isRight()) {
-         throw new UnsupportedSqlExpressionException("RIGHT JOIN"); //$NON-NLS-1$
-      }
-      else if (join.isFull()) {
-         throw new UnsupportedSqlExpressionException("FULL JOIN"); //$NON-NLS-1$
-      }
-      else if (join.isNatural()) {
-         throw new UnsupportedSqlExpressionException("NATURAL JOIN"); //$NON-NLS-1$
+      else if (join.isCross()) {
+         ISqlExpression leftExpression = mFromExpression;
+         join.getRightItem().accept(this);
+         ISqlExpression rightExpression = getExpression();
+         join.getOnExpression().accept(handler);
+         createJoinExpression(leftExpression, rightExpression, handler.getJoinConditions());
       }
       else {
-         ISqlExpression leftExpression = mFromExpression;
-         join.getRightItem().accept(this);
-         ISqlExpression rightExpression = getExpression();
-         JoinConditionHandler handler = new JoinConditionHandler(this);
-         join.getOnExpression().accept(handler);
-         createJoinExpression(leftExpression, rightExpression, handler.getJoinConditions());
+         throw new UnsupportedSqlExpressionException(join);
       }
    }
 
@@ -298,28 +231,10 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    }
 
    @Override
-   public void visit(NullValue nullValue)
-   {
-      throw new UnsupportedSqlExpressionException("NULL VALUE"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(net.sf.jsqlparser.expression.Function function)
-   {
-      throw new UnsupportedSqlExpressionException("CALL FUNCTION"); //$NON-NLS-1$
-   }
-
-   @Override
    public void visit(Parenthesis parenthesis)
    {
       increaseOpenParenthesisCount();
       parenthesis.getExpression().accept(this);
-   }
-
-   @Override
-   public void visit(JdbcParameter jdbcParameter)
-   {
-      throw new UnsupportedSqlExpressionException("PREPARED STATEMENT"); //$NON-NLS-1$
    }
 
    @Override
@@ -365,30 +280,6 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    }
 
    @Override
-   public void visit(Addition addition)
-   {
-      throw new UnsupportedSqlExpressionException("ADDTION"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Division division)
-   {
-      throw new UnsupportedSqlExpressionException("DIVISION"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Multiplication multiplication)
-   {
-      throw new UnsupportedSqlExpressionException("MULTIPLICATION"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Subtraction subtraction)
-   {
-      throw new UnsupportedSqlExpressionException("SUBSTRACT"); //$NON-NLS-1$
-   }
-
-   @Override
    public void visit(AndExpression expression)
    {
       expression.getLeftExpression().accept(this);
@@ -420,12 +311,6 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
       if (mOpenParenthesisCount != 0) {
          decreaseOpenParenthesisCount();
       }
-   }
-
-   @Override
-   public void visit(Between between)
-   {
-      throw new UnsupportedSqlExpressionException("BETWEEN"); //$NON-NLS-1$
    }
 
    @Override
@@ -480,18 +365,6 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    }
 
    @Override
-   public void visit(InExpression inExpression)
-   {
-      throw new UnsupportedSqlExpressionException("IN"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(LikeExpression likeExpression)
-   {
-      throw new UnsupportedSqlExpressionException("LIKE"); //$NON-NLS-1$
-   }
-
-   @Override
    public void visit(net.sf.jsqlparser.schema.Column tableColumn)
    {
       String tableName = tableColumn.getTable().getFullyQualifiedName();
@@ -505,150 +378,6 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    private ITable findTableFromMetadata(String tableName)
    {
       return mMetadata.getTable(tableName);
-   }
-
-   @Override
-   public void visit(CaseExpression caseExpression)
-   {
-      throw new UnsupportedSqlExpressionException("CASE"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(WhenClause whenClause)
-   {
-      throw new UnsupportedSqlExpressionException("WHEN"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(ExistsExpression existsExpression)
-   {
-      throw new UnsupportedSqlExpressionException("EXISTS"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(AllComparisonExpression allComparisonExpression)
-   {
-      throw new UnsupportedSqlExpressionException("NESTED SELECT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(AnyComparisonExpression anyComparisonExpression)
-   {
-      throw new UnsupportedSqlExpressionException("NESTED SELECT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Concat concat)
-   {
-      throw new UnsupportedSqlExpressionException("CONCAT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Matches matches)
-   {
-      throw new UnsupportedSqlExpressionException("MATCHES"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(BitwiseAnd bitwiseAnd)
-   {
-      throw new UnsupportedSqlExpressionException("BITWISE AND"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(BitwiseOr bitwiseOr)
-   {
-      throw new UnsupportedSqlExpressionException("BITWISE OR"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(BitwiseXor bitwiseXor)
-   {
-      throw new UnsupportedSqlExpressionException("BITWISE XOR"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(SignedExpression signed)
-   {
-      throw new UnsupportedSqlExpressionException("SIGNED"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(JdbcNamedParameter parameter)
-   {
-      throw new UnsupportedSqlExpressionException("JDBC NAMED PARAMETER"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(CastExpression cast)
-   {
-      throw new UnsupportedSqlExpressionException("CAST"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(Modulo module)
-   {
-      throw new UnsupportedSqlExpressionException("MODULO"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(AnalyticExpression analytic)
-   {
-      throw new UnsupportedSqlExpressionException("ANALYTIC"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(ExtractExpression extract)
-   {
-      throw new UnsupportedSqlExpressionException("EXTRACT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(IntervalExpression interval)
-   {
-      throw new UnsupportedSqlExpressionException("INTERVAL"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(OracleHierarchicalExpression oracleHierarchical)
-   {
-      throw new UnsupportedSqlExpressionException("ORACLE HIERARCHICAL"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(RegExpMatchOperator regExpMatch)
-   {
-      throw new UnsupportedSqlExpressionException("REGEXP MATCH"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(MultiExpressionList multiExpressionList)
-   {
-      throw new UnsupportedSqlExpressionException("MULTI EXPRESSION LIST"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(LateralSubSelect lateralSubSelect)
-   {
-      throw new UnsupportedSqlExpressionException("LATERAL SUB-SELECT"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(ValuesList valuesList)
-   {
-      throw new UnsupportedSqlExpressionException("VALUES LIST"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(SetOperationList setOperationList)
-   {
-      throw new UnsupportedSqlExpressionException("SET OPERATION LIST"); //$NON-NLS-1$
-   }
-
-   @Override
-   public void visit(WithItem withItem)
-   {
-      throw new UnsupportedSqlExpressionException("WITH ITEM"); //$NON-NLS-1$
    }
 
    protected ISqlExpression visitBinaryExpression(BinaryExpression binaryExpression)
@@ -677,7 +406,7 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
       else if (binaryExpression instanceof MinorThanEquals) {
          return sSqlFactory.createLessThanEqualsExpression(leftParameter, rightParameter);
       }
-      throw new UnsupportedSqlExpressionException(binaryExpression.toString());
+      throw new UnsupportedSqlExpressionException(binaryExpression);
    }
 
    private ISqlExpression getExpression()
@@ -693,5 +422,47 @@ public class SelectStatementHandler implements SelectVisitor, FromItemVisitor, I
    private void decreaseOpenParenthesisCount()
    {
       mOpenParenthesisCount--;
+   }
+
+   @Override
+   public void visit(TableFunction tableFunction)
+   {
+      throw new UnsupportedSqlExpressionException(tableFunction);
+   }
+
+   @Override
+   public void visit(SubJoin subjoin)
+   {
+      throw new UnsupportedSqlExpressionException(subjoin);
+   }
+
+   @Override
+   public void visit(LateralSubSelect lateralSubSelect)
+   {
+      throw new UnsupportedSqlExpressionException(lateralSubSelect);
+   }
+
+   @Override
+   public void visit(ValuesList valuesList)
+   {
+      throw new UnsupportedSqlExpressionException(valuesList);
+   }
+
+   @Override
+   public void visit(SetOperationList setOpList)
+   {
+      throw new UnsupportedSqlExpressionException(setOpList);
+   }
+
+   @Override
+   public void visit(WithItem withItem)
+   {
+      throw new UnsupportedSqlExpressionException(withItem);
+   }
+
+   @Override
+   protected void handleDefault(Expression expr)
+   {
+      throw new UnsupportedSqlExpressionException(expr);
    }
 }
