@@ -55,7 +55,7 @@ public class UserQueryHandler implements SelectItemVisitor
             return createUserQuery(plainSelect, sqlString);
          }
          else {
-            throw new UnsupportedSqlExpressionException("Only SELECT statement is valid"); //$NON-NLS-1$
+            throw new SqlParserException("Only SELECT statement is valid"); //$NON-NLS-1$
          }
       }
       catch (ParseException e) {
