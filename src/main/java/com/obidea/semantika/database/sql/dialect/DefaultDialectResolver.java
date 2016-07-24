@@ -35,12 +35,12 @@ public class DefaultDialectResolver
          dialect.setQuoteString(quoteString);
          dialect.setSeparator(catalogSeparator);
       }
-      if (databaseName.equals(DatabaseProduct.MYSQL)) {
+      else if (databaseName.equals(DatabaseProduct.MYSQL)) {
          dialect = new MySqlDialect();
          dialect.setQuoteString(quoteString);
          dialect.setSeparator(catalogSeparator);
       }
-      if (databaseName.equals(DatabaseProduct.PGSQL)) {
+      else if (databaseName.equals(DatabaseProduct.PGSQL)) {
          dialect = new PostgreSqlDialect();
          dialect.setQuoteString(quoteString);
          dialect.setSeparator(catalogSeparator);
