@@ -160,36 +160,36 @@ public abstract class Sql99Dialect implements IDialect
    }
 
    @Override
-   public String isNull(String column)
+   public String isNull(String expr)
    {
-      return column + " IS NULL"; //$NON-NLS-1$
+      return expr + " IS NULL"; //$NON-NLS-1$
    }
 
    @Override
-   public String isNotNull(String column)
+   public String isNotNull(String expr)
    {
-      return column + " IS NOT NULL"; //$NON-NLS-1$
+      return expr + " IS NOT NULL"; //$NON-NLS-1$
    }
 
    @Override
-   public String concat(List<String> parameters)
+   public String concat(List<String> exprs)
    {
       String concat = ""; //$NON-NLS-1$
       boolean needConcat = false;
-      for (String parameter : parameters) {
+      for (String expr : exprs) {
          if (needConcat) {
             concat += "||"; //$NON-NLS-1$
          }
-         concat += parameter;
+         concat += expr;
          needConcat = true;
       }
       return parenthesis(concat);
    }
 
    @Override
-   public String regex(String column, String pattern, String flag)
+   public String regex(String expr, String pattern, String flag)
    {
-      return column + " LIKE " + pattern; //$NON-NLS-1$
+      return expr + " LIKE " + pattern; //$NON-NLS-1$
    }
 
    private String parenthesis(String expr)

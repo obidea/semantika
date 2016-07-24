@@ -50,8 +50,8 @@ public interface IDialect
    String isNotNull(String expr);
 
    String concat(List<String> exprs);
-   String regex(String text, String pattern, String flag);
-   String lang(String text);
+   String regex(String expr, String pattern, String flag);
+   String lang(String expr);
 
-   String cast(String text, int targetDatatype);
+   String cast(String expr, int targetDatatype);
 }

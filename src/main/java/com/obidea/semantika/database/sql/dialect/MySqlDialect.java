@@ -28,17 +28,17 @@ public class MySqlDialect extends Sql99Dialect
    }
 
    @Override
-   public String concat(List<String> parameters)
+   public String concat(List<String> exprs)
    {
       StringBuilder sb = new StringBuilder();
       sb.append("CONCAT"); //$NON-NLS-1$
       sb.append("("); //$NON-NLS-1$
       boolean needConcat = false;
-      for (String parameter : parameters) {
+      for (String expr : exprs) {
          if (needConcat) {
             sb.append(","); //$NON-NLS-1$
          }
-         sb.append(parameter);
+         sb.append(expr);
          needConcat = true;
       }
       sb.append(")"); //$NON-NLS-1$
@@ -46,21 +46,21 @@ public class MySqlDialect extends Sql99Dialect
    }
 
    @Override
-   public String regex(String textExpr, String pattern, String flag)
+   public String regex(String expr, String pattern, String flag)
    {
-      return textExpr + " REGEXP " + pattern; //$NON-NLS-1$
+      return expr + " REGEXP " + pattern; //$NON-NLS-1$
    }
 
    @Override
-   public String lang(String textExpr)
+   public String lang(String expr)
    {
-      return String.format("SUBSTRING(%s, LENGTH(%s) - LOCATE('@', REVERSE(%s)) + 2)", textExpr, textExpr, textExpr); //$NON-NLS-1$
+      return String.format("SUBSTRING(%s, LENGTH(%s) - LOCATE('@', REVERSE(%s)) + 2)", expr, expr, expr); //$NON-NLS-1$
    }
 
    @Override
-   public String cast(String column, int datatype)
+   public String cast(String expr, int datatype)
    {
-      return "CAST(" + column + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      return "CAST(" + expr + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
    }
 
    private String getTypeName(int datatype)

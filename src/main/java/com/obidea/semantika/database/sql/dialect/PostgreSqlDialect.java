@@ -27,26 +27,26 @@ public class PostgreSqlDialect extends Sql99Dialect
    }
 
    @Override
-   public String regex(String column, String pattern, String flag)
+   public String regex(String expr, String pattern, String flag)
    {
       if (flag.equalsIgnoreCase("i")) { //$NON-NLS-1$ // XPath flag: http://www.w3.org/TR/xpath-functions/#regex-syntax
-         return column + " ~* " + pattern; //$NON-NLS-1$
+         return expr + " ~* " + pattern; //$NON-NLS-1$
       }
       else {
-         return column + " ~ " + pattern; //$NON-NLS-1$
+         return expr + " ~ " + pattern; //$NON-NLS-1$
       }
    }
 
    @Override
-   public String lang(String textExpr)
+   public String lang(String expr)
    {
-      return String.format("SUBSTR(SUBSTRING(%s from '@[A-z0-9_-]*$'), 2)", textExpr); //$NON-NLS-1$
+      return String.format("SUBSTR(SUBSTRING(%s from '@[A-z0-9_-]*$'), 2)", expr); //$NON-NLS-1$
    }
 
    @Override
-   public String cast(String column, int datatype)
+   public String cast(String expr, int datatype)
    {
-      return "CAST(" + column + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      return "CAST(" + expr + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
    }
 
    private String getTypeName(int datatype)

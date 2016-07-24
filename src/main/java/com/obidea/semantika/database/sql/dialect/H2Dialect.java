@@ -29,17 +29,17 @@ public class H2Dialect extends Sql99Dialect
    }
 
    @Override
-   public String concat(List<String> parameters)
+   public String concat(List<String> exprs)
    {
       StringBuilder sb = new StringBuilder();
       sb.append("CONCAT"); //$NON-NLS-1$
       sb.append("("); //$NON-NLS-1$
       boolean needConcat = false;
-      for (String parameter : parameters) {
+      for (String expr : exprs) {
          if (needConcat) {
             sb.append(","); //$NON-NLS-1$
          }
-         sb.append(parameter);
+         sb.append(expr);
          needConcat = true;
       }
       sb.append(")"); //$NON-NLS-1$
@@ -47,22 +47,22 @@ public class H2Dialect extends Sql99Dialect
    }
 
    @Override
-   public String regex(String column, String pattern, String flag)
+   public String regex(String expr, String pattern, String flag)
    {
-      return column + " REGEXP " + pattern; //$NON-NLS-1$
+      return expr + " REGEXP " + pattern; //$NON-NLS-1$
    }
 
    @Override
-   public String lang(String text)
+   public String lang(String expr)
    {
       throw new SqlDeparserException("Unable to produce SQL lang expression. " +
             "H2 doesn't have the sufficient built-in expressions"); //$NON-NLS-1$
    }
 
    @Override
-   public String cast(String column, int datatype)
+   public String cast(String expr, int datatype)
    {
-      return "CAST(" + column + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      return "CAST(" + expr + " AS " + getTypeName(datatype) + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
    }
 
    private String getTypeName(int datatype)
