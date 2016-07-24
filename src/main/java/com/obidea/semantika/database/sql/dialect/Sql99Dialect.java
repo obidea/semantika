@@ -186,12 +186,6 @@ public abstract class Sql99Dialect implements IDialect
       return parenthesis(concat);
    }
 
-   @Override
-   public String regex(String expr, String pattern, String flag)
-   {
-      return expr + " LIKE " + pattern; //$NON-NLS-1$
-   }
-
    private String parenthesis(String expr)
    {
       return Sql99.LPAREN + expr + Sql99.RPAREN;
